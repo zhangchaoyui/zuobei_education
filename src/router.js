@@ -1,31 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from './pages/home'
+import Index from './pages/index'
 import User from './pages/user'
 import Mine from './pages/mine'
+import Works from './pages/works'
 import WorksList from './pages/worksList'
 
 Vue.use(Router);
 export default new Router({
     routes: [{
         path: '/',
-        name: 'home',
-        component: Home,
-        redirect: 'index',
+        name: 'index',
+        component: Index,
         children: [
             {
-                path: '/index',
-                name: 'index',
-                component: Index,
-            },
-            {
                 path: '/external',//跳转链接
-                name: 'External',
+                name: 'external',
                 component: resolve => require(['./pages/external'], resolve),
             },
             {
-                path: '/monthList/',//月度排行
-                name: 'news',
+                path: '/monthList',//月度排行
+                name: 'monthList',
                 component: resolve => require(['./pages/monthList'], resolve),
             },
             {
@@ -55,7 +50,7 @@ export default new Router({
     {
         path: '/works',//作品排行
         name: 'works',
-        component: 'works',
+        component: Works,
         redirect: 'worksList',
         children: [
             {
@@ -66,7 +61,7 @@ export default new Router({
             {
                 path: '/worksdetail/:id',//作品详情
                 name: 'worksDetail',
-                component: resolve => require(['./pages/worksDetail'], resolve),
+                component: resolve => require(['./pages/worksdetail'], resolve),
             }
         ]
     },
@@ -139,7 +134,7 @@ export default new Router({
             {
                 path: '/reply',//回复
                 name: 'reply',
-                component: resolve => require(['./pages/Reply'], resolve),
+                component: resolve => require(['./pages/reply'], resolve),
             },
         ]
     },

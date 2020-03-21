@@ -4,20 +4,12 @@ module.exports = {
         port: 8080,
         proxy: {
             '/api': {
-                target: 'http://mall-pre.springboot.cn',
+                target: 'https://www.imooc.com',
                 changeOrigin: true,
                 pathRewrite: {
                     '/api': ''
                 }
             },
-            //多个接口代理
-            // '/api2': {
-            //     target: 'http://www.baidu.com',
-            // },
-
-            // '/api3': {
-            //     target: 'http://www.taobao.com',
-            // }
         }
     },
     lintOnSave: true,   //语法检查
