@@ -24,12 +24,12 @@ axios.interceptors.response.use(function (response) {
     }
     return Promise.reject(res);
   } else {
-    Message.error(res.msg)
+    alert(res.msg)
     return Promise.reject(res);
   }
 },(error)=>{ //这部分拦截服务器错误码
   let res = error.response;
-  Message.error(res.data.message);
+  alert(res.data.message);
   return Promise.reject(error);
 });
 

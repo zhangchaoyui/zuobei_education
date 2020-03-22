@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Home from './pages/home'
 import Index from './pages/index'
 import User from './pages/user'
 import Mine from './pages/mine'
@@ -10,9 +11,16 @@ Vue.use(Router);
 export default new Router({
     routes: [{
         path: '/',
-        name: 'index',
-        component: Index,
+        name: 'home',
+        component: Home,
+        redirect: Index,
+        meta:{ title: '首页' },
         children: [
+            {
+                path: '/index',//首页
+                name: 'index',
+                component: Index,
+            },
             {
                 path: '/external',//跳转链接
                 name: 'external',
