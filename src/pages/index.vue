@@ -153,7 +153,7 @@
           </div>
           <div class="user">
             <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
+            <div class="user_name">蜡笔小</div>
             <div class="submit">2分钟</div>
           </div>
         </div>
