@@ -6,8 +6,11 @@ import store from './store'
 import vueAxios from 'vue-axios'
 import lazyload from 'vue-lazyload'
 import vueCookie from 'vue-cookie'
-
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
 Vue.config.productionTip = false
+
+Vue.use(MintUI);
 
 //根据前端跨域做调整,/api是接口代理，代理是最安全的
 axios.defaults.baseURL = "/api";
@@ -27,7 +30,7 @@ axios.interceptors.response.use(function (response) {
     alert(res.msg)
     return Promise.reject(res);
   }
-},(error)=>{ //这部分拦截服务器错误码
+}, (error) => { //这部分拦截服务器错误码
   let res = error.response;
   alert(res.data.message);
   return Promise.reject(error);

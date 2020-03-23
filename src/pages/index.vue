@@ -1,13 +1,428 @@
 <template>
-  <div id="index">这是首页</div>
+  <div class="index">
+    <mt-swipe :auto="4000">
+      <mt-swipe-item>
+        <img v-lazy="'/images/banner.png'" />
+      </mt-swipe-item>
+      <mt-swipe-item>
+        <img v-lazy="'/images/banner.png'" />
+      </mt-swipe-item>
+      <mt-swipe-item>
+        <img v-lazy="'/images/banner.png'" />
+      </mt-swipe-item>
+    </mt-swipe>
+    <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search>
+    <div class="nav-list">
+      <div class="nav_row">
+        <img src="/images/category1.png" />
+        作品排行
+      </div>
+      <div class="nav_row">
+        <img src="/images/category2.png" />
+        月度排行
+      </div>
+      <div class="nav_row">
+        <img src="/images/category3.png" />
+        我的订单
+      </div>
+      <div class="nav_row">
+        <img src="/images/category4.png" />
+        积分商城
+      </div>
+    </div>
+    <div class="articleList">
+      <div class="title">
+        <div class="title_content">
+          <img src="/images/icon30.png" />文章资讯
+        </div>
+        <img src="/images/icon6.png" class="right_icon" />
+      </div>
+      <div class="content">
+        <div class="from">
+          <div class="img">
+            <img src="/images/23.png" />
+          </div>
+          <div class="text">
+            <div class="title">挖掘儿童创造力脑洞大开</div>
+            <div class="text_content">
+              他把具有丰富想象力的4-14岁的小朋友聚集在一起，
+              通过头脑风碌、发明课程，把世界变成我们…
+            </div>
+          </div>
+        </div>
+        <div class="from">
+          <div class="img">
+            <img src="/images/23.png" />
+          </div>
+          <div class="text">
+            <div class="title">挖掘儿童创造力脑洞大开</div>
+            <div class="text_content">
+              他把具有丰富想象力的4-14岁的小朋友聚集在一起，
+              通过头脑风碌、发明课程，把世界变成我们…
+            </div>
+          </div>
+        </div>
+        <div class="from">
+          <div class="img">
+            <img src="/images/23.png" />
+          </div>
+          <div class="text">
+            <div class="title">挖掘儿童创造力脑洞大开</div>
+            <div class="text_content">
+              他把具有丰富想象力的4-14岁的小朋友聚集在一起，
+              通过头脑风碌、发明课程，把世界变成我们…
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav_img">
+      <img src="/images/background4.png" />
+    </div>
+    <div class="articleList">
+      <div class="title">
+        <div class="title_content">
+          <img src="/images/icon39.png" />作品列表
+        </div>
+        <img src="/images/icon6.png" class="right_icon" />
+      </div>
+      <div class="works_nav">
+        <div class="btn">最新点评</div>
+        <div>最新上传</div>
+        <div>最多点评</div>
+      </div>
+      <div class="content2">
+        <div class="works">
+          <img src="/images/22.png" />
+          <div class="worksDetail">
+            <div class="works_name">小发明小风车</div>
+            <img src="/images/fabulous_red.png" alt />
+            <div class="num">100</div>
+          </div>
+          <div class="user">
+            <img src="/images/user.jpg" alt />
+            <div class="user_name">蜡笔小新</div>
+            <div class="submit">2分钟</div>
+          </div>
+        </div>
+        <div class="works">
+          <img src="/images/22.png" />
+          <div class="worksDetail">
+            <div class="works_name">小发明小风车</div>
+            <img src="/images/fabulous_red.png" alt />
+            <div class="num">100</div>
+          </div>
+          <div class="user">
+            <img src="/images/user.jpg" alt />
+            <div class="user_name">蜡笔小新</div>
+            <div class="submit">2分钟</div>
+          </div>
+        </div>
+        <div class="works">
+          <img src="/images/22.png" />
+          <div class="worksDetail">
+            <div class="works_name">小发明小风车</div>
+            <img src="/images/fabulous_red.png" alt />
+            <div class="num">100</div>
+          </div>
+          <div class="user">
+            <img src="/images/user.jpg" alt />
+            <div class="user_name">蜡笔小新</div>
+            <div class="submit">2分钟</div>
+          </div>
+        </div>
+        <div class="works">
+          <img src="/images/22.png" />
+          <div class="worksDetail">
+            <div class="works_name">小发明小风车</div>
+            <img src="/images/fabulous_red.png" alt />
+            <div class="num">100</div>
+          </div>
+          <div class="user">
+            <img src="/images/user.jpg" alt />
+            <div class="user_name">蜡笔小新</div>
+            <div class="submit">2分钟</div>
+          </div>
+        </div>
+        <div class="works">
+          <img src="/images/22.png" />
+          <div class="worksDetail">
+            <div class="works_name">小发明小风车</div>
+            <img src="/images/fabulous_red.png" alt />
+            <div class="num">100</div>
+          </div>
+          <div class="user">
+            <img src="/images/user.jpg" alt />
+            <div class="user_name">蜡笔小新</div>
+            <div class="submit">2分钟</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <Tabbar :selected="selected" :tabs="tabs"></Tabbar>
+  </div>
 </template>
 
 <script>
+import Tabbar from "../components/Tabbar";
 export default {
-  name: "index"
+  name: "index",
+  data() {
+    return {
+      selected: "首页",
+      tabs: [
+        require("../../public/images/icon15.png"),
+        require("../../public/images/icon9.png"),
+        require("../../public/images/icon10.png"),
+        require("../../public/images/icon11.png")
+      ]
+    };
+  },
+  components: {
+    Tabbar
+  }
 };
 </script>
 
 <style lang="scss">
-
+@import "./../assets/scss/config.scss";
+@import "./../assets/scss/mixin.scss";
+.index {
+  background: #fff;
+  padding-bottom: 1.1rem;
+  .mint-swipe {
+    width: 100%;
+    height: 4.15rem;
+    overflow: hidden;
+    img {
+      width: auto;
+      height: 4.15rem;
+    }
+  }
+  .mint-search {
+    height: auto;
+    margin-top: 0.2rem;
+    .mint-searchbar {
+      padding: 0px 10px;
+      border-radius: 0.4rem;
+      background: #f9f9f9 !important;
+      .mint-searchbar-inner {
+        background: none !important;
+        .mintui-search {
+          font-size: 0.34rem;
+        }
+        .mint-searchbar-core {
+          padding-left: 5%;
+          background: none !important;
+        }
+      }
+      .mint-searchbar-cancel {
+        font-size: 0.34rem;
+        color: $colorA;
+      }
+    }
+  }
+  .nav-list {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 0.47rem 0 0.33rem;
+    .nav_row {
+      width: 1.23rem;
+      height: 1.26rem;
+      text-align: center;
+      font-size: $fontK;
+      font-weight: 500;
+      color: $colorB;
+      font-family: "微软雅黑";
+      img {
+        width: auto;
+        height: 0.85rem;
+      }
+    }
+  }
+  .articleList {
+    width: 100%;
+    height: auto;
+    padding-bottom: 0.14rem;
+    background: url("/images/background10.png");
+    background-size: 100%;
+    box-sizing: border-box;
+    .title {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      .title_content {
+        height: 0.36rem;
+        line-height: 0.36rem;
+        display: flex;
+        flex-direction: row;
+        margin: 0.33rem auto 0.3rem;
+        font-size: 0.31rem;
+        color: #fff;
+        img {
+          display: inline-block;
+          height: 0.33rem;
+          margin-right: 0.14rem;
+          vertical-align: middle;
+        }
+      }
+      .right_icon {
+        display: inline-block;
+        height: 0.2rem;
+        position: absolute;
+        top: 0.395rem;
+        right: 0.29rem;
+      }
+    }
+    .content {
+      width: 94%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      background: #fff;
+      .from {
+        display: flex;
+        flex-direction: row;
+        width: 96%;
+        margin: 0 auto;
+        padding: 0.33rem 0 0.28rem;
+        border-bottom: 1px solid #e5e5e5;
+        overflow: hidden;
+        box-sizing: border-box;
+        .img {
+          border-radius: 10px;
+          img {
+            display: inline-block;
+            width: auto;
+            height: 1.5rem;
+            vertical-align: middle;
+          }
+        }
+        .text {
+          width: 70%;
+          margin-left: 3%;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          text-align: left;
+          .title {
+            width: 100%;
+            font-size: $fontK;
+            color: $colorB;
+            font-weight: bold;
+            margin-bottom: 0.18rem;
+          }
+          .text_content {
+            width: 100%;
+            height: auto;
+            line-height: 0.28rem;
+            font-size: 0.18rem;
+            color: #777777;
+          }
+        }
+      }
+    }
+    .content2 {
+      width: 94%;
+      margin: 0 auto;
+      text-align: left;
+      background: #fff;
+      overflow: hidden;
+      padding-bottom: 0.2rem;
+      .works {
+        width: 46%;
+        height: 3.58rem;
+        display: flex;
+        flex-direction: column;
+        padding: 0.27rem 0 0 0.26rem;
+        box-sizing: border-box;
+        float: left;
+        margin-left: 1%;
+        img {
+          width: auto;
+          height: 2.22rem;
+        }
+        .worksDetail {
+          width: 100%;
+          line-height: $fontJ;
+          display: flex;
+          flex-direction: row;
+          margin-top: 0.21rem;
+          .works_name {
+            width: 78%;
+            @include textWidth();
+            font-size: 0.26rem;
+          }
+          img {
+            width: auto;
+            height: 0.21rem;
+          }
+          .num {
+            color: #f05556;
+            font-size: $fontJ;
+          }
+        }
+        .user {
+          width: 100%;
+          line-height: 0.5rem;
+          display: flex;
+          flex-direction: row;
+          margin-top: 0.14rem;
+          img {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 0.5rem;
+          }
+          .user_name {
+            width: 60%;
+            padding-left: 3%;
+            @include textWidth();
+            font-size: $fontJ;
+            box-sizing: border-box;
+            color: #333333;
+          }
+          .submit {
+            font-size: 0.18rem;
+            color: #999999;
+          }
+        }
+      }
+    }
+    .works_nav {
+      width: 80%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin: 0 auto 0.27rem;
+      font-size: $fontJ;
+      color: #ffffff;
+      text-align: center;
+      div {
+        height: 0.39rem;
+        line-height: 0.39rem;
+        padding: 0.08rem 0.24rem;
+      }
+      .btn {
+        background: #fff;
+        border-radius: 20px;
+        color: $colorA;
+      }
+    }
+  }
+  .nav_img {
+    width: 96%;
+    margin: 0.22rem auto 0rem;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 1.96rem;
+    }
+  }
+}
 </style>

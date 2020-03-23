@@ -1,7 +1,13 @@
-@mixin flex($hov:space-between,$col:center) {
+@mixin flex($hov:space-between,$col:center, $row:row) {
     display: flex;
+    flex-direction: $row;
     justify-content: $hov;
     align-items: $col;
+};
+@mixin textWidth() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 };
 @mixin bgImg($wid:0,$hei:0,$img:'') {
     width: $wid;
