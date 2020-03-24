@@ -27,7 +27,7 @@
           <img src="/images/icon6.png" alt />
         </span>
       </div>
-    </div> -->
+    </div>-->
     <Tabbar :selected="selected" :tabs="tabs" :nav="4"></Tabbar>
   </div>
 </template>
