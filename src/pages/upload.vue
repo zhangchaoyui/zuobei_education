@@ -50,9 +50,9 @@ export default {
 
 <style lang="scss">
 .upload {
-  width: 98%;
+  width: 96%;
+  margin: 0.1rem auto 0;
   height: auto;
-  margin: 0 auto;
   .text {
     width: 100%;
     .textarea {

@@ -235,6 +235,8 @@ export default {
 @import "./../assets/scss/config.scss";
 @import "./../assets/scss/mixin.scss";
 .index {
+  width: 96%;
+  margin: 0.1rem auto 0;
   background: #fff;
   padding-bottom: 1.1rem;
   .mint-swipe {
