@@ -10,8 +10,6 @@ html, body {
   font-family: Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif;
   color: #333333;
   background-color: #ffffff;
-  min-width: 1226px;
-  font-size: 12px;
 }
 
 a {
@@ -31,6 +29,5 @@ input:focus, a:focus {
 }
 
 .container {
-  width: 1226px;
   margin: 0 auto;
 }

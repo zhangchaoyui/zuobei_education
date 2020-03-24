@@ -1,5 +1,6 @@
 <template>
   <div class="index">
+    <!-- 轮播图 -->
     <mt-swipe :auto="4000">
       <mt-swipe-item>
         <img v-lazy="'/images/banner.png'" />
@@ -13,32 +14,33 @@
     </mt-swipe>
     <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search>
     <div class="nav-list">
-      <div class="nav_row">
+      <div class="nav_row" @click="nav(1)">
         <img src="/images/category1.png" />
         作品排行
       </div>
-      <div class="nav_row">
+      <div class="nav_row" @click="nav(2)">
         <img src="/images/category2.png" />
         月度排行
       </div>
-      <div class="nav_row">
+      <div class="nav_row" @click="nav(3)">
         <img src="/images/category3.png" />
         我的订单
       </div>
-      <div class="nav_row">
+      <div class="nav_row" @click="nav(4)">
         <img src="/images/category4.png" />
         积分商城
       </div>
     </div>
+    <!-- 文章详情 -->
     <div class="articleList">
       <div class="title">
         <div class="title_content">
           <img src="/images/icon30.png" />文章资讯
         </div>
-        <img src="/images/icon6.png" class="right_icon" />
+        <img src="/images/icon6.png" class="right_icon" @click="newsList" />
       </div>
       <div class="content">
-        <div class="from">
+        <div class="from" @click="worksDetail(1)">
           <div class="img">
             <img src="/images/23.png" />
           </div>
@@ -76,23 +78,25 @@
         </div>
       </div>
     </div>
-    <div class="nav_img">
+    <!-- 外链 -->
+    <div class="nav_img" @click="external">
       <img src="/images/background4.png" />
     </div>
+    <!-- 作品列表 -->
     <div class="articleList">
       <div class="title">
         <div class="title_content">
           <img src="/images/icon39.png" />作品列表
         </div>
-        <img src="/images/icon6.png" class="right_icon" />
+        <img src="/images/icon6.png" class="right_icon" @click="worksList" />
       </div>
       <div class="works_nav">
-        <div class="btn">最新点评</div>
-        <div>最新上传</div>
-        <div>最多点评</div>
+        <div v-bind:class="{'btn':btn==1}" @click="btn=1">最新点评</div>
+        <div v-bind:class="{'btn':btn==2}" @click="btn=2">最新上传</div>
+        <div v-bind:class="{'btn':btn==3}" @click="btn=3">最多点评</div>
       </div>
       <div class="content2">
-        <div class="works">
+        <div class="works" @click="worksDetail(12)">
           <img src="/images/22.png" />
           <div class="worksDetail">
             <div class="works_name">小发明小风车</div>
@@ -153,13 +157,13 @@
           </div>
           <div class="user">
             <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小</div>
+            <div class="user_name">蜡笔小新</div>
             <div class="submit">2分钟</div>
           </div>
         </div>
       </div>
     </div>
-    <Tabbar :selected="selected" :tabs="tabs"></Tabbar>
+    <Tabbar :selected="selected" :tabs="tabs" :nav="1"></Tabbar>
   </div>
 </template>
 
@@ -169,7 +173,9 @@ export default {
   name: "index",
   data() {
     return {
+      value: "",
       selected: "首页",
+      btn: 1,
       tabs: [
         require("../../public/images/icon15.png"),
         require("../../public/images/icon9.png"),
@@ -177,6 +183,47 @@ export default {
         require("../../public/images/icon11.png")
       ]
     };
+  },
+  mounted() {},
+  methods: {
+    //跳转作品详情页
+    worksDetail(id) {
+      this.$router.push(`/works/worksdetail/${id}`);
+    },
+
+    //跳转作品列表
+    worksList() {
+      this.$router.push("/works/workslist");
+    },
+
+    //跳转外链
+    external() {
+      this.$router.push("/external");
+    },
+
+    //跳转文章资讯
+    news(e) {
+      e = 12;
+      this.$router.push(`/news/${e}`);
+    },
+    //跳转文章列表
+    newsList() {
+      this.$router.push("/newsList");
+    },
+
+    //跳转导航
+    nav(e) {
+      console.log(e);
+      if (e == 1) {
+        this.$router.push("/works/workslist");
+      } else if (e == 2) {
+        this.$router.push("/monthList");
+      } else if (e == 3) {
+        this.$router.push("/order");
+      } else if (e == 4) {
+        this.$router.push("/shop");
+      }
+    }
   },
   components: {
     Tabbar
@@ -320,7 +367,7 @@ export default {
           }
           .text_content {
             width: 100%;
-            height: auto;
+            max-height: 0.48;
             line-height: 0.28rem;
             font-size: 0.18rem;
             color: #777777;

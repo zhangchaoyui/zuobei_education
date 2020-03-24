@@ -59,7 +59,7 @@ export default new Router({
         path: '/works',//作品排行
         name: 'works',
         component: Works,
-        redirect: 'worksList',
+        redirect: WorksList,
         children: [
             {
                 path: '/workslist',//作品列表
