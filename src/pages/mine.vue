@@ -10,7 +10,7 @@
       </div>
       <div>完善信息</div>
     </div>
-    <div class="record">
+    <!-- <div class="record">
       <div class="record_left">
         <span>38,325</span>
         <span>上传作品次数</span>
@@ -27,7 +27,7 @@
           <img src="/images/icon6.png" alt />
         </span>
       </div>
-    </div>
+    </div> -->
     <Tabbar :selected="selected" :tabs="tabs" :nav="4"></Tabbar>
   </div>
 </template>
@@ -58,13 +58,18 @@ export default {
 @import "./../assets/scss/config.scss";
 @import "./../assets/scss/mixin.scss";
 .mine {
+  width: 100%;
+  min-height: 100vh;
   margin: 0;
   padding-top: 0;
   background: #f5f5f5;
   padding-bottom: 1.1rem;
+  overflow: hidden;
   .header {
     width: 100%;
     height: 3.7rem;
+    background: url("/images/icon31.png") no-repeat;
+    background-size: 100%;
     .img {
       width: 1.33rem;
       height: 1.33rem;
