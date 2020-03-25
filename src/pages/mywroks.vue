@@ -1,99 +1,11 @@
 <template>
-  <div class="index">
-    <!-- 轮播图 -->
-    <mt-swipe :auto="4000">
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner.png'" />
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner.png'" />
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner.png'" />
-      </mt-swipe-item>
-    </mt-swipe>
-    <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search>
-    <div class="nav-list">
-      <div class="nav_row" @click="nav(1)">
-        <img src="/images/category1.png" />
-        作品排行
-      </div>
-      <div class="nav_row" @click="nav(2)">
-        <img src="/images/category2.png" />
-        月度排行
-      </div>
-      <div class="nav_row" @click="nav(3)">
-        <img src="/images/category3.png" />
-        我的订单
-      </div>
-      <div class="nav_row" @click="nav(4)">
-        <img src="/images/category4.png" />
-        积分商城
-      </div>
-    </div>
-    <!-- 文章详情 -->
-    <div class="articleList">
-      <div class="title">
-        <div class="title_content">
-          <img src="/images/icon30.png" />文章资讯
-        </div>
-        <img src="/images/icon6.png" class="right_icon" @click="newsList" />
-      </div>
-      <div class="content">
-        <div class="from" @click="worksDetail(1)">
-          <div class="img">
-            <img src="/images/23.png" />
-          </div>
-          <div class="text">
-            <div class="title">挖掘儿童创造力脑洞大开</div>
-            <div class="text_content">
-              他把具有丰富想象力的4-14岁的小朋友聚集在一起，
-              通过头脑风碌、发明课程，把世界变成我们…
-            </div>
-          </div>
-        </div>
-        <div class="from">
-          <div class="img">
-            <img src="/images/23.png" />
-          </div>
-          <div class="text">
-            <div class="title">挖掘儿童创造力脑洞大开</div>
-            <div class="text_content">
-              他把具有丰富想象力的4-14岁的小朋友聚集在一起，
-              通过头脑风碌、发明课程，把世界变成我们…
-            </div>
-          </div>
-        </div>
-        <div class="from">
-          <div class="img">
-            <img src="/images/23.png" />
-          </div>
-          <div class="text">
-            <div class="title">挖掘儿童创造力脑洞大开</div>
-            <div class="text_content">
-              他把具有丰富想象力的4-14岁的小朋友聚集在一起，
-              通过头脑风碌、发明课程，把世界变成我们…
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 外链 -->
-    <div class="nav_img" @click="external">
-      <img src="/images/background4.png" />
-    </div>
+  <div class="myworks">
     <!-- 作品列表 -->
     <div class="articleList">
       <div class="title">
         <div class="title_content">
-          <img src="/images/icon39.png" />作品列表
+          <img src="/images/icon39.png" />我的作品集
         </div>
-        <img src="/images/icon6.png" class="right_icon" @click="worksList" />
-      </div>
-      <div class="works_nav">
-        <div v-bind:class="{'btn':btn==1}" @click="btn=1">最新点评</div>
-        <div v-bind:class="{'btn':btn==2}" @click="btn=2">最新上传</div>
-        <div v-bind:class="{'btn':btn==3}" @click="btn=3">最多点评</div>
       </div>
       <div class="content2">
         <div class="works" @click="worksDetail(12)">
@@ -163,147 +75,37 @@
         </div>
       </div>
     </div>
-    <Tabbar :selected="selected" :tabs="tabs" :nav="1"></Tabbar>
   </div>
 </template>
-
-<script>
-import Tabbar from "../components/Tabbar";
+ 
+ <script>
 export default {
-  name: "index",
+  name: "myworks",
   data() {
-    return {
-      value: "",
-      selected: "首页",
-      btn: 1,
-      tabs: [
-        require("../../public/images/icon15.png"),
-        require("../../public/images/icon9.png"),
-        require("../../public/images/icon10.png"),
-        require("../../public/images/icon11.png")
-      ]
-    };
+    return {};
   },
   mounted() {},
-  methods: {
-    //跳转作品详情页
-    worksDetail(id) {
-      this.$router.push(`/works/worksdetail/${id}`);
-    },
-
-    //跳转作品列表
-    worksList() {
-      this.$router.push("/works/workslist");
-    },
-
-    //跳转外链
-    external() {
-      this.$router.push("/external");
-    },
-
-    //跳转文章资讯
-    news(e) {
-      e = 12;
-      this.$router.push(`/news/${e}`);
-    },
-    //跳转文章列表
-    newsList() {
-      this.$router.push("/newsList");
-    },
-
-    //跳转导航
-    nav(e) {
-      console.log(e);
-      if (e == 1) {
-        this.$router.push("/works/workslist");
-      } else if (e == 2) {
-        this.$router.push("/monthList");
-      } else if (e == 3) {
-        this.$router.push("/order");
-      } else if (e == 4) {
-        this.$router.push("/shop");
-      }
-    }
-  },
-  components: {
-    Tabbar
-  }
+  methods: {},
+  components: {}
 };
 </script>
 
 <style lang="scss">
 @import "./../assets/scss/config.scss";
 @import "./../assets/scss/mixin.scss";
-.index {
-  width: 96%;
-  margin: 0.1rem auto 0;
-  background: #fff;
-  padding-bottom: 1.1rem;
-  .mint-swipe {
-    width: 100%;
-    height: 4.15rem;
-    overflow: hidden;
-    img {
-      width: 100%;
-      height: 4.15rem;
-    }
-  }
-  .mint-search {
-    height: auto;
-    margin-top: 0.2rem;
-    .mint-searchbar {
-      padding: 0px 10px;
-      border-radius: 0.4rem;
-      background: #f9f9f9 !important;
-      .mint-searchbar-inner {
-        background: none !important;
-        .mintui-search {
-          font-size: 0.34rem;
-        }
-        .mint-searchbar-core {
-          padding-left: 5%;
-          background: none !important;
-        }
-      }
-      .mint-searchbar-cancel {
-        font-size: 0.34rem;
-        color: $colorA;
-      }
-    }
-  }
-  .nav-list {
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin: 0.47rem 0 0.33rem;
-    .nav_row {
-      width: 1.23rem;
-      height: 1.26rem;
-      text-align: center;
-      font-size: $fontK;
-      font-weight: 500;
-      color: $colorB;
-      font-family: "微软雅黑";
-      img {
-        width: auto;
-        height: 0.85rem;
-      }
-    }
-  }
+.myworks {
   .articleList {
-    width: 100%;
-    height: auto;
-    padding-bottom: 0.14rem;
-    background: url("/images/background10.png");
-    background-size: 100%;
-    box-sizing: border-box;
+    width: 96%;
+    min-height: 98vh;
+    background: url("/images/background10.png") repeat-y;
+    background-size: 100% 100%;
+    margin: 0.2rem auto 0;
     .title {
       width: 100%;
       display: flex;
       flex-direction: row;
       position: relative;
+      overflow: hidden;
       .title_content {
         height: 0.36rem;
         line-height: 0.36rem;
@@ -449,35 +251,6 @@ export default {
           }
         }
       }
-    }
-    .works_nav {
-      width: 80%;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-around;
-      margin: 0 auto 0.27rem;
-      font-size: $fontJ;
-      color: #ffffff;
-      text-align: center;
-      div {
-        height: 0.39rem;
-        line-height: 0.39rem;
-        padding: 0.08rem 0.24rem;
-      }
-      .btn {
-        background: #fff;
-        border-radius: 20px;
-        color: $colorA;
-      }
-    }
-  }
-  .nav_img {
-    width: 96%;
-    margin: 0.22rem auto 0rem;
-    overflow: hidden;
-    img {
-      width: 100%;
-      height: 1.96rem;
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class="button">
     <button class="type" v-on:click="$emit('submit')" v-if="btnType==1">{{sureText}}</button>
     <button class="positionBtn" v-on:click="$emit('submit')" v-if="btnType==3">{{sureText}}</button>
-    <button class="login" v-on:click="$emit('submit')" v-if="btnType==2">登录</button>
+    <button class="login2" v-on:click="$emit('submit')" v-if="btnType==2">{{sureText}}</button>
   </div>
 </template>
 <script>
@@ -19,23 +19,37 @@ export default {
 .button {
   width: 6rem;
   height: 0.95rem;
-  margin: 1rem auto 0;
-  button {
+  margin: 0.3rem auto 0.1rem;
+  .type {
     width: 100%;
     height: 100%;
     border: none;
     border-radius: 0.5rem;
     color: #fff;
     font-size: 0.34rem;
-  }
-  .type {
     background: #f5bb0e;
+    margin: 1rem auto 0;
   }
   .positionBtn {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.34rem;
     position: fixed;
     bottom: 0.17rem;
   }
-  .login {
+  .login2 {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.34rem;
+    width: 6rem;
+    height: 0.95rem;
+    margin: 0rem auto 0;
     background: #fa8100;
   }
 }

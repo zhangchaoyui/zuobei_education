@@ -50,7 +50,7 @@ export default {
 
 <style lang="scss">
 .upload {
-  width: 96%;
+  width: 92%;
   margin: 0.1rem auto 0;
   height: auto;
   .text {
