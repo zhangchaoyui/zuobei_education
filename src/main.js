@@ -49,7 +49,7 @@ new Vue({
   render: h => h(App),
 }).$mount('#app')
 
-
+//监听路由
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
   if (to.meta.title) {

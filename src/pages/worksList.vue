@@ -428,7 +428,7 @@ export default {
             width: 65%;
             @include textWidth();
             text-align: center;
-            margin: 0.09rem auto 0;
+            margin: 0.2rem auto 0;
             font-size: 0.3rem;
             color: #ffed9e;
             span {
@@ -438,7 +438,7 @@ export default {
           .bottom_row2 {
             width: 100%;
             text-align: center;
-            font-size: 0.12rem;
+            font-size: 0.1rem;
             color: #ffed9e;
           }
         }

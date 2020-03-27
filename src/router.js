@@ -11,7 +11,7 @@ export default new Router({
         {
             path: '/',//首页
             name: 'index',
-            meta:{title:'首页'},
+            meta: { title: '首页' },
             component: Index,
         },
         {
@@ -22,111 +22,143 @@ export default new Router({
         {
             path: '/monthList',//月度排行
             name: 'monthList',
+            meta: { title: '月度排行' },
             component: resolve => require(['./pages/monthList'], resolve),
         },
         {
             path: '/news/:id',//文章详情
             name: 'news',
+            meta: { title: '文章详情' },
             component: resolve => require(['./pages/news'], resolve),
         },
 
         {
             path: '/upload',//上传作品
             name: 'upload',
-            meta:{title:'上传作品'},
+            meta: { title: '上传作品' },
             component: Upload,
+        },
+        {
+            path: '/personal',//个人信息页面
+            name: 'personal',
+            meta: { title: '个人信息' },
+            component: resolve => require(['./pages/personal'], resolve),
         },
         {
             path: '/login',//登录
             name: 'login',
+            meta: { title: '登录' },
             component: resolve => require(['./pages/login'], resolve),
         },
         {
             path: '/register',//注册
             name: 'register',
+            meta: { title: '注册' },
             component: resolve => require(['./pages/register'], resolve),
         },
 
         {
             path: '/workslist',//作品列表
             name: 'worksList',
+            meta: { title: '作品列表' },
             component: WorksList,
         },
         {
             path: '/worksdetail/:id',//作品详情
             name: 'worksDetail',
+            meta: { title: '作品详情' },
             component: resolve => require(['./pages/worksdetail'], resolve),
         },
 
         {
             path: '/mine',
             name: 'mine',
+            meta: { title: '我的' },
             component: Mine,
         },
         {
             path: '/mywroks',//我的作品列表
             name: 'mywroks',
+            meta: { title: '我的作品集' },
             component: resolve => require(['./pages/mywroks'], resolve),
         },
         {
             path: '/shop',//积分商城
             name: 'shop',
+            meta: { title: '积分商城' },
             component: resolve => require(['./pages/shop'], resolve),
         },
         {
             path: '/integral',//积分
             name: 'integral',
+            meta: { title: '积分' },
             component: resolve => require(['./pages/integral'], resolve),
         },
         {
             path: '/order',//订单
             name: 'order',
+            meta: { title: '我的订单' },
             component: resolve => require(['./pages/order'], resolve),
         },
         {
             path: '/submitOrder',//提交订单
             name: 'submitOrder',
+            meta: { title: '提交订单' },
             component: resolve => require(['./pages/submitOrder'], resolve),
         },
         {
             path: '/addressList',//地址列表
             name: 'addressList',
+            meta: { title: '地址列表' },
             component: resolve => require(['./pages/addressList'], resolve),
         },
         {
             path: '/addAddress',//添加地址信息
             name: 'addAddress',
+            meta: { title: '添加地址信息' },
             component: resolve => require(['./pages/addAddress'], resolve),
         },
         {
             path: '/myOrder',//我的订单
             name: 'myOrder',
+            meta: { title: '我的订单' },
             component: resolve => require(['./pages/myOrder'], resolve),
         },
         {
             path: '/logistics',//物流
             name: 'logistics',
+            meta: { title: '物流信息' },
             component: resolve => require(['./pages/logistics'], resolve),
         },
         {
             path: '/userInfo',//用户基本资料
             name: 'userInfo',
+            meta: { title: '用户基本资料' },
             component: resolve => require(['./pages/userInfo'], resolve),
         },
         {
             path: '/about',//关于
             name: 'about',
+            meta: { title: '关于我们' },
             component: resolve => require(['./pages/about'], resolve),
         },
         {
             path: '/feedback',//反馈
             name: 'feedback',
+            meta: { title: '反馈' },
             component: resolve => require(['./pages/feedback'], resolve),
         },
         {
             path: '/reply',//回复
             name: 'reply',
+            meta: { title: '回复我的点评' },
             component: resolve => require(['./pages/reply'], resolve),
+        },
+        {
+            path: '/forget',//忘记密码
+            name: 'forget',
+            meta: { title: '忘记密码' },
+            component: resolve => require(['./pages/forget'], resolve),
         }
 
     ]

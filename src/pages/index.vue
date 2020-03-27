@@ -188,12 +188,12 @@ export default {
   methods: {
     //跳转作品详情页
     worksDetail(id) {
-      this.$router.push(`/works/worksdetail/${id}`);
+      this.$router.push(`/worksdetail/${id}`);
     },
 
     //跳转作品列表
     worksList() {
-      this.$router.push("/works/workslist");
+      this.$router.push("/workslist");
     },
 
     //跳转外链
@@ -215,7 +215,7 @@ export default {
     nav(e) {
       console.log(e);
       if (e == 1) {
-        this.$router.push("/works/workslist");
+        this.$router.push("/workslist");
       } else if (e == 2) {
         this.$router.push("/monthList");
       } else if (e == 3) {
@@ -305,12 +305,14 @@ export default {
       flex-direction: row;
       position: relative;
       .title_content {
+        width: 30%;
         height: 0.36rem;
         line-height: 0.36rem;
         display: flex;
         flex-direction: row;
+        justify-content: center;
         margin: 0.33rem auto 0.3rem;
-        font-size: 0.31rem;
+        font-size: 0.29rem;
         color: #fff;
         img {
           display: inline-block;
@@ -436,7 +438,7 @@ export default {
             border-radius: 0.5rem;
           }
           .user_name {
-            width: 60%;
+            width: 54%;
             padding-left: 3%;
             @include textWidth();
             font-size: $fontJ;
@@ -444,6 +446,8 @@ export default {
             color: #333333;
           }
           .submit {
+            width: 28%;
+            text-align: right;
             font-size: 0.18rem;
             color: #999999;
           }
