@@ -159,6 +159,12 @@ export default new Router({
             name: 'forget',
             meta: { title: '忘记密码' },
             component: resolve => require(['./pages/forget'], resolve),
+        },
+        {
+            path: '/productDetail',//商品详情
+            name: 'productDetail',
+            meta: { title: '商品详情' },
+            component: resolve => require(['./pages/productDetail'], resolve),
         }
 
     ]
