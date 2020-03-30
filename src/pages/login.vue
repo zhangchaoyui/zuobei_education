@@ -1,37 +1,29 @@
 <template>
   <div class="login">
     <div class="container">
-      <div class="type" v-if="page==1">
-        <p>请选择您的身份？</p>
-        <p class="lastp">帮助我们更好地为您提供服务</p>
-        <div class="img">
-          <div class="children">
-            <img src="/images/2.png" alt />
-            <p>孩子</p>
-          </div>
-          <div class="teacher">
-            <img src="/images/1.png" alt />
-            <p>老师</p>
-          </div>
-        </div>
-      </div>
-      <div class="page" v-if="page==2">
+      <div class="page">
         <img src="/images/logo.png" alt class="logo" />
         <div class="input">
           <div class="phone">
             +86
-            <input type="text" placeholder="请输入手机号码" />
+            <input
+              type="number"
+              placeholder="请输入手机号码"
+              pattern="regexp_pattern"
+              maxlength="11"
+              v-model="phone"
+            />
           </div>
           <div class="phone">
-            <input type="password" placeholder="请输入密码" />
+            <input type="password" placeholder="请输入密码" v-model="password" />
           </div>
         </div>
-        <Btn btnType="2" sureText="登录"></Btn>
+        <Btn btnType="2" sureText="登录" v-on:submit="login"></Btn>
         <div class="user_operation">
-          <div>注册</div>
-          <div>忘记密码</div>
+          <div @click="register">注册</div>
+          <div @click="forget">忘记密码</div>
         </div>
-        <div class="wx_chat">
+        <div class="wx_chat" @click="bind">
           <img src="/images/icon20.png" alt />
           <div>首次登录绑定微信</div>
         </div>
@@ -42,15 +34,69 @@
  
  <script>
 import Btn from "../components/Button";
+import { Toast } from "mint-ui";
 export default {
   name: "login",
   data() {
     return {
-      page: 2
+      phone: "",
+      password: ""
     };
   },
   mounted() {},
-  methods: {},
+  methods: {
+    //登录
+    login() {
+      let { phone, password } = this;
+      var myreg = /^[1]([3-9])[0-9]{9}$/;
+      if (phone == "" || !myreg.test(phone)) {
+        Toast({
+          message: "请输入正确的手机号码！",
+          position: "bottom",
+          duration: 2000
+        });
+        return;
+      } else if (password == "") {
+        Toast({
+          message: "请输入密码！",
+          position: "bottom",
+          duration: 2000
+        });
+        return;
+      }
+      this.axios
+        .post("/login/register", {
+          phone,
+          password
+        })
+        .then(res => {
+          this.res = res;
+          Toast({
+            message: "登陆成功~",
+            position: "middle",
+            duration: 1900
+          });
+          this.$cookie.set("userId", res.id, { expires: "Session" });
+          // this.$store.dispatch("saveUserName", res.username);
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 2000);
+        });
+    },
+
+    //绑定微信
+    bind() {},
+
+    //注册
+    register() {
+      this.$router.push("/register");
+    },
+
+    //忘记密码
+    forget() {
+      this.$router.push("/forget");
+    }
+  },
   components: {
     Btn
   }

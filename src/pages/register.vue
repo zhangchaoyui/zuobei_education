@@ -1,19 +1,33 @@
 <template>
   <div class="register">
+    <div class="type" v-if="page==1">
+      <p>请选择您的身份？</p>
+      <p class="lastp">帮助我们更好地为您提供服务</p>
+      <div class="img">
+        <div class="children" @click="type(1)">
+          <img src="/images/2.png" alt />
+          <p>孩子</p>
+        </div>
+        <div class="teacher" @click="type(2)">
+          <img src="/images/1.png" alt />
+          <p>老师</p>
+        </div>
+      </div>
+    </div>
     <div class="container">
       <div class="page">
         <img src="/images/logo.png" alt class="logo" />
         <div class="input">
           <div class="phone">
             +86
-            <input type="text" placeholder="请输入手机号码" />
+            <input type="text" placeholder="请输入手机号码" maxlength="11" v-model="phone" />
           </div>
           <div class="phone">
-            <input type="text" placeholder="请输入验证码" />
+            <input type="number" placeholder="请输入验证码" maxlength="4" v-model="code" />
             <button>获取60</button>
           </div>
           <div class="phone">
-            <input type="text" placeholder="请输入密码" />
+            <input type="password" placeholder="请输入密码" v-model="password" />
           </div>
         </div>
         <Btn btnType="2" sureText="注册"></Btn>
@@ -27,10 +41,60 @@ import Btn from "../components/Button";
 export default {
   name: "register",
   data() {
-    return {};
+    return {
+      page: 1,
+      phone: "",
+      password: "",
+      code: ""
+    };
   },
   mounted() {},
-  methods: {},
+  methods: {
+    register() {
+      let { phone, password, code } = this;
+      var myreg = /^[1]([3-9])[0-9]{9}$/;
+      if (phone == "" || !myreg.test(phone)) {
+        Toast({
+          message: "请输入正确的手机号码！",
+          position: "bottom",
+          duration: 2000
+        });
+        return;
+      } else if (code == "") {
+        Toast({
+          message: "请验证码！",
+          position: "bottom",
+          duration: 2000
+        });
+        return;
+      } else if (password == "") {
+        Toast({
+          message: "请输入密码！",
+          position: "bottom",
+          duration: 2000
+        });
+        return;
+      }
+      this.axios
+        .post("/login/register", {
+          phone,
+          password
+        })
+        .then(res => {
+          this.res = res;
+          Toast({
+            message: "登陆成功~",
+            position: "middle",
+            duration: 1900
+          });
+          this.$cookie.set("userId", res.id, { expires: "Session" });
+          // this.$store.dispatch("saveUserName", res.username);
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 2000);
+        });
+    }
+  },
   components: {
     Btn
   }
@@ -63,7 +127,7 @@ export default {
         width: 5.8rem;
         height: 0.95rem;
         line-height: 0.95rem;
-        font-size: 0.30rem;
+        font-size: 0.3rem;
         padding-left: 3%;
         margin: 0.34rem auto 0.4rem;
         background: #fff;
@@ -73,14 +137,14 @@ export default {
           width: 70%;
           height: 100%;
           border: none;
-          font-size: 0.30rem;
+          font-size: 0.3rem;
           padding-left: 3%;
           box-sizing: border-box;
         }
         button {
           width: 20%;
           height: 100%;
-          font-size: 0.30rem;
+          font-size: 0.3rem;
           color: #555555;
           text-align: center;
           background: #fff;

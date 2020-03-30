@@ -128,7 +128,7 @@ export default {
           line-height: 1.3rem;
         }
         .bottom {
-          width: 60%;
+          width: 54%;
           font-size: 0.2rem;
           line-height: 0.2rem;
           border-bottom: 1px solid white;
