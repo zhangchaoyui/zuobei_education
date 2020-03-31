@@ -1,7 +1,7 @@
 /** 
 *Storage封装
 */
-const STORAGE_KEY = "mall";
+const STORAGE_KEY = "zuobei";
 export default {
     //存储值
     setItem(key, value, module_name) {

@@ -6,17 +6,18 @@
         <div class="input">
           <div class="phone">
             +86
-            <input type="text" placeholder="请输入手机号码" />
+            <input type="text" placeholder="请输入手机号码" v-model="phone" />
           </div>
           <div class="phone">
-            <input type="text" placeholder="请输入验证码" />
-            <button>获取60</button>
+            <input type="text" placeholder="请输入验证码" v-model="code" />
+            <button @click="codeTime" v-if="timeStatus==1">获取{{time}}</button>
+            <button v-if="timeStatus==0">获取{{time}}</button>
           </div>
           <div class="phone">
-            <input type="text" placeholder="请输入新密码" />
+            <input type="text" placeholder="请输入新密码" v-model="password" />
           </div>
         </div>
-        <Btn btnType="2" sureText="重置密码"></Btn>
+        <Btn btnType="2" sureText="重置密码" v-on:submit="forget"></Btn>
       </div>
     </div>
   </div>
@@ -24,13 +25,87 @@
  
  <script>
 import Btn from "../components/Button";
+import { Toast } from "mint-ui";
 export default {
   name: "forget",
   data() {
-    return {};
+    return {
+      phone: "",
+      password: "",
+      code: "",
+      time: 60,
+      timeStatus: 1
+    };
   },
   mounted() {},
-  methods: {},
+  methods: {
+    //重置密码
+    forget() {
+      let { phone, password, code } = this;
+      var myreg = /^[1]([3-9])[0-9]{9}$/;
+      if (phone == "" || !myreg.test(phone)) {
+        Toast({
+          message: "请输入正确的手机号码！",
+          position: "bottom",
+          duration: 2000
+        });
+        return;
+      } else if (code == "") {
+        Toast({
+          message: "请验证码！",
+          position: "bottom",
+          duration: 2000
+        });
+        return;
+      } else if (password == "") {
+        Toast({
+          message: "请输入新密码！",
+          position: "bottom",
+          duration: 2000
+        });
+        return;
+      }
+      this.axios
+        .post("/login/reg", {
+          phone,
+          code,
+          password
+        })
+        .then(res => {
+          this.res = res;
+          Toast({
+            message: "重置密码成功~",
+            position: "middle",
+            duration: 1900
+          });
+          setTimeout(() => {
+            this.$router.push("/login");
+          }, 2000);
+        });
+    },
+
+    //验证码倒计时
+    codeTime() {
+      Toast({
+        message: "验证码发送成功~",
+        position: "bottom",
+        duration: 2000
+      });
+      this.timeStatus = 0;
+      let { time } = this,
+        a;
+      a = setInterval(() => {
+        if (time == 0) {
+          this.timeStatus = 1;
+          this.time = 60;
+          clearInterval(a);
+        } else {
+          --time;
+          this.time = time;
+        }
+      }, 1000);
+    }
+  },
   components: {
     Btn
   }

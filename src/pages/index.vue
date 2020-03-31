@@ -1,15 +1,9 @@
 <template>
   <div class="index">
     <!-- 轮播图 -->
-    <mt-swipe :auto="4000">
+    <mt-swipe :auto="4000" v-for="(item,index) in swiper" v-bind:key="index">
       <mt-swipe-item>
-        <img v-lazy="'/images/banner.png'" />
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner.png'" />
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner.png'" />
+        <img v-lazy="item.image" />
       </mt-swipe-item>
     </mt-swipe>
     <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search>
@@ -181,10 +175,13 @@ export default {
         require("../../public/images/icon9.png"),
         require("../../public/images/icon10.png"),
         require("../../public/images/icon11.png")
-      ]
+      ],
+      swiper: []
     };
   },
-  mounted() {},
+  mounted() {
+    this.getSwiper();
+  },
   methods: {
     //跳转作品详情页
     worksDetail(id) {
@@ -223,6 +220,14 @@ export default {
       } else if (e == 4) {
         this.$router.push("/shop");
       }
+    },
+
+    //获取轮播图信息
+    getSwiper() {
+      this.axios.get("/index/slide").then(res => {
+        console.log(res);
+        this.swiper = res.data;
+      });
     }
   },
   components: {

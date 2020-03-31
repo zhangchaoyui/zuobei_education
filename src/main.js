@@ -20,7 +20,7 @@ axios.interceptors.response.use(function (response) {
   let res = response.data;
   let path = location.hash;
   if (res.code == 1 || res.code == 2) {   //拦截业务错误码
-    return res.data;
+    return res;
   } else if (res.code == 0) {
     if (path != "#/index") {
       window.location.href = "/#/login"

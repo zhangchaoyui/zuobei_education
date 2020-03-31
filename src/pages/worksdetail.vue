@@ -100,11 +100,15 @@
 </template>
 
 <script>
+import util from '../util/util';
 export default {
   name: "worksdetail",
   data() {
     return {};
   },
+  mounted(){
+    util.login();
+  }, 
   components: {}
 };
 </script>

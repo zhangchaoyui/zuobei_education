@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div class="container">
+    <div class="container" v-if="page==2">
       <div class="page">
         <img src="/images/logo.png" alt class="logo" />
         <div class="input">
@@ -24,13 +24,14 @@
           </div>
           <div class="phone">
             <input type="number" placeholder="请输入验证码" maxlength="4" v-model="code" />
-            <button>获取60</button>
+            <button @click="codeTime()" v-if="timeStatus==1">获取{{time}}</button>
+            <button v-if="timeStatus==0">获取{{time}}</button>
           </div>
           <div class="phone">
             <input type="password" placeholder="请输入密码" v-model="password" />
           </div>
         </div>
-        <Btn btnType="2" sureText="注册"></Btn>
+        <Btn btnType="2" sureText="注册" v-on:submit="register"></Btn>
       </div>
     </div>
   </div>
@@ -38,6 +39,7 @@
  
  <script>
 import Btn from "../components/Button";
+import { Toast } from "mint-ui";
 export default {
   name: "register",
   data() {
@@ -45,11 +47,14 @@ export default {
       page: 1,
       phone: "",
       password: "",
-      code: ""
+      code: "",
+      time: 5,
+      timeStatus: 1
     };
   },
   mounted() {},
   methods: {
+    //注册
     register() {
       let { phone, password, code } = this;
       var myreg = /^[1]([3-9])[0-9]{9}$/;
@@ -76,23 +81,51 @@ export default {
         return;
       }
       this.axios
-        .post("/login/register", {
+        .post("/login/reg", {
           phone,
+          code,
           password
         })
         .then(res => {
           this.res = res;
           Toast({
-            message: "登陆成功~",
+            message: "注册成功~",
             position: "middle",
             duration: 1900
           });
-          this.$cookie.set("userId", res.id, { expires: "Session" });
-          // this.$store.dispatch("saveUserName", res.username);
-          setTimeout(() => {
-            this.$router.push("/");
-          }, 2000);
         });
+    },
+
+    //验证码倒计时
+    codeTime() {
+      Toast({
+        message: "验证码发送成功~",
+        position: "bottom",
+        duration: 2000
+      });
+      this.timeStatus = 0;
+      let { time } = this,
+        a;
+      a = setInterval(() => {
+        if (time == 0) {
+          this.timeStatus = 1;
+          this.time = 60;
+          clearInterval(a);
+        } else {
+          --time;
+          this.time = time;
+        }
+      }, 1000);
+    },
+
+    //身份选择
+    type(e) {
+      this.page = 2;
+      this.axios
+        .post("/login/iden", {
+          tid: e
+        })
+        .then(() => {});
     }
   },
   components: {
@@ -111,6 +144,56 @@ export default {
   background-size: 100% 150%;
   display: flex;
   flex-direction: row;
+  .type {
+    width: 90%;
+    margin: 0 auto;
+    p:first-child {
+      margin-top: 1.1rem;
+      font-size: 0.38rem;
+      line-height: 0.6rem;
+      color: #ffffff;
+    }
+    .lastp {
+      font-size: 0.24rem;
+      line-height: 0.6rem;
+      color: #ffffff;
+    }
+    .img {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-top: 0.68rem;
+      overflow: hidden;
+      .children,
+      .teacher {
+        width: 47%;
+        height: 3.79rem;
+        background: #fff;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        img {
+          display: inline-block;
+          margin: 0.53rem auto 0rem;
+          width: 3.1rem;
+          height: 2.49rem;
+        }
+        p {
+          text-align: center;
+          font-size: 0.34rem;
+          margin-top: -0.2rem;
+        }
+      }
+      .teacher {
+        img {
+          display: inline-block;
+          margin: 0.53rem auto 0rem;
+          width: 3.1rem;
+          height: 2.49rem;
+        }
+      }
+    }
+  }
   .container {
     width: 90%;
     .page {

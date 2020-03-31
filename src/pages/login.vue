@@ -77,7 +77,6 @@ export default {
             duration: 1900
           });
           this.$cookie.set("userId", res.id, { expires: "Session" });
-          // this.$store.dispatch("saveUserName", res.username);
           setTimeout(() => {
             this.$router.push("/");
           }, 2000);
@@ -115,56 +114,6 @@ export default {
   flex-direction: row;
   .container {
     width: 90%;
-    .type {
-      width: 100%;
-      margin: 0 auto;
-      p:first-child {
-        margin-top: 1.1rem;
-        font-size: 0.38rem;
-        line-height: 0.6rem;
-        color: #ffffff;
-      }
-      .lastp {
-        font-size: 0.24rem;
-        line-height: 0.6rem;
-        color: #ffffff;
-      }
-      .img {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-top: 0.68rem;
-        overflow: hidden;
-        .children,
-        .teacher {
-          width: 47%;
-          height: 3.79rem;
-          background: #fff;
-          border-radius: 0.5rem;
-          overflow: hidden;
-          img {
-            display: inline-block;
-            margin: 0.53rem auto 0rem;
-            width: 3.1rem;
-            height: 2.49rem;
-          }
-          p {
-            text-align: center;
-            font-size: 0.34rem;
-            margin-top: -0.2rem;
-          }
-        }
-        .teacher {
-          img {
-            display: inline-block;
-            margin: 0.53rem auto 0rem;
-            width: 3.1rem;
-            height: 2.49rem;
-          }
-        }
-      }
-    }
     .page {
       width: 100%;
       height: auto;
