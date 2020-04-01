@@ -2,29 +2,23 @@
   <div class="worksdetail">
     <div class="header">
       <div class="header_img">
-        <img src="/images/user.jpg" alt />
+        <img v-bind:src="data.result.avatar" alt />
       </div>
       <div class="header_userinfo">
-        <span>蜡笔小新</span>
-        <span>14分钟前</span>
+        <span>{{data.result.nickname}}</span>
+        <!-- <span>14分钟前</span> -->
+        <span>{{data.result.time}}</span>
       </div>
       <div class="header_right">
         <img src="/images/fabulous_red.png" alt />
-        <!-- <img src="/images/fabulous.png" alt /> -->
-        100
+        {{data.result.praise}}
       </div>
     </div>
-    <div class="works_title">源自英国 Iittle inventors 小小发明家发明小风车</div>
+    <div class="works_title">{{data.result.title}}</div>
     <!-- 轮播图 -->
     <mt-swipe :auto="4000">
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner.png'" />
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner.png'" />
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner.png'" />
+      <mt-swipe-item v-for="(item,index) in data.result.image" :key="index">
+        <img v-lazy="item" />
       </mt-swipe-item>
     </mt-swipe>
     <div class="br"></div>
@@ -33,40 +27,16 @@
         <span>留言</span>
       </div>
       <div class="evaluate_list">
-        <div class="evaluate_detail">
+        <div class="evaluate_detail" v-for="(item,index) in data.message" :key="index">
           <div class="evaluate_img">
-            <img src="/images/user.jpg" alt />
+            <img v-bind:src="item.avatar" alt />
           </div>
           <div class="evaluate_title">
             <div class="top">
-              <div class="title_left">刘小洋</div>
-              <div class="title_right">2020.3.13</div>
+              <div class="title_left">{{item.nickname}}</div>
+              <div class="title_right">{{item.time}}</div>
             </div>
-            <div class="evaluate_content">他把具有丰富想象力的4-14岁的小朋友聚集在一起，通过头脑风碌发明课程，把世界变成我们</div>
-          </div>
-        </div>
-        <div class="evaluate_detail">
-          <div class="evaluate_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="evaluate_title">
-            <div class="top">
-              <div class="title_left">刘小洋</div>
-              <div class="title_right">2020.3.13</div>
-            </div>
-            <div class="evaluate_content">他把具有丰富想象力的4-14岁的小朋友聚集在一起，通过头脑风碌发明课程，把世界变成我们</div>
-          </div>
-        </div>
-        <div class="evaluate_detail">
-          <div class="evaluate_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="evaluate_title">
-            <div class="top">
-              <div class="title_left">刘小洋</div>
-              <div class="title_right">2020.3.13</div>
-            </div>
-            <div class="evaluate_content">他把具有丰富想象力的4-14岁的小朋友聚集在一起，通过头脑风碌发明课程，把世界变成我们</div>
+            <div class="evaluate_content">{{item.content}}</div>
           </div>
         </div>
       </div>
@@ -100,15 +70,33 @@
 </template>
 
 <script>
-import util from '../util/util';
 export default {
   name: "worksdetail",
   data() {
-    return {};
+    return {
+      id: this.$route.params.id,
+      data: {},
+    };
   },
-  mounted(){
-    util.login();
-  }, 
+  mounted() {
+    // util.login(); 判断用户登录
+    this.getWorksDetail();
+  },
+  methods: {
+    //获取作品详情
+    getWorksDetail() {
+      this.axios
+        .get("/works/detail", {
+          params: {
+            id: this.id
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.data = res;
+        });
+    }
+  },
   components: {}
 };
 </script>

@@ -34,40 +34,13 @@
         <img src="/images/icon6.png" class="right_icon" @click="newsList" />
       </div>
       <div class="content">
-        <div class="from" @click="worksDetail(1)">
+        <div class="from" @click="news(item.id)" v-for="(item,index) in Article" v-bind:key="index">
           <div class="img">
-            <img src="/images/23.png" />
+            <img v-lazy="item.thumbnail" />
           </div>
           <div class="text">
-            <div class="title">挖掘儿童创造力脑洞大开</div>
-            <div class="text_content">
-              他把具有丰富想象力的4-14岁的小朋友聚集在一起，
-              通过头脑风碌、发明课程，把世界变成我们…
-            </div>
-          </div>
-        </div>
-        <div class="from">
-          <div class="img">
-            <img src="/images/23.png" />
-          </div>
-          <div class="text">
-            <div class="title">挖掘儿童创造力脑洞大开</div>
-            <div class="text_content">
-              他把具有丰富想象力的4-14岁的小朋友聚集在一起，
-              通过头脑风碌、发明课程，把世界变成我们…
-            </div>
-          </div>
-        </div>
-        <div class="from">
-          <div class="img">
-            <img src="/images/23.png" />
-          </div>
-          <div class="text">
-            <div class="title">挖掘儿童创造力脑洞大开</div>
-            <div class="text_content">
-              他把具有丰富想象力的4-14岁的小朋友聚集在一起，
-              通过头脑风碌、发明课程，把世界变成我们…
-            </div>
+            <div class="title">{{item.post_title}}</div>
+            <div class="text_content">{{item.post_content}}</div>
           </div>
         </div>
       </div>
@@ -85,74 +58,27 @@
         <img src="/images/icon6.png" class="right_icon" @click="worksList" />
       </div>
       <div class="works_nav">
-        <div v-bind:class="{'btn':btn==1}" @click="btn=1">最新点评</div>
-        <div v-bind:class="{'btn':btn==2}" @click="btn=2">最新上传</div>
-        <div v-bind:class="{'btn':btn==3}" @click="btn=3">最多点评</div>
+        <div v-bind:class="{'btn':btn==1}" @click="getWorks(1)">最新点评</div>
+        <div v-bind:class="{'btn':btn==2}" @click="getWorks(2)">最新上传</div>
+        <div v-bind:class="{'btn':btn==3}" @click="getWorks(3)">最多点评</div>
       </div>
       <div class="content2">
-        <div class="works" @click="worksDetail(12)">
-          <img src="/images/22.png" />
+        <div
+          class="works"
+          @click="worksDetail(item.id)"
+          v-for="(item,index) in Works"
+          v-bind:key="index"
+        >
+          <img v-lazy="item.image" />
           <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
+            <div class="works_name">{{item.title}}</div>
+            <img src="/images/fabulous_red.png" style="border-radius:0" />
+            <div class="num">{{item.praise}}</div>
           </div>
           <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
+            <img src="/images/user.jpg" />
+            <div class="user_name">{{item.name}}</div>
+            <div class="submit">{{item.time}}</div>
           </div>
         </div>
       </div>
@@ -176,11 +102,15 @@ export default {
         require("../../public/images/icon10.png"),
         require("../../public/images/icon11.png")
       ],
-      swiper: []
+      swiper: [],
+      Article: [],
+      Works: []
     };
   },
   mounted() {
     this.getSwiper();
+    this.getArticle();
+    this.getWorks();
   },
   methods: {
     //跳转作品详情页
@@ -200,7 +130,6 @@ export default {
 
     //跳转文章资讯
     news(e) {
-      e = 12;
       this.$router.push(`/news/${e}`);
     },
     //跳转文章列表
@@ -225,8 +154,21 @@ export default {
     //获取轮播图信息
     getSwiper() {
       this.axios.get("/index/slide").then(res => {
-        console.log(res);
-        this.swiper = res.data;
+        this.swiper = res;
+      });
+    },
+    //获取文章
+    getArticle() {
+      this.axios.get("/article/index", { params: { limit: 3 } }).then(res => {
+        this.Article = res.data;
+      });
+    },
+
+    //获取作品
+    getWorks(e) {
+      this.axios.get("/works/index", { params: { order: e } }).then(res => {
+        this.Works = res;
+        this.btn = e || 1;
       });
     }
   },
@@ -351,35 +293,38 @@ export default {
         overflow: hidden;
         box-sizing: border-box;
         .img {
-          border-radius: 10px;
+          width: 30%;
+          border-radius: 5px;
+          overflow: hidden;
           img {
             display: inline-block;
-            width: auto;
+            width: 100%;
             height: 1.5rem;
             vertical-align: middle;
           }
         }
         .text {
-          width: 70%;
+          width: 67%;
           margin-left: 3%;
           overflow: hidden;
           display: flex;
           flex-direction: column;
-          justify-content: center;
+          // justify-content: center;
           text-align: left;
           .title {
-            width: 100%;
+            // width: 100%;
             font-size: $fontK;
             color: $colorB;
             font-weight: bold;
             margin-bottom: 0.18rem;
             @include textWidth();
+            display: block;
           }
           .text_content {
             width: 100%;
             max-height: 0.56rem;
             line-height: 0.28rem;
-            font-size: 0.16rem;
+            font-size: 0.21rem;
             color: #777777;
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -409,6 +354,8 @@ export default {
         img {
           width: auto;
           height: 2.22rem;
+          border-radius: 5px;
+          overflow: hidden;
         }
         .worksDetail {
           width: 100%;
@@ -470,7 +417,7 @@ export default {
       text-align: center;
       div {
         height: 0.39rem;
-        line-height: 0.39rem;
+        line-height: 0.4rem;
         padding: 0.08rem 0.24rem;
       }
       .btn {

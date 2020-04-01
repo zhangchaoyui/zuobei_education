@@ -9,7 +9,7 @@ import vueCookie from 'vue-cookie'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 Vue.config.productionTip = false
-
+import storage from "./stroage/index";
 Vue.use(MintUI);
 
 //根据前端跨域做调整,/api是接口代理，代理是最安全的
@@ -20,7 +20,10 @@ axios.interceptors.response.use(function (response) {
   let res = response.data;
   let path = location.hash;
   if (res.code == 1 || res.code == 2) {   //拦截业务错误码
-    return res;
+    if (res.code == 2) {
+      storage.setItem("userType", res.code);
+    }
+    return res.data;
   } else if (res.code == 0) {
     if (path != "#/index") {
       window.location.href = "/#/login"

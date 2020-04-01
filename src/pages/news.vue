@@ -1,8 +1,12 @@
 <template>
   <div class="news">
-    <div class="title">源自英国Iittle inventors小小发明家</div>
-    <div class="time">2020-03-19</div>
-    <div></div>
+    <div class="title">{{data.post_title}}</div>
+    <div class="time">{{data.published_time}}</div>
+    <div>
+      <div>
+        <p v-html="post_content"></p>
+      </div>
+    </div>
   </div>
 </template>
  
@@ -10,10 +14,38 @@
 export default {
   name: "news",
   data() {
-    return {};
+    return {
+      id: this.$route.params.id,
+      data: "",
+      post_content: ""
+    };
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.getDetail();
+  },
+  methods: {
+    //获取文章详情
+    getDetail() {
+      this.axios
+        .get("/article/detail", {
+          params: {
+            id: this.id
+          }
+        })
+        .then(res => {
+          this.data = res;
+          this.post_content = this.showHtml(res.post_content);
+        });
+    },
+    showHtml(str) {
+      return str
+        .replace(str ? /&(?!#?\w+;)/g : /&/g, "&amp;")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+    }
+  },
   components: {}
 };
 </script>
