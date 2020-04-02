@@ -13,11 +13,14 @@ export default {
   name: "feedback",
   data() {
     return {
-      imgList: [],
-      datas: new FormData(),
-      files: 0,
-      size: 0
+      value: ""
     };
+  },
+  methods: {
+    //提交用户内容
+    postValue() {
+      this.axios.post("/article/back", { content: this.value }).then(() => {});
+    }
   },
   components: {
     Btn

@@ -84,7 +84,11 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  mounted() {
+    this.axios.get("/personal/index", { params: {} }).then(res => {
+      this.user_info = res.data;
+    });
+  },
   methods: {},
   components: {}
 };

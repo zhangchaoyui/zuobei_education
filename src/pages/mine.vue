@@ -12,11 +12,11 @@
     </div>
     <div class="record">
       <div class="record_left">
-        <span>38,325</span>
+        <span>{{user_info.num}}</span>
         <span>上传作品次数</span>
       </div>
       <div class="record_right">
-        <span>18,325</span>
+        <span>{{user_info.praise}}</span>
         <span>点赞次数</span>
       </div>
     </div>
@@ -75,7 +75,7 @@ export default {
           type: 7
         }
       ],
-      user_info:{}
+      user_info: {}
     };
   },
   mounted() {
@@ -110,13 +110,21 @@ export default {
     },
 
     //获取个人信息
-    getMineInfo(){
-       this.axios.get("/personal/index", { params: {} }).then(res => {
-        this.user_info = res.data;
+    getMineInfo() {
+      this.axios.get("/personal/index", { params: {} }).then(res => {
+        console.log(res);
+        this.user_info = res;
+      });
+    },
+    //获取老师信息
+    getTeacherInfo() {
+      this.axios.get("/personal/teacher", { params: {} }).then(res => {
+        this.user_info = res;
       });
     }
   },
-  components: {}
+  components: {
+  }
 };
 </script>
 

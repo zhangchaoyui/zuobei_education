@@ -3,37 +3,38 @@
     <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search>
     <div class="frame">
       <div class="nav">
-        <div v-bind:class="{'btn':btn==1}" @click="btn=1">月度</div>
-        <div v-bind:class="{'btn':btn==2}" @click="btn=2">季度</div>
-        <div v-bind:class="{'btn':btn==3}" @click="btn=3">年度</div>
+        <div v-bind:class="{'btn':btn==1}" @click="getWorksList(1)">月度</div>
+        <div v-bind:class="{'btn':btn==2}" @click="getWorksList(2)">季度</div>
+        <div v-bind:class="{'btn':btn==3}" @click="getWorksList(3)">年度</div>
       </div>
       <div class="list">
         <div class="ranking">
           <div class="one">
             <div class="works_left">
               <div class="detail_let">
-                <img src="/images/22.png" alt />
+                <img v-bind:src="oneList[0].image" alt />
               </div>
               <div class="works_right">
                 <div class="works_r_top">
                   <div class="userImage">
-                    <img src="/images/user.jpg" alt />
+                    <img v-bind:src="oneList[0].avatar" alt />
                   </div>
                   <div class="userDetail">
-                    <div>蜡笔小新</div>
-                    <div>2020.3.13</div>
+                    <div>{{oneList[0].name}}111</div>
+                    <div>{{oneList[0].time}}</div>
                   </div>
                 </div>
                 <div class="row">
                   累计上传
-                  <span>100</span>&nbsp;次
+                  <span>{{oneList[0].num}}</span>&nbsp;次
                 </div>
                 <div class="row">
                   累计上传
-                  <span>15</span>&nbsp;天
+                  <span>{{oneList[0].num}}</span>&nbsp;天
                 </div>
                 <div class="top">
-                  <img src="/images/fabulous_red.png" alt />120
+                  <img src="/images/fabulous_red.png" alt />
+                  {{oneList[0].praise}}
                 </div>
               </div>
             </div>
@@ -43,64 +44,6 @@
                 <span>次</span>
               </div>
               <div class="bottom_row2">累计上墙</div>
-            </div>
-          </div>
-          <div class="two">
-            <div class="works_left2">
-              <div class="detail_let">
-                <img src="/images/22.png" alt />
-              </div>
-              <div class="works_right">
-                <div class="works_r_top">
-                  <div class="userImage">
-                    <img src="/images/user.jpg" alt />
-                  </div>
-                  <div class="userDetail">
-                    <div>蜡笔小新</div>
-                    <div>2020.3.13</div>
-                  </div>
-                </div>
-                <div class="row">
-                  累计上传
-                  <span>100</span>&nbsp;次
-                </div>
-                <div class="row">
-                  累计上传
-                  <span>15</span>&nbsp;天
-                </div>
-                <div class="top">
-                  <img src="/images/fabulous_red.png" alt />120
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="two">
-            <div class="works_left2">
-              <div class="detail_let">
-                <img src="/images/22.png" alt />
-              </div>
-              <div class="works_right">
-                <div class="works_r_top">
-                  <div class="userImage">
-                    <img src="/images/user.jpg" alt />
-                  </div>
-                  <div class="userDetail">
-                    <div>蜡笔小新</div>
-                    <div>2020.3.13</div>
-                  </div>
-                </div>
-                <div class="row">
-                  累计上传
-                  <span>100</span>&nbsp;次
-                </div>
-                <div class="row">
-                  累计上传
-                  <span>15</span>&nbsp;天
-                </div>
-                <div class="top">
-                  <img src="/images/fabulous_red.png" alt />120
-                </div>
-              </div>
             </div>
           </div>
           <div class="two">
@@ -145,7 +88,6 @@ export default {
     return {
       btn: 1, //按钮类型
       value: "", //搜索框内容
-      tid: 1, //导航id
       worksList: [], //列表
       oneList: {} //第一个显示
     };
@@ -159,16 +101,18 @@ export default {
     getWorksList(e) {
       this.axios.get("/works/ranking", { params: { tid: e } }).then(res => {
         this.worksList = res.data;
+        this.btn = e;
       });
     },
     //获取排行榜第一名信息
     getoOneList() {
       this.axios.get("/works/one", { params: {} }).then(res => {
-        this.oneList = res.data;
+        this.oneList = res;
       });
     }
   },
-  components: {}
+  components: {
+  }
 };
 </script>
 

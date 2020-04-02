@@ -11,7 +11,7 @@ export default new Router({
         {
             path: '/',//首页
             name: 'index',
-            meta: { title: '首页' },
+            meta: { title: '首页', showTab: true },
             component: Index,
         },
         {
@@ -35,7 +35,7 @@ export default new Router({
         {
             path: '/upload',//上传作品
             name: 'upload',
-            meta: { title: '上传作品' },
+            meta: { title: '上传作品', showTab: true },
             component: Upload,
         },
         {
@@ -60,7 +60,7 @@ export default new Router({
         {
             path: '/workslist',//作品列表
             name: 'worksList',
-            meta: { title: '作品列表' },
+            meta: { title: '作品列表', showTab: true },
             component: WorksList,
         },
         {
@@ -73,7 +73,7 @@ export default new Router({
         {
             path: '/mine',
             name: 'mine',
-            meta: { title: '我的' },
+            meta: { title: '我的', showTab: true },
             component: Mine,
         },
         {
@@ -165,6 +165,12 @@ export default new Router({
             name: 'productDetail',
             meta: { title: '商品详情' },
             component: resolve => require(['./pages/productDetail'], resolve),
+        },
+        {
+            path: '/rules',//积分规则
+            name: 'rules',
+            meta: { title: '积分规则' },
+            component: resolve => require(['./pages/rules'], resolve),
         }
 
     ]

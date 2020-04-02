@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <mt-tabbar v-model="selected" fixed>
+    <mt-tabbar v-model="selected" fixed  v-if='$route.meta.showTab'>
       <mt-tab-item id="0">
         <img slot="icon" class="ss" src="../public/images/icon40.png" v-if="selected!=0" />
         <img slot="icon" class="ss" src="../public/images/icon15.png" v-else />
