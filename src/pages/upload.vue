@@ -35,7 +35,31 @@ export default {
   methods: {
     fileClick() {
       this.axios.post("/index/image", {}).then(() => {});
+      wx.chooseImage({
+        success: function(res) {},
+        fail(res) {}
+      });
     }
+  },
+  created() {
+    axios
+      .get("/api/wechat/buildConfig")
+      .then(function(response) {
+        wx.config({
+          debug: false,
+          appId: response.data.appId,
+          timestamp: parseInt(response.data.timestamp),
+          nonceStr: response.data.nonceStr,
+          signature: response.data.signature,
+          jsApiList: ["chooseImage", "uploadImage"]
+        });
+        wx.ready(function() {
+          console.log("ready");
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   },
   components: {
     Btn
