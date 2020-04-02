@@ -135,30 +135,40 @@
         </div>
       </div>
     </div>
-    <Tabbar :selected="selected" :tabs="tabs" :nav="3"></Tabbar>
   </div>
 </template>
 
 <script>
-import Tabbar from "../components/Tabbar";
 export default {
   name: "workslist",
   data() {
     return {
-      btn: 1,
-      value: "",
-      selected: "作品排行",
-      tabs: [
-        require("../../public/images/icon40.png"),
-        require("../../public/images/icon9.png"),
-        require("../../public/images/icon10_yellow.png"),
-        require("../../public/images/icon11.png")
-      ]
+      btn: 1, //按钮类型
+      value: "", //搜索框内容
+      tid: 1, //导航id
+      worksList: [], //列表
+      oneList: {} //第一个显示
     };
   },
-  components: {
-    Tabbar
-  }
+  mounted() {
+    this.getoOneList();
+    this.getWorksList(1);
+  },
+  methods: {
+    //获取排行榜信息
+    getWorksList(e) {
+      this.axios.get("/works/ranking", { params: { tid: e } }).then(res => {
+        this.worksList = res.data;
+      });
+    },
+    //获取排行榜第一名信息
+    getoOneList() {
+      this.axios.get("/works/one", { params: {} }).then(res => {
+        this.oneList = res.data;
+      });
+    }
+  },
+  components: {}
 };
 </script>
 
@@ -219,9 +229,9 @@ export default {
       .ranking {
         .one {
           width: 100%;
-          height: 4.868rem;
+          height: 4.5rem;
           background: url("/images/background.png") no-repeat;
-          background-size: 100%;
+          background-size: 100% 100%;
           display: flex;
           flex-direction: row;
           align-items: center;
@@ -229,10 +239,10 @@ export default {
         }
         .two {
           width: 100%;
-          height: 3.38rem;
-          margin-top: 0.2rem;
+          height: 3rem;
+          margin-top: 0.1rem;
           background: url("/images/background7.png") no-repeat;
-          background-size: 100%;
+          background-size: 100% 100%;
           display: flex;
           flex-direction: row;
           align-items: center;

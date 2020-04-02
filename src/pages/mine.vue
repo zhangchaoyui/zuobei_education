@@ -29,23 +29,15 @@
         </span>
       </div>
     </div>
-    <Tabbar :selected="selected" :tabs="tabs" :nav="4"></Tabbar>
+    <div class="bottom"></div>
   </div>
 </template>
 
  <script>
-import Tabbar from "../components/Tabbar";
 export default {
   name: "mine",
   data() {
     return {
-      selected: "我的",
-      tabs: [
-        require("../../public/images/icon40.png"),
-        require("../../public/images/icon9.png"),
-        require("../../public/images/icon10.png"),
-        require("../../public/images/icon11_yellow.png")
-      ],
       list: [
         {
           icon: "icon18.png",
@@ -82,14 +74,16 @@ export default {
           name: "我的老师",
           type: 7
         }
-      ]
+      ],
+      user_info:{}
     };
   },
-  mounted() {},
+  mounted() {
+    this.getMineInfo();
+  },
   methods: {
     //功能跳转
     click(type) {
-      console.log(type);
       switch (type) {
         case 1:
           this.$router.push("/mywroks");
@@ -113,11 +107,16 @@ export default {
           this.$router.push("/myTeacher");
           break;
       }
+    },
+
+    //获取个人信息
+    getMineInfo(){
+       this.axios.get("/personal/index", { params: {} }).then(res => {
+        this.user_info = res.data;
+      });
     }
   },
-  components: {
-    Tabbar
-  }
+  components: {}
 };
 </script>
 
@@ -135,11 +134,12 @@ export default {
   position: relative;
   .header {
     width: 100%;
-    height: 3.7rem;
+    height: 27vh;
     background: url("/images/icon31.png") no-repeat;
     background-size: 100%;
     display: flex;
     flex-direction: row;
+    margin-bottom: 0.5rem;
     .img {
       width: 1.33rem;
       height: 1.33rem;
@@ -154,7 +154,7 @@ export default {
     }
     .username {
       width: 48%;
-      margin: 1.25rem 0 0 0.15rem;
+      margin: 1.3rem 0 0 0.15rem;
       font-size: 0.32rem;
       color: #333333;
       font-weight: bold;
@@ -259,7 +259,7 @@ export default {
     border-radius: 0.2rem;
     display: flex;
     flex-direction: column;
-    padding: 0.36rem 0;
+    padding: 0.2rem 0;
     .function {
       width: 90%;
       margin: 0 auto;
@@ -291,6 +291,10 @@ export default {
     .function:last-child {
       border-bottom: none;
     }
+  }
+  .bottom {
+    width: 100%;
+    height: 1rem;
   }
 }
 </style>

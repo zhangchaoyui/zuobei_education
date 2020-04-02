@@ -17,24 +17,15 @@
       </div>
     </div>
     <Btn btnType="1" sureText="发表"></Btn>
-    <Tabbar :selected="selected" :tabs="tabs" :nav="2"></Tabbar>
   </div>
 </template>
 
 <script>
-import Tabbar from "../components/Tabbar";
 import Btn from "../components/Button";
 export default {
   name: "upload",
   data() {
     return {
-      selected: "上传作品",
-      tabs: [
-        require("../../public/images/icon40.png"),
-        require("../../public/images/icon9_yellow.png"),
-        require("../../public/images/icon10.png"),
-        require("../../public/images/icon11.png")
-      ],
       imgList: [],
       datas: new FormData(),
       files: 0,
@@ -55,7 +46,6 @@ export default {
     }
   },
   components: {
-    Tabbar,
     Btn
   }
 };

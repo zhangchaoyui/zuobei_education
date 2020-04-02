@@ -83,25 +83,16 @@
         </div>
       </div>
     </div>
-    <Tabbar :selected="selected" :tabs="tabs" :nav="1"></Tabbar>
   </div>
 </template>
 
 <script>
-import Tabbar from "../components/Tabbar";
 export default {
   name: "index",
   data() {
     return {
       value: "",
-      selected: "首页",
       btn: 1,
-      tabs: [
-        require("../../public/images/icon15.png"),
-        require("../../public/images/icon9.png"),
-        require("../../public/images/icon10.png"),
-        require("../../public/images/icon11.png")
-      ],
       swiper: [],
       Article: [],
       Works: []
@@ -173,7 +164,6 @@ export default {
     }
   },
   components: {
-    Tabbar
   }
 };
 </script>
