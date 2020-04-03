@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <mt-tabbar v-model="selected" fixed  v-if='$route.meta.showTab'>
+    <mt-tabbar v-model="selected" fixed v-if="$route.meta.showTab">
       <mt-tab-item id="0">
         <img slot="icon" class="ss" src="../public/images/icon40.png" v-if="selected!=0" />
         <img slot="icon" class="ss" src="../public/images/icon15.png" v-else />
@@ -9,12 +9,12 @@
       <mt-tab-item id="1">
         <img slot="icon" src="../public/images/icon9.png" v-if="selected!=1" />
         <img slot="icon" src="../public/images/icon9_yellow.png" v-else />
-        分类
+        上传作品
       </mt-tab-item>
       <mt-tab-item id="2">
         <img slot="icon" src="../public/images/icon10.png" v-if="selected!=2" />
         <img slot="icon" src="../public/images/icon10_yellow.png" v-else />
-        发现
+        作品排行
       </mt-tab-item>
       <mt-tab-item id="3">
         <img slot="icon" src="../public/images/icon11.png" v-if="selected!=3" />

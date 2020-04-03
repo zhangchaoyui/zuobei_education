@@ -7,41 +7,72 @@
       <div class="functionList">
         <div class="function">
           <img class="icon" src="/images/icon21.png" />
-          <input type="text" placeholder="发明家的姓名" />
+          <input type="text" placeholder="发明家的姓名" v-model="name" />
         </div>
         <div class="function">
           <img class="icon" src="/images/icon26.png" />
-          <input type="text" placeholder="发明家的性别" />
+          <input type="text" placeholder="发明家的性别" v-model="sex" />
         </div>
         <div class="function">
           <img class="icon" src="/images/icon16.png" />
-          <input type="text" placeholder="发明家的手机号码" />
+          <input type="text" placeholder="发明家的手机号码" v-model="phone" />
         </div>
         <div class="function">
           <img class="icon" src="/images/icon8.png" />
-          <input type="text" placeholder="发明家的生日" />
+          <input type="text" placeholder="发明家的生日" v-model="birthday" />
         </div>
         <div class="function">
           <img class="icon" src="/images/address.png" />
-          <input type="text" placeholder="邮寄发明材料的地址" />
+          <input type="text" placeholder="邮寄发明材料的地址" v-model="address" />
         </div>
       </div>
-      <Btn btnType="1" sureText="保存"></Btn>
+      <v-distpicker type="mobile"></v-distpicker>
+      <Btn btnType="1" sureText="保存" v-on:submit="preservation"></Btn>
     </div>
   </div>
 </template>
 
  <script>
+ import VDistpicker from 'v-distpicker'
 import Btn from "../components/Button";
 export default {
   name: "userinfo",
   data() {
-    return {};
+    return {
+      name: "", //名称
+      sex: "", //性别
+      phone: "", //手机
+      birthday: "", //生日
+      address: "" //地址
+    };
   },
   mounted() {},
-  methods: {},
+  methods: {
+    //保存
+    preservation() {
+      let {
+        name, //名称
+        sex, //性别
+        phone, //手机
+        birthday, //生日
+        address
+      } = this;
+      this.axios
+        .post("/", {
+          name,
+          sex,
+          phone,
+          birthday,
+          address
+        })
+        .then(res => {
+          console.log(res);
+        });
+    }
+  },
   components: {
-    Btn
+    Btn,
+    VDistpicker
   }
 };
 </script>
@@ -84,7 +115,7 @@ export default {
         height: 0.76rem;
         line-height: 0.76rem;
         font-size: 0.26rem;
-        border-bottom: 0.002rem solid #EBEBED;
+        border-bottom: 0.002rem solid #ebebed;
         padding: 0.1rem 0;
         display: flex;
         .icon {

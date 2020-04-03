@@ -3,9 +3,7 @@
     <div class="img">
       <img src="/images/logo.png" />
     </div>
-    <div class="content">
-      
-    </div>
+    <div class="content" v-html="data">{{data}}</div>
   </div>
 </template>
 
@@ -14,13 +12,24 @@ export default {
   name: "personal",
   data() {
     return {
-      data:''
+      data: ""
     };
   },
-  mounted(){
-       this.axios.get("/article/about", { params: {} }).then(res => {
-        this.data = res.data;
-      });
+  mounted() {
+    this.axios.get("/article/about", { params: {} }).then(res => {
+      console.log(res);
+      this.data = this.showHtml(res.post_content);
+    });
+  },
+  methods: {
+    showHtml(str) {
+      return str
+        .replace(str ? /&(?!#?\w+;)/g : /&/g, "&amp;")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+    }
   },
   components: {}
 };

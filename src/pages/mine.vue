@@ -8,7 +8,7 @@
         <span>蜡笔小新蜡笔小新蜡笔小新蜡笔小新蜡笔小新</span>
         <img src="/images/icon27.png" alt />
       </div>
-      <div class="user_info">完善信息</div>
+      <div class="user_info" @click="perfect">完善信息</div>
     </div>
     <div class="record">
       <div class="record_left">
@@ -109,6 +109,11 @@ export default {
       }
     },
 
+    //完善信息
+    perfect() {
+      this.$router.push("/userInfo");
+    },
+
     //获取个人信息
     getMineInfo() {
       this.axios.get("/personal/index", { params: {} }).then(res => {
@@ -123,8 +128,7 @@ export default {
       });
     }
   },
-  components: {
-  }
+  components: {}
 };
 </script>
 

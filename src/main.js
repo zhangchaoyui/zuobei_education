@@ -11,10 +11,9 @@ import 'mint-ui/lib/style.css'
 Vue.config.productionTip = false
 import storage from "./stroage/index";
 Vue.use(MintUI);
+import Distpicker from 'v-distpicker'
 
-// import https from './https'
-// //声明公共请求方法
-// Vue.prototype.https = https
+Vue.component('v-distpicker', Distpicker)
 
 //根据前端跨域做调整,/api是接口代理，代理是最安全的
 axios.defaults.baseURL = "/api";

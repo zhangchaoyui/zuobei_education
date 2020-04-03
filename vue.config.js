@@ -1,10 +1,8 @@
 module.exports = {
     devServer: {
-        host: 'localhost',
-        port: 8080,
         proxy: {
             '/api': {
-                target: 'http://192.168.2.146/api.php/home',
+                target: 'http://zuobei.400539.com/api.php/home',
                 changeOrigin: true,
                 pathRewrite: {
                     '/api': ''
@@ -17,5 +15,4 @@ module.exports = {
     chainWebpack: (config) => {
         config.plugins.delete('prefetch');
     }
-
 }

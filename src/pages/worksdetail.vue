@@ -59,7 +59,7 @@
           <img src="/images/icon5.png" alt />分享
         </div>
         <div>
-          <img src="/images/icon30.png" alt />留言
+          <img src="/images/icon30.png" alt @click="recording" />留言
         </div>
         <div>
           <img src="/images/fabulous.png" alt />点赞
@@ -70,12 +70,13 @@
 </template>
 
 <script>
+import wx from "weixin-js-sdk";
 export default {
   name: "worksdetail",
   data() {
     return {
       id: this.$route.params.id,
-      data: {},
+      data: {}
     };
   },
   mounted() {
@@ -95,7 +96,31 @@ export default {
           console.log(res);
           this.data = res;
         });
+    },
+    recording() {
+      wx.startRecord();
     }
+  },
+  created() {
+    this.axios
+      .post("/token/responseMsg", { url: location.href.split("#")[0] })
+      .then(res => {
+        console.log(res);
+        wx.config({
+          debug: false,
+          appId: res.data.appId,
+          timestamp: parseInt(res.data.timestamp),
+          nonceStr: res.data.nonceStr,
+          signature: res.data.signanonceStrture,
+          jsApiList: ["startRecord", "stopRecord", ""]
+        });
+        wx.ready(function() {
+          console.log("ready");
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   },
   components: {}
 };
