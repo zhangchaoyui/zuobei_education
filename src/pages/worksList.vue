@@ -383,7 +383,7 @@ export default {
             @include textWidth();
             text-align: center;
             margin: 0.2rem auto 0;
-            font-size: 0.3rem;
+            font-size: 0.32rem;
             color: #ffed9e;
             span {
               font-size: 0.12rem;
@@ -392,7 +392,7 @@ export default {
           .bottom_row2 {
             width: 100%;
             text-align: center;
-            font-size: 0.1rem;
+            font-size: 0.17rem;
             color: #ffed9e;
           }
         }

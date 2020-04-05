@@ -31,7 +31,8 @@ export default {
   name: "App",
   data() {
     return {
-      selected: 0
+      selected: 0,
+      showTab:0,
     };
   },
   mounted() {
