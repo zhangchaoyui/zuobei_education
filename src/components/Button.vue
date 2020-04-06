@@ -31,14 +31,16 @@ export default {
     margin: 1rem auto 0;
   }
   .positionBtn {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 1rem;
     border: none;
     border-radius: 0.5rem;
+    background: #f5bb0e;
     color: #fff;
     font-size: 0.34rem;
     position: fixed;
     bottom: 0.17rem;
+    left: 5%;
   }
   .login2 {
     width: 100%;

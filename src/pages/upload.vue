@@ -8,7 +8,7 @@
         <img src="/images/icon38.png" />
       </div>-->
       <div class="img_cloumn">
-        <img src="/images/icon38.png" />
+        <img v-bind:src="localIds" />
         <input type="file" capture="camera" @click="fileClick" id="upload_file" />
       </div>
       <div class="img_cloumn">
@@ -30,7 +30,8 @@ export default {
       imgList: [],
       datas: new FormData(),
       files: 0,
-      size: 0
+      size: 0,
+      localIds:''
     };
   },
   methods: {
@@ -42,16 +43,17 @@ export default {
         success: function(res) {
           console.log(res);
           alert(res);
-          // var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
         }
       });
     }
   },
   created() {
+    console.log(location.href)
     this.axios
-      .post("/token/sdksign", { url: location.href.split("#")[0] })
+      .post("/token/sdksign", { url: location.href })   //.split("#")[0]
       .then(res => {
-        console.log(res);
+        // console.log(res);
         wx.config({
           debug: true,
           appId: res.appid,
@@ -61,12 +63,12 @@ export default {
           jsApiList: ["chooseImage", "previewImage", "uploadImage"]
         });
         wx.ready(function() {
-          console.log(1);
-          console.log("ready");
+          // console.log(1);
+          // console.log("ready");
         });
         wx.error(function(res) {
-          console.log(2);
-          console.log(res);
+          // console.log(2);
+          // console.log(res);
           // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
         });
       });

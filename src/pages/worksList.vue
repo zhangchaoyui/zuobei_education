@@ -392,7 +392,7 @@ export default {
           .bottom_row2 {
             width: 100%;
             text-align: center;
-            font-size: 0.17rem;
+            font-size: 0.2rem;
             color: #ffed9e;
           }
         }

@@ -1,5 +1,9 @@
 <template>
   <div class="logistics">
+    <div class="title">
+      <img src="/images/icon14.png" alt />
+      韵达快递：4158454548556
+    </div>
     <div class="package-status">
       <div class="status-box">
         <ul class="status-list">
@@ -60,6 +64,21 @@ export default {
 
 <style lang="scss">
 .logistics {
+  .title {
+    width: 95%;
+    padding: 0 2.5%;
+    height: 1rem;
+    line-height: 1rem;
+    font-size: 0.28rem;
+    display: flex;
+    align-items: center;
+    img {
+      width: 0.39rem;
+      height: 0.31rem;
+      margin-right: 3%;
+      margin-left: 6%;
+    }
+  }
   .package-status {
     padding: 18px 0 0 0;
   }
@@ -126,6 +145,7 @@ export default {
     text-align: left;
     margin-left: 25px;
     margin-top: -20px;
+    font-size: 0.25rem;
   }
   .status-content-latest {
     text-align: left;

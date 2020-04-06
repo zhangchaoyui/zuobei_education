@@ -118,12 +118,7 @@ export default new Router({
             meta: { title: '添加地址信息' },
             component: resolve => require(['./pages/addAddress'], resolve),
         },
-        {
-            path: '/myOrder',//我的订单
-            name: 'myOrder',
-            meta: { title: '我的订单' },
-            component: resolve => require(['./pages/myOrder'], resolve),
-        },
+
         {
             path: '/logistics',//物流
             name: 'logistics',
