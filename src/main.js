@@ -4,53 +4,24 @@ import router from './router'
 import axios from 'axios'
 import store from './store'
 import vueAxios from 'vue-axios'
-import lazyload from 'vue-lazyload'
 import vueCookie from 'vue-cookie'
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
-Vue.config.productionTip = false
-import storage from "./stroage/index";
-Vue.use(MintUI);
-import Distpicker from 'v-distpicker'
+import http from './https'
+//挂载到VUE实例，以便全局使用;
+Vue.prototype.http = http;
 
+
+import Distpicker from 'v-distpicker'
 Vue.component('v-distpicker', Distpicker)
+
+Vue.config.productionTip = false
 
 //根据前端跨域做调整,/api是接口代理，代理是最安全的
 axios.defaults.baseURL = "/api";
-
-//全局接口错误拦截
-axios.interceptors.response.use(function (response) {
-  let res = response.data;
-  let path = location.hash;
-  if (res.code == 1 || res.code == 2) {   //拦截业务错误码
-    if (res.code == 2) {
-      storage.setItem("userType", res.code);
-    }
-    return res.data;
-  } else if (res.code == 0) {
-    if (path != "#/index") {
-      window.location.href = "/#/login"
-    } else {
-      MintUI.Toast(res.data);
-    }
-    return Promise.reject(res);
-  } else {
-    MintUI.Toast(res.data);
-    return Promise.reject(res);
-  }
-}, (error) => { //这部分拦截服务器错误码
-  let res = error.response;
-  alert(res.data.message);
-  return Promise.reject(error);
-});
-
 Vue.use(vueAxios, axios);
 Vue.use(vueCookie);
-
-Vue.use(lazyload, {
-  loading: '/images/loading-spin.svg'
-})
-
+Vue.use(MintUI);
 new Vue({
   store,
   router,

@@ -1,5 +1,6 @@
 <template>
   <div class="app">
+    <router-view></router-view>
     <mt-tabbar v-model="selected" fixed v-if="$route.meta.showTab">
       <mt-tab-item id="0">
         <img slot="icon" class="ss" src="../public/images/icon40.png" v-if="selected!=0" />
@@ -22,7 +23,6 @@
         我的
       </mt-tab-item>
     </mt-tabbar>
-    <router-view></router-view>
   </div>
 </template>
 
@@ -32,13 +32,12 @@ export default {
   data() {
     return {
       selected: 0,
-      showTab:0,
+      showTab: 0
     };
   },
   mounted() {
-    this.axios.post("/login/index", {}).then(res => {
-      this.$cookie.set("token", res, { expires: "Session" });
-    });
+    console.log(1);
+    this.$cookie.set("token", "", { expires: "Session" });
   },
   watch: {
     selected: function(val) {

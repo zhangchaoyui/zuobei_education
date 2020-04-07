@@ -186,6 +186,7 @@ export default {
         margin-top: -0.1rem;
         width: 0.32rem;
         height: 0.34rem;
+        margin-right: 5%;
       }
     }
   }

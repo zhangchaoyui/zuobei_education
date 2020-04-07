@@ -1,6 +1,8 @@
  <template>
   <div class="workslist">
-    <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search>
+    <div class="search" @click="search">
+      <img src="/images/search.png" alt />请输入您要搜索的名称
+    </div>
     <div class="frame">
       <div class="nav">
         <div v-bind:class="{'btn':btn==1}" @click="getWorksList(1)">月度</div>
@@ -109,10 +111,13 @@ export default {
       this.axios.get("/works/one", { params: {} }).then(res => {
         this.oneList = res;
       });
+    },
+
+    search(){
+      this.$router.push("/search");
     }
   },
-  components: {
-  }
+  components: {}
 };
 </script>
 
@@ -124,27 +129,22 @@ export default {
   margin: 0.1rem auto 0;
   background: #fff;
   padding-bottom: 1.1rem;
-  .mint-search {
-    height: auto;
-    margin-top: 0.2rem;
-    .mint-searchbar {
-      padding: 0px 10px;
-      border-radius: 0.4rem;
-      background: #f9f9f9 !important;
-      .mint-searchbar-inner {
-        background: none !important;
-        .mintui-search {
-          font-size: 0.34rem;
-        }
-        .mint-searchbar-core {
-          padding-left: 5%;
-          background: none !important;
-        }
-      }
-      .mint-searchbar-cancel {
-        font-size: 0.34rem;
-        color: $colorA;
-      }
+   .search {
+    width: 100%;
+    height: 0.62rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.24rem;
+    color: #858585;
+    margin-top: 4%;
+    background: #f9f9f9;
+    border-radius: 0.3rem;
+    padding: 0;
+    img {
+      width: 0.26rem;
+      height: 0.26rem;
+      margin-left: 5%;
+      margin-right: 5%;
     }
   }
   .frame {

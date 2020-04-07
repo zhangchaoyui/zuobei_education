@@ -21,7 +21,7 @@
           <img class="icon" src="/images/icon8.png" />
           <input type="text" placeholder="发明家的生日" v-model="birthday" />
         </div>
-        <div class="function" @click="choose" >
+        <div class="function" @click="choose">
           <img class="icon" src="/images/address.png" />
           <input type="text" placeholder="邮寄发明材料的地址" v-model="address" />
         </div>
@@ -45,6 +45,7 @@
  <script>
 import VDistpicker from "v-distpicker";
 import Btn from "../components/Button";
+import { Toast } from "mint-ui";
 export default {
   name: "userinfo",
   data() {
@@ -74,8 +75,15 @@ export default {
         birthday, //生日
         address
       } = this;
+      if (name == "" || sex == "" || phone == "" || birthday == "") {
+        Toast("请完善用户信息~");
+        return;
+      } else if (address == "") {
+        Toast("请完善邮寄地址信息~");
+        return;
+      }
       this.axios
-        .post("/", {
+        .post("/login/vali", {
           name,
           sex,
           phone,

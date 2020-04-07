@@ -1,95 +1,51 @@
 <template>
-  <div class="myworks">
+  <div class="search">
+    <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search>
     <!-- 作品列表 -->
-    <div class="articleList">
+    <div class="articleList" v-if="Works">
       <div class="title">
         <div class="title_content">
-          <img src="/images/icon39.png" />我的作品集
+          <img src="/images/icon39.png" />作品列表
         </div>
       </div>
       <div class="content2">
-        <div class="works" @click="worksDetail(12)">
-          <img src="/images/22.png" />
+        <div
+          class="works"
+          @click="worksDetail(item.id)"
+          v-for="(item,index) in Works"
+          v-bind:key="index"
+        >
+          <img v-lazy="item.image" />
           <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
+            <div class="works_name">{{item.title}}</div>
+            <img src="/images/fabulous_red.png" style="border-radius:0" />
+            <div class="num">{{item.praise}}</div>
           </div>
           <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
+            <img src="/images/user.jpg" />
+            <div class="user_name">{{item.name}}</div>
+            <div class="submit">{{item.time}}</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
- 
- <script>
+
+<script>
 export default {
-  name: "myworks",
+  name: "index",
   data() {
-    return {};
+    return {
+      value: ""
+    };
   },
-  mounted() {
-    this.axios.get("personal/works", { params: {} }).then(res => {
-      this.user_info = res.data;
-    });
+  mounted() {},
+  methods: {
+    search() {
+      this.$router.push("/search");
+    }
   },
-  methods: {},
   components: {}
 };
 </script>
@@ -97,26 +53,56 @@ export default {
 <style lang="scss">
 @import "./../assets/scss/config.scss";
 @import "./../assets/scss/mixin.scss";
-.myworks {
+.search {
+  width: 96%;
+  margin: 0.1rem auto 0;
+  background: #fff;
+  padding-bottom: 1.1rem;
+  .mint-search {
+    height: auto;
+    margin-top: 0.2rem;
+    .mint-searchbar {
+      padding: 0px 10px;
+      border-radius: 0.4rem;
+      background: #f9f9f9 !important;
+      .mint-searchbar-inner {
+        background: none !important;
+        .mintui-search {
+          font-size: 0.34rem;
+        }
+        .mint-searchbar-core {
+          padding-left: 5%;
+          background: none !important;
+        }
+      }
+      .mint-searchbar-cancel {
+        font-size: 0.34rem;
+        color: $colorA;
+      }
+    }
+  }
+
   .articleList {
-    width: 96%;
-    min-height: 98vh;
-    background: url("/images/background10.png") repeat-y;
-    background-size: 100% 100%;
-    margin: 0.2rem auto 0;
+    width: 100%;
+    height: auto;
+    padding-bottom: 0.14rem;
+    background: url("/images/background10.png");
+    background-size: 100%;
+    box-sizing: border-box;
     .title {
       width: 100%;
       display: flex;
       flex-direction: row;
       position: relative;
-      overflow: hidden;
       .title_content {
+        width: 30%;
         height: 0.36rem;
         line-height: 0.36rem;
         display: flex;
         flex-direction: row;
+        justify-content: center;
         margin: 0.33rem auto 0.3rem;
-        font-size: 0.31rem;
+        font-size: 0.29rem;
         color: #fff;
         img {
           display: inline-block;
@@ -150,35 +136,38 @@ export default {
         overflow: hidden;
         box-sizing: border-box;
         .img {
-          border-radius: 10px;
+          width: 30%;
+          border-radius: 5px;
+          overflow: hidden;
           img {
             display: inline-block;
-            width: auto;
+            width: 100%;
             height: 1.5rem;
             vertical-align: middle;
           }
         }
         .text {
-          width: 70%;
+          width: 67%;
           margin-left: 3%;
           overflow: hidden;
           display: flex;
           flex-direction: column;
-          justify-content: center;
+          // justify-content: center;
           text-align: left;
           .title {
-            width: 100%;
+            // width: 100%;
             font-size: $fontK;
             color: $colorB;
             font-weight: bold;
             margin-bottom: 0.18rem;
             @include textWidth();
+            display: block;
           }
           .text_content {
             width: 100%;
             max-height: 0.56rem;
             line-height: 0.28rem;
-            font-size: 0.16rem;
+            font-size: 0.21rem;
             color: #777777;
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -208,6 +197,8 @@ export default {
         img {
           width: auto;
           height: 2.22rem;
+          border-radius: 5px;
+          overflow: hidden;
         }
         .worksDetail {
           width: 100%;
@@ -242,7 +233,7 @@ export default {
             border-radius: 0.5rem;
           }
           .user_name {
-            width: 60%;
+            width: 54%;
             padding-left: 3%;
             @include textWidth();
             font-size: $fontJ;
@@ -250,10 +241,32 @@ export default {
             color: #333333;
           }
           .submit {
+            width: 28%;
+            text-align: right;
             font-size: 0.18rem;
             color: #999999;
           }
         }
+      }
+    }
+    .works_nav {
+      width: 80%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin: 0 auto 0.27rem;
+      font-size: $fontJ;
+      color: #ffffff;
+      text-align: center;
+      div {
+        height: 0.39rem;
+        line-height: 0.4rem;
+        padding: 0.08rem 0.24rem;
+      }
+      .btn {
+        background: #fff;
+        border-radius: 20px;
+        color: $colorA;
       }
     }
   }

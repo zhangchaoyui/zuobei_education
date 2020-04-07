@@ -34,7 +34,7 @@
  
  <script>
 import Btn from "../components/Button";
-import { Toast } from "mint-ui";
+import { Toast, Indicator } from "mint-ui";
 export default {
   name: "login",
   data() {
@@ -64,13 +64,18 @@ export default {
         });
         return;
       }
-      this.axios
-        .post("/login/register", {
+      Indicator.open({
+        text: "加载中...",
+        spinnerType: "snake"
+      });
+
+      this.http
+        .post("login/login", {
           phone,
           password
         })
         .then(res => {
-          this.res = res;
+          console.log(res);
           Toast({
             message: "登陆成功~",
             position: "middle",
@@ -84,7 +89,20 @@ export default {
     },
 
     //绑定微信
-    bind() {},
+    bind() {
+      //appID
+      let appID = `wx4522fb49b27981d6`;
+      //appsecret
+      let appSerect = `015257afd30d4d7b1f4c304f0126982c`;
+      //点击授权后重定向url地址
+      let redirectUrl = `/login`;
+      let host = `http://192.168.2.104:8080`;
+      //微信授权api,接口返回code,点击授权后跳转到重定向地址并带上code参数
+      let authorizeUrl =
+        `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appID}&redirect_uri=` +
+        `${host}${redirectUrl}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
+      this.authorizeUrl = authorizeUrl;
+    },
 
     //注册
     register() {

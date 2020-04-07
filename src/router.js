@@ -166,7 +166,20 @@ export default new Router({
             name: 'rules',
             meta: { title: '积分规则' },
             component: resolve => require(['./pages/rules'], resolve),
+        },
+        {
+            path: '/newList',//积分规则
+            name: 'newList',
+            meta: { title: '新闻列表' },
+            component: resolve => require(['./pages/newList'], resolve),
+        },
+        {
+            path: '/search',//积分规则
+            name: 'search',
+            meta: { title: '搜索列表' },
+            component: resolve => require(['./pages/search'], resolve),
         }
+
 
     ]
 }) 

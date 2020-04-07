@@ -1,78 +1,31 @@
 <template>
-  <div class="myworks">
-    <!-- 作品列表 -->
+  <div class="newList">
+    <!-- 文章详情 -->
     <div class="articleList">
       <div class="title">
         <div class="title_content">
-          <img src="/images/icon39.png" />我的作品集
+          <img src="/images/icon30.png" />文章资讯
         </div>
       </div>
-      <div class="content2">
-        <div class="works" @click="worksDetail(12)">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
+      <div
+        class="content"
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="loading"
+        infinite-scroll-distance="10"
+      >
+        <div class="from" @click="news(item.id)" v-for="(item,index) in data" v-bind:key="index">
+          <div class="img">
+            <img v-lazy="item.thumbnail" />
           </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
+          <div class="text">
+            <div class="title">{{item.post_title}}</div>
+            <div class="text_content">{{item.post_content}}</div>
           </div>
         </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
+      </div>
+      <div class="loading-box tc" v-if="isLoading">
+        <mt-spinner type="snake" class="loading-more"></mt-spinner>
+        <span class="loading-more-txt">加载中...</span>
       </div>
     </div>
   </div>
@@ -80,16 +33,46 @@
  
  <script>
 export default {
-  name: "myworks",
+  name: "newList",
   data() {
-    return {};
+    return {
+      data: [],
+      isLoading: false,
+      page: 1
+    };
   },
   mounted() {
-    this.axios.get("personal/works", { params: {} }).then(res => {
-      this.user_info = res.data;
-    });
+    this.getDetail();
   },
-  methods: {},
+  methods: {
+    //获取文章详情
+    getDetail() {
+      this.axios
+        .get("/article/index", {
+          params: {
+            page: this.page,
+            limit: 1
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.loading = false;
+          this.data = this.data.concat(res.data);
+        });
+    },
+    //跳转文章资讯
+    news(e) {
+      this.$router.push(`/news/${e}`);
+    },
+
+    loadMore() {
+      this.loading = true;
+      this.page++;
+      setTimeout(() => {
+        this.getDetail();
+      }, 1000);
+    }
+  },
   components: {}
 };
 </script>
@@ -97,26 +80,28 @@ export default {
 <style lang="scss">
 @import "./../assets/scss/config.scss";
 @import "./../assets/scss/mixin.scss";
-.myworks {
+.newList {
   .articleList {
-    width: 96%;
-    min-height: 98vh;
+    width: 100%;
+    min-height: 100vh;
+    padding-bottom: 0.14rem;
     background: url("/images/background10.png") repeat-y;
     background-size: 100% 100%;
-    margin: 0.2rem auto 0;
+    box-sizing: border-box;
     .title {
       width: 100%;
       display: flex;
       flex-direction: row;
       position: relative;
-      overflow: hidden;
       .title_content {
+        width: 30%;
         height: 0.36rem;
         line-height: 0.36rem;
         display: flex;
         flex-direction: row;
+        justify-content: center;
         margin: 0.33rem auto 0.3rem;
-        font-size: 0.31rem;
+        font-size: 0.29rem;
         color: #fff;
         img {
           display: inline-block;
@@ -135,11 +120,13 @@ export default {
     }
     .content {
       width: 94%;
+      min-height: 95vh;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       text-align: left;
       background: #fff;
+      border-radius: 10px;
       .from {
         display: flex;
         flex-direction: row;
@@ -150,35 +137,38 @@ export default {
         overflow: hidden;
         box-sizing: border-box;
         .img {
-          border-radius: 10px;
+          width: 30%;
+          border-radius: 5px;
+          overflow: hidden;
           img {
             display: inline-block;
-            width: auto;
+            width: 100%;
             height: 1.5rem;
             vertical-align: middle;
           }
         }
         .text {
-          width: 70%;
+          width: 67%;
           margin-left: 3%;
           overflow: hidden;
           display: flex;
           flex-direction: column;
-          justify-content: center;
+          // justify-content: center;
           text-align: left;
           .title {
-            width: 100%;
+            // width: 100%;
             font-size: $fontK;
             color: $colorB;
             font-weight: bold;
             margin-bottom: 0.18rem;
             @include textWidth();
+            display: block;
           }
           .text_content {
             width: 100%;
             max-height: 0.56rem;
             line-height: 0.28rem;
-            font-size: 0.16rem;
+            font-size: 0.21rem;
             color: #777777;
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -208,6 +198,8 @@ export default {
         img {
           width: auto;
           height: 2.22rem;
+          border-radius: 5px;
+          overflow: hidden;
         }
         .worksDetail {
           width: 100%;
@@ -242,7 +234,7 @@ export default {
             border-radius: 0.5rem;
           }
           .user_name {
-            width: 60%;
+            width: 54%;
             padding-left: 3%;
             @include textWidth();
             font-size: $fontJ;
@@ -250,10 +242,32 @@ export default {
             color: #333333;
           }
           .submit {
+            width: 28%;
+            text-align: right;
             font-size: 0.18rem;
             color: #999999;
           }
         }
+      }
+    }
+    .works_nav {
+      width: 80%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin: 0 auto 0.27rem;
+      font-size: $fontJ;
+      color: #ffffff;
+      text-align: center;
+      div {
+        height: 0.39rem;
+        line-height: 0.4rem;
+        padding: 0.08rem 0.24rem;
+      }
+      .btn {
+        background: #fff;
+        border-radius: 20px;
+        color: $colorA;
       }
     }
   }

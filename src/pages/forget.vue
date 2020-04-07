@@ -65,45 +65,55 @@ export default {
         });
         return;
       }
-      this.axios
+      this.http
         .post("/login/reg", {
           phone,
           code,
           password
         })
-        .then(res => {
-          this.res = res;
+        .then(() => {
           Toast({
             message: "重置密码成功~",
             position: "middle",
             duration: 1900
           });
           setTimeout(() => {
-            this.$router.push("/login");
+            this.$router.go(-1);
           }, 2000);
         });
     },
 
     //验证码倒计时
     codeTime() {
-      Toast({
-        message: "验证码发送成功~",
-        position: "bottom",
-        duration: 2000
+      var myreg = /^[1]([3-9])[0-9]{9}$/;
+      if (this.phone == "" || !myreg.test(this.phone)) {
+        Toast({
+          message: "请输入正确的手机号码！",
+          position: "bottom",
+          duration: 2000
+        });
+        return;
+      }
+      this.http.post("/Sms/index", { phone: this.phone }).then(() => {
+        Toast({
+          message: "验证码发送成功~",
+          position: "bottom",
+          duration: 2000
+        });
+        this.timeStatus = 0;
+        let { time } = this,
+          a;
+        a = setInterval(() => {
+          if (time == 0) {
+            this.timeStatus = 1;
+            this.time = 60;
+            clearInterval(a);
+          } else {
+            --time;
+            this.time = time;
+          }
+        }, 1000);
       });
-      this.timeStatus = 0;
-      let { time } = this,
-        a;
-      a = setInterval(() => {
-        if (time == 0) {
-          this.timeStatus = 1;
-          this.time = 60;
-          clearInterval(a);
-        } else {
-          --time;
-          this.time = time;
-        }
-      }, 1000);
     }
   },
   components: {

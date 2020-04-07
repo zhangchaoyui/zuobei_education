@@ -6,7 +6,10 @@
         <img v-lazy="item.image" />
       </mt-swipe-item>
     </mt-swipe>
-    <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search>
+    <!-- <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search> -->
+    <div class="search" @click="search">
+      <img src="/images/search.png" alt />请输入您要搜索的名称
+    </div>
     <div class="nav-list">
       <div class="nav_row" @click="nav(1)">
         <img src="/images/category1.png" />
@@ -125,7 +128,7 @@ export default {
     },
     //跳转文章列表
     newsList() {
-      this.$router.push("/newsList");
+      this.$router.push("/newList");
     },
 
     //跳转导航
@@ -161,10 +164,13 @@ export default {
         this.Works = res;
         this.btn = e || 1;
       });
+    },
+
+    search() {
+      this.$router.push("/search");
     }
   },
-  components: {
-  }
+  components: {}
 };
 </script>
 
@@ -183,6 +189,24 @@ export default {
     img {
       width: 100%;
       height: 4.15rem;
+    }
+  }
+  .search {
+    width: 100%;
+    height: 0.62rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.24rem;
+    color: #858585;
+    margin-top: 4%;
+    background: #f9f9f9;
+    border-radius: 0.3rem;
+    padding: 0;
+    img {
+      width: 0.26rem;
+      height: 0.26rem;
+      margin-left: 5%;
+      margin-right: 5%;
     }
   }
   .mint-search {
@@ -340,7 +364,7 @@ export default {
         padding: 0.27rem 0 0 0.26rem;
         box-sizing: border-box;
         float: left;
-        margin-left: 1%;
+        margin-left: 2%;
         img {
           width: auto;
           height: 2.22rem;
@@ -354,7 +378,7 @@ export default {
           flex-direction: row;
           margin-top: 0.21rem;
           .works_name {
-            width: 78%;
+            width: 90%;
             @include textWidth();
             font-size: 0.26rem;
             line-height: 0.28rem;
@@ -362,6 +386,7 @@ export default {
           img {
             width: auto;
             height: 0.21rem;
+            margin-right: 2%;
           }
           .num {
             color: #f05556;
