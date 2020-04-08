@@ -41,6 +41,7 @@ function errorfun(res) {
 }
 export default {
     post(url, data) {//post请求
+        data.token = document.cookie
         return axios({
             method: 'post',
             url,
@@ -70,6 +71,6 @@ export default {
             return errorfun(err)
         })
     },
-    
+
 }
 
