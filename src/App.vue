@@ -36,8 +36,7 @@ export default {
     };
   },
   mounted() {
-    console.log(1);
-    this.$cookie.set("token", "", { expires: "Session" });
+    this.$store.dispatch("userStatus", 0);
   },
   watch: {
     selected: function(val) {

@@ -1,74 +1,136 @@
 <template>
   <div class="upload">
     <div class="text">
-      <textarea class="textarea" placeholder="输入你作品的标题…"></textarea>
+      <textarea class="textarea" placeholder="输入你作品的标题…" v-model="value"></textarea>
     </div>
     <div class="img">
+      <div class="img_cloumn" v-for="(item,index) in imgList" :key="index">
+        <img v-bind:src="item" />
+      </div>
       <div class="img_cloumn">
-        <img src="/images/icon38.png" @click="xuan" />
+        <img src="/images/icon38.png" @click="onClickUp" />
       </div>
     </div>
-    <Btn btnType="1" sureText="发表" v-on:submit="aa"></Btn>
+    <div>{{serverId}}</div>
+    <div>{{localIdImgs}}</div>
+    <Btn btnType="1" sureText="发表" v-on:submit="fromData"></Btn>
   </div>
 </template>
 
 <script>
 import wx from "weixin-js-sdk";
 import Btn from "../components/Button";
-import { Toast } from "mint-ui";
 export default {
   name: "upload",
   data() {
     return {
-      imgList: [],
-      // pic:[],
+      imgList: [], //图片列表
+      pic: [],
+      imgaesMaxLenght: 3, //可上传图片
+      value: ""
     };
   },
   methods: {
     //选择图片
-    xuan() {
-      const that = this;
-      wx.ready(() => {
-        wx.chooseImage({
-          count: 1,
-          sizeType: ["compressed"], // 可以指定是原图还是压缩图，默认二者都有
-          sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
-          success: function(res) {
-            var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-            that.pic = localIds[0];
-          }
-        });
-      });
-    },
-
-    //上传图片
-    submit() {
-      const that = this;
-      const img = that.pic;
-      if (that.pic == "" ) {
-        Toast("未选择图片");
-        return;
-      }
-      wx.uploadImage({
-        localId: img, // 需要上传的图片的本地ID，由chooseImage接口获得
-        isShowProgressTips: 1, // 默认为1，显示进度提示
+    onClickUp() {
+      let _this = this;
+      wx.chooseImage({
+        count: _this.imgaesMaxLenght - _this.imgList.length, // 默认9
+        sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: function(res) {
-          let serverId = res.serverId; //这里要let或var定义下，不然会错误停止执行。被坑了备注一下
-          alert(serverId);
+          let localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          // 判断 ios
+          if (window.__wxjs_is_wkwebview) {
+            _this.wxgetLocalImgData(localIds);
+          } else {
+            localIds.forEach((item) => {
+              _this.imgList.push(item);
+              if (_this.imgList.length >= _this.imgaesMaxLenght) {
+                _this.imgLenght = false;
+              }
+            });
+          }
+          _this.wxuploadImage(localIds);
         },
-        fail: function(res) {
-          alert(JSON.stringify(res));
+        fail: function() {
+          console.log("失败");
         }
       });
     },
 
-    aa(){
+    wxuploadImage(localIds) {
+      let _this = this;
+      var i = 0;
+      var length = localIds.length;
+      var upload = function() {
+        let loacId = localIds[i];
+        if (window.__wxjs_is_wkwebview) {
+          if (loacId.indexOf("wxlocalresource") != -1) {
+            loacId = loacId.replace("wxlocalresource", "wxLocalResource");
+          }
+        }
+        wx.uploadImage({
+          localId: loacId, // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 1, // 默认为1，显示进度提示
+          success: function(res) {
+            this.value = res.serverId;
+            var serverId = {
+              id: "",
+              serverid: res.serverId
+            };
+            _this.serverId.push(serverId);
+            i++;
+            i < length && upload();
+          },
+          fail: function() {
+            alert("失败11");
+          }
+        });
+      };
+      upload();
+    },
 
+    wxgetLocalImgData(localIds) {
+      let _this = this;
+      var i = 0;
+      var length = localIds.length;
+      var upload = function() {
+        wx.getLocalImgData({
+          localId: localIds[i], // 图片的localID
+          success: function(res) {
+            let localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+            localData = localData.replace("jpg", "jpeg");
+            _this.localIdImgs.push(localData);
+            if (_this.localIdImgs.length >= _this.imgaesMaxLenght) {
+              _this.imgLenght = false;
+            }
+            i++;
+            i < length && upload();
+          }
+        });
+      };
+      upload();
+    },
+
+    //
+    fromData() {
+      let { value, imgList } = this;
+      this.http
+        .post("/works/work", {
+          title: "111",
+          value,
+          image: imgList
+        })
+        .then(res => {
+          alert(res);
+          console.log(res);
+          // util.toast("登陆成功~");
+        });
     }
   },
 
   created() {
-    console.log(location.href);
     this.axios
       .post("/token/sdksign", { url: location.href.split("#")[0] })
       .then(res => {
@@ -78,7 +140,7 @@ export default {
           timestamp: parseInt(res.timestamp),
           nonceStr: res.nonceStr,
           signature: res.signature,
-          jsApiList: ["chooseImage", "previewImage", "uploadImage"]
+          jsApiList: ["chooseImage", "uploadImage", "downloadImage"]
         });
         wx.ready(function() {
           console.log("ready");
@@ -125,7 +187,7 @@ export default {
     .img_cloumn {
       height: auto;
       position: relative;
-      margin-left: 0.23rem;
+      margin-left: 0.18rem;
       img {
         width: 2.09rem;
         height: 2.09rem;

@@ -6,9 +6,9 @@ import { Toast, Indicator } from "mint-ui";
 axios.interceptors.response.use(function (response) {
     let res = response.data;
     let path = location.hash;
-    if (res.code == 1 ) {   //拦截业务错误码
+    if (res.code == 1) {   //拦截业务错误码
         return res.data;
-    } else if (res.code == 0) {
+    } else if (res.code == 2) {
         if (path != "#/index") {
             window.location.href = "/#/login"
         } else {
@@ -69,6 +69,7 @@ export default {
             Indicator.close();
             return errorfun(err)
         })
-    }
+    },
+    
 }
 

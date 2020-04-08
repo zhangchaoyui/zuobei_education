@@ -39,7 +39,7 @@
  
  <script>
 import Btn from "../components/Button";
-import { Toast } from "mint-ui";
+import util from "../util/util";
 export default {
   name: "register",
   data() {
@@ -59,27 +59,16 @@ export default {
       let { phone, password, code } = this;
       var myreg = /^[1]([3-9])[0-9]{9}$/;
       if (phone == "" || !myreg.test(phone)) {
-        Toast({
-          message: "请输入正确的手机号码！",
-          position: "bottom",
-          duration: 2000
-        });
+        util.toast("请输入正确的手机号码！");
         return;
       } else if (code == "") {
-        Toast({
-          message: "请验证码！",
-          position: "bottom",
-          duration: 2000
-        });
+        util.toast("请验证码！");
         return;
       } else if (password == "") {
-        Toast({
-          message: "请输入密码！",
-          position: "bottom",
-          duration: 2000
-        });
+        util.toast("请输入密码！");
         return;
       }
+      util.Indicator("加载中");
       this.http
         .post("/login/reg", {
           phone,
@@ -87,11 +76,7 @@ export default {
           password
         })
         .then(() => {
-          Toast({
-            message: "注册成功~",
-            position: "middle",
-            duration: 1900
-          });
+          util.toast("注册成功~");
           setTimeout(() => {
             this.$router.go(-1);
           }, 2000);
@@ -101,11 +86,7 @@ export default {
     //验证码倒计时
     codeTime() {
       this.http.post("/Sms/index", { phone: this.phone }).then(() => {
-        Toast({
-          message: "验证码发送成功~",
-          position: "bottom",
-          duration: 2000
-        });
+        util.toast("验证码发送成功~");
         this.timeStatus = 0;
         let { time } = this,
           a;

@@ -34,54 +34,42 @@
  
  <script>
 import Btn from "../components/Button";
-import { Toast, Indicator } from "mint-ui";
+import util from "../util/util";
 export default {
   name: "login",
   data() {
     return {
       phone: "",
-      password: ""
+      password: "",
+      code: ""
     };
   },
-  mounted() {},
+  mounted() {
+    this.getOpenId();
+  },
   methods: {
     //登录
     login() {
       let { phone, password } = this;
       var myreg = /^[1]([3-9])[0-9]{9}$/;
       if (phone == "" || !myreg.test(phone)) {
-        Toast({
-          message: "请输入正确的手机号码！",
-          position: "bottom",
-          duration: 2000
-        });
+        util.toast("请输入正确的手机号码！");
         return;
       } else if (password == "") {
-        Toast({
-          message: "请输入密码！",
-          position: "bottom",
-          duration: 2000
-        });
+        util.toast("请输入密码！");
         return;
       }
-      Indicator.open({
-        text: "加载中...",
-        spinnerType: "snake"
-      });
-
+      util.Indicator("加载中");
       this.http
-        .post("login/login", {
+        .post("/login/login", {
           phone,
           password
         })
         .then(res => {
-          console.log(res);
-          Toast({
-            message: "登陆成功~",
-            position: "middle",
-            duration: 1900
-          });
-          this.$cookie.set("userId", res.id, { expires: "Session" });
+          util.toast("登陆成功~");
+          this.$cookie.set("token", res.token, { expires: "Session" });
+          this.$store.dispatch("userStatus", 1);
+          this.$store.dispatch("user_type", res.user_type);
           setTimeout(() => {
             this.$router.push("/");
           }, 2000);
@@ -90,18 +78,47 @@ export default {
 
     //绑定微信
     bind() {
-      //appID
-      let appID = `wx4522fb49b27981d6`;
-      //appsecret
-      let appSerect = `015257afd30d4d7b1f4c304f0126982c`;
-      //点击授权后重定向url地址
-      let redirectUrl = `/login`;
-      let host = `http://192.168.2.104:8080`;
-      //微信授权api,接口返回code,点击授权后跳转到重定向地址并带上code参数
-      let authorizeUrl =
-        `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appID}&redirect_uri=` +
-        `${host}${redirectUrl}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
-      this.authorizeUrl = authorizeUrl;
+      const appid = "wx4522fb49b27981d6";
+      const code = util.GetQueryString("code"); // 截取路径
+      if (code == null || code === "") {
+        const local = "http://zuobei.niu5.cc/#/login";
+        window.location.href =
+          "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+          appid +
+          "&redirect_uri=" +
+          encodeURIComponent(local) +
+          "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+      } else {
+        this.code = code;
+      }
+    },
+    
+    //获取用户信息
+    getOpenId() {
+      let {code}=this
+      if (!code) {
+        return false;
+      } else {
+        // 通过code获取 openId等用户信息，/api/user/wechat/login 为后台接口
+        let { phone } = this;
+        var myreg = /^[1]([3-9])[0-9]{9}$/;
+        if (phone == "" || !myreg.test(phone)) {
+          util.toast("请输入正确的手机号码！");
+          return;
+        }
+        util.Indicator("加载中");
+        this.http
+          .post("/login/getToken", {
+            code: this.code,
+            phone: this.phone
+          })
+          .then(() => {
+            util.toast("绑定微信成功~");
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     },
 
     //注册

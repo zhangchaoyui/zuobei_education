@@ -104,7 +104,7 @@ export default {
           this.$router.push("/feedback");
           break;
         case 7:
-         <a href="tel:0147-88469258"></a>
+          <a href="tel:0147-88469258"></a>;
           break;
       }
     },
