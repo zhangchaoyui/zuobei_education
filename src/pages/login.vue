@@ -44,9 +44,7 @@ export default {
       code: ""
     };
   },
-  mounted() {
-    this.getOpenId();
-  },
+  mounted() {},
   methods: {
     //登录
     login() {
@@ -59,21 +57,22 @@ export default {
         util.toast("请输入密码！");
         return;
       }
+      this.getOpenId();
       util.Indicator("加载中");
-      this.http
-        .post("/login/login", {
-          phone,
-          password
-        })
-        .then(res => {
-          util.toast("登陆成功~");
-          this.$cookie.set("token", res.token, { expires: "Session" });
-          this.$store.dispatch("userStatus", 1);
-          this.$store.dispatch("user_type", res.user_type);
-          setTimeout(() => {
-            this.$router.push("/");
-          }, 2000);
-        });
+      setTimeout(() => {
+        this.http
+          .post("/login/login", {
+            phone,
+            password
+          })
+          .then(res => {
+            util.toast("登陆成功~");
+            this.$cookie.set("token", res.token);
+            setTimeout(() => {
+              this.$router.push("/");
+            }, 2000);
+          });
+      }, 800);
     },
 
     //绑定微信
@@ -92,33 +91,15 @@ export default {
         this.code = code;
       }
     },
-    
+
     //获取用户信息
     getOpenId() {
-      let {code}=this
-      if (!code) {
-        return false;
-      } else {
-        // 通过code获取 openId等用户信息，/api/user/wechat/login 为后台接口
-        let { phone } = this;
-        var myreg = /^[1]([3-9])[0-9]{9}$/;
-        if (phone == "" || !myreg.test(phone)) {
-          util.toast("请输入正确的手机号码！");
-          return;
-        }
-        util.Indicator("加载中");
-        this.http
-          .post("/login/getToken", {
-            code: this.code,
-            phone: this.phone
-          })
-          .then(() => {
-            util.toast("绑定微信成功~");
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      }
+      this.http
+        .post("/login/getToken", {
+          code: util.GetQueryString("code"),
+          phone: this.phone
+        })
+        .then(() => {});
     },
 
     //注册

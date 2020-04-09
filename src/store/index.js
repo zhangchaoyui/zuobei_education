@@ -5,9 +5,10 @@ import actions from './action'
 
 Vue.use(Vuex);
 
-const state={
-    username:'',//登录用户名
-    cartCount:0,//购物车商品数量
+const state = {
+    token: '',//token
+    status: 0,//用户登录状态
+    type: ''//用户类型
 }
 export default new Vuex.Store({
     state,
