@@ -43,7 +43,12 @@
     </div>
     <div class="br2"></div>
     <div class="bottom">
-      <div class="user">
+      <div
+        class="user"
+        @touchstart="recording($event)"
+        @touchmove="touchend($event)"
+        @touchend="endVoice"
+      >
         <img src="/images/user.jpg" alt />
         小新老师
       </div>
@@ -56,15 +61,10 @@
       </div>
       <div class="icon">
         <div>
-          <img src="/images/icon5.png" alt />分享
+          <img src="/images/icon5.png" alt @click="initShareInfo" />分享
         </div>
         <div>
-          <img
-            src="/images/icon30.png"
-            @touchstart="recording($event)"
-            @touchmove="touchend($event)"
-            @touchend="endVoice"
-          />留言
+          <img src="/images/icon30.png" />留言
         </div>
         <div>
           <img src="/images/fabulous.png" alt />点赞
@@ -76,7 +76,10 @@
 
 <script>
 import wx from "weixin-js-sdk";
-let START,END,recordTimer,voice={};
+let START,
+  END,
+  recordTimer,
+  voice = {};
 export default {
   name: "worksdetail",
   data() {
@@ -111,7 +114,7 @@ export default {
       recordTimer = setTimeout(function() {
         wx.startRecord({
           success: function(res) {
-            console.log(res)
+            console.log(res);
             // localStorage.rainAllowRecord = "true";
           },
           cancel: function() {
@@ -150,10 +153,10 @@ export default {
         localId: voice.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
         isShowProgressTips: 1, // 默认为1，显示进度提示
         success: function(res) {
-          console.log(res)
+          console.log(res);
           //把录音在微信服务器上的id（res.serverId）发送到自己的服务器供下载。
           this.http
-            .post('', {
+            .post("", {
               data: JSON.stringify(res)
             })
             .then(res => {
@@ -162,6 +165,7 @@ export default {
         }
       });
     },
+
     endVoice() {
       //注册微信播放录音结束事件【一定要放在wx.ready函数内】
       wx.onVoicePlayEnd({
@@ -173,11 +177,11 @@ export default {
     },
 
     //分享功能
-    initShareInfo(wx) {
+    initShareInfo() {
       let shareInfo = {
-        title: "慕课支付分享专项课程", // 分享标题
-        desc: "欢迎学习慕课支付分享专项课程", // 分享描述
-        link: "http://m.51purse.com/#/index", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        title: "做呗科技", // 分享标题
+        desc: "做呗科技做呗科技做呗科技", // 分享描述
+        link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: "" // 分享图标
       };
       wx.onMenuShareAppMessage(shareInfo);
@@ -194,7 +198,7 @@ export default {
       .then(res => {
         console.log(res);
         wx.config({
-          debug: false,
+          debug: true,
           appId: res.data.appId,
           timestamp: parseInt(res.data.timestamp),
           nonceStr: res.data.nonceStr,

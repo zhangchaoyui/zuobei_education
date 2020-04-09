@@ -6,12 +6,13 @@ import { Toast, Indicator } from "mint-ui";
 axios.interceptors.response.use(function (response) {
     let res = response.data;
     let path = location.hash;
-    if (res.code == 1) {   //拦截业务错误码
+    if (res.code == 1 || res.code == 2) {   //拦截业务错误码
         return res.data;
-    } else if (res.code == 2) {
+    } else if (res.code == 0) {
         if (path != "#/index") {
             window.location.href = "/#/login"
         } else {
+            window.location.href = "/#/login"
             Toast(res.msg);
         }
         return Promise.reject(res);
@@ -41,6 +42,8 @@ function errorfun(res) {
 }
 export default {
     post(url, data) {//post请求
+        data.token = ;
+        console.log(data.token,22222)
         return axios({
             method: 'post',
             url,

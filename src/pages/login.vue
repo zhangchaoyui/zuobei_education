@@ -20,7 +20,7 @@
         </div>
         <Btn btnType="2" sureText="登录" v-on:submit="login"></Btn>
         <div class="user_operation">
-          <div @click="register">注册</div>
+          <div @click="bind">注册</div>
           <div @click="forget">忘记密码</div>
         </div>
         <div class="wx_chat" @click="bind">
@@ -44,7 +44,11 @@ export default {
       code: ""
     };
   },
-  mounted() {},
+  mounted() {
+    if (util.GetQueryString("code")) {
+      this.getOpenId();
+    }
+  },
   methods: {
     //登录
     login() {
@@ -57,7 +61,6 @@ export default {
         util.toast("请输入密码！");
         return;
       }
-      this.getOpenId();
       util.Indicator("加载中");
       setTimeout(() => {
         this.http
@@ -68,6 +71,7 @@ export default {
           .then(res => {
             util.toast("登陆成功~");
             this.$cookie.set("token", res.token);
+            this.$cookie.set("user_type", res.user_type);
             setTimeout(() => {
               this.$router.push("/");
             }, 2000);
@@ -75,7 +79,7 @@ export default {
       }, 800);
     },
 
-    //绑定微信
+    //微信授权
     bind() {
       const appid = "wx4522fb49b27981d6";
       const code = util.GetQueryString("code"); // 截取路径
@@ -86,7 +90,7 @@ export default {
           appid +
           "&redirect_uri=" +
           encodeURIComponent(local) +
-          "&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+          "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
       } else {
         this.code = code;
       }
@@ -94,18 +98,24 @@ export default {
 
     //获取用户信息
     getOpenId() {
-      console.log(util.GetQueryString("code"), 222);
       this.http
         .post("/login/getToken", {
-          code: util.GetQueryString("code"),
-          phone: this.phone
+          code: util.GetQueryString("code")
         })
-        .then(() => {});
-    },
-
-    //注册
-    register() {
-      this.$router.push("/register");
+        .then(res => {
+          console.log(res);
+          if (res.user_type) {
+            util.toast("登陆成功~");
+            setTimeout(() => {
+              this.$cookie.set("token", res.token);
+              this.$cookie.set("user_type", res.user_type);
+              this.$router.push("/");
+            }, 1800);
+          } else {
+            this.$cookie.set("token", res.token);
+            this.$router.push("/register");
+          }
+        });
     },
 
     //忘记密码

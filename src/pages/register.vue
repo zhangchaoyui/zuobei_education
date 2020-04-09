@@ -78,7 +78,7 @@ export default {
         .then(() => {
           util.toast("注册成功~");
           setTimeout(() => {
-            this.$router.go(-1);
+            window.location.href = "http://zuobei.niu5.cc/#/login";
           }, 2000);
         });
     },
@@ -106,11 +106,11 @@ export default {
     //身份选择
     type(e) {
       this.page = 2;
-      this.axios
-        .post("/login/iden", {
-          tid: e
+       this.http.post("/login/iden", {
+          tid: e,
         })
-        .then(() => {});
+        .then(() => {
+        });
     }
   },
   components: {
