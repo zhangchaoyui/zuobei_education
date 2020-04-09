@@ -4,15 +4,13 @@
       <textarea class="textarea" placeholder="输入你作品的标题…" v-model="value"></textarea>
     </div>
     <div class="img">
-      <div class="img_cloumn" v-for="(item,index) in imgList" :key="index">
+      <div class="img_cloumn" v-for="(item,index) in showImg" :key="index">
         <img v-bind:src="item" />
       </div>
-      <div class="img_cloumn">
+      <div class="img_cloumn" v-if="imgList.length<=3">
         <img src="/images/icon38.png" @click="onClickUp" />
       </div>
     </div>
-    <div>{{serverId}}</div>
-    <div>{{localIdImgs}}</div>
     <Btn btnType="1" sureText="发表" v-on:submit="fromData"></Btn>
   </div>
 </template>
@@ -20,100 +18,50 @@
 <script>
 import wx from "weixin-js-sdk";
 import Btn from "../components/Button";
+import util from "../util/util";
 export default {
   name: "upload",
   data() {
     return {
       imgList: [], //图片列表
-      pic: [],
-      imgaesMaxLenght: 3, //可上传图片
-      value: ""
+      showImg: [], //图片显示列表
+      value: "", //内容
+      title: "" //title
     };
   },
   methods: {
     //选择图片
     onClickUp() {
-      let _this = this;
+      let that = this;
+      // util.Indicator("加载中");
       wx.chooseImage({
-        count: _this.imgaesMaxLenght - _this.imgList.length, // 默认9
+        count: 1, // 默认9
         sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: function(res) {
-          let localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-          // 判断 ios
-          if (window.__wxjs_is_wkwebview) {
-            _this.wxgetLocalImgData(localIds);
-          } else {
-            localIds.forEach((item) => {
-              _this.imgList.push(item);
-              if (_this.imgList.length >= _this.imgaesMaxLenght) {
-                _this.imgLenght = false;
-              }
-            });
-          }
-          _this.wxuploadImage(localIds);
-        },
-        fail: function() {
-          console.log("失败");
+          var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          wx.uploadImage({
+            localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: function(res) {
+              Indicator.close();
+              var serverId = res.serverId; // 返回图片的服务器端ID
+              that.imgList.push(serverId);
+              // wx.downloadImage({
+              //   serverId: serverId, // 需要下载的图片的服务器端ID，由uploadImage接口获得
+              //   isShowProgressTips: 1, // 默认为1，显示进度提示
+              //   success: function(res) {
+              //     var localId = res.localId; // 返回图片下载后的本地ID
+              //     this.showImg.push(showImg);
+              //   }
+              // });
+            }
+          });
         }
       });
     },
 
-    wxuploadImage(localIds) {
-      let _this = this;
-      var i = 0;
-      var length = localIds.length;
-      var upload = function() {
-        let loacId = localIds[i];
-        if (window.__wxjs_is_wkwebview) {
-          if (loacId.indexOf("wxlocalresource") != -1) {
-            loacId = loacId.replace("wxlocalresource", "wxLocalResource");
-          }
-        }
-        wx.uploadImage({
-          localId: loacId, // 需要上传的图片的本地ID，由chooseImage接口获得
-          isShowProgressTips: 1, // 默认为1，显示进度提示
-          success: function(res) {
-            this.value = res.serverId;
-            var serverId = {
-              id: "",
-              serverid: res.serverId
-            };
-            _this.serverId.push(serverId);
-            i++;
-            i < length && upload();
-          },
-          fail: function() {
-            alert("失败11");
-          }
-        });
-      };
-      upload();
-    },
-
-    wxgetLocalImgData(localIds) {
-      let _this = this;
-      var i = 0;
-      var length = localIds.length;
-      var upload = function() {
-        wx.getLocalImgData({
-          localId: localIds[i], // 图片的localID
-          success: function(res) {
-            let localData = res.localData; // localData是图片的base64数据，可以用img标签显示
-            localData = localData.replace("jpg", "jpeg");
-            _this.localIdImgs.push(localData);
-            if (_this.localIdImgs.length >= _this.imgaesMaxLenght) {
-              _this.imgLenght = false;
-            }
-            i++;
-            i < length && upload();
-          }
-        });
-      };
-      upload();
-    },
-
-    //
+    //上传
     fromData() {
       let { value, imgList } = this;
       this.http
