@@ -119,8 +119,6 @@ export default {
   },
   mounted() {
     this.getMineInfo();
-    console.log(stroage.getItem("user_type"), 222);
-    this.Usertype = stroage.getItem("user_type") || 1;
   },
   methods: {
     //功能跳转
@@ -163,19 +161,15 @@ export default {
       this.axios
         .get("/personal/index", {
           params: {
-            token: this.$cookie.get("token")
+            token: this.$cookie.get("token"),
+            user_type: stroage.getItem("user_type") || 1
           }
         })
         .then(res => {
           console.log(res);
           this.user_info = res;
+          this.Usertype = stroage.getItem("user_type") || 1;
         });
-    },
-    //获取老师信息
-    getTeacherInfo() {
-      this.axios.get("/personal/teacher", { params: {} }).then(res => {
-        this.user_info = res;
-      });
     }
   },
   components: {}
