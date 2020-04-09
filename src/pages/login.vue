@@ -57,9 +57,8 @@ export default {
         util.toast("请输入密码！");
         return;
       }
-      util.Indicator("加载中");
       this.getOpenId();
-
+      util.Indicator("加载中");
       setTimeout(() => {
         this.http
           .post("/login/login", {
@@ -68,14 +67,12 @@ export default {
           })
           .then(res => {
             util.toast("登陆成功~");
-            this.$store.dispatch("userStatus", 1);
-            this.$store.dispatch("user_type", res.user_type);
-            this.$cookie.set("token", res.token, { expires: "Session" });
+            this.$cookie.set("token", res.token);
             setTimeout(() => {
               this.$router.push("/");
             }, 2000);
           });
-      }, 1000);
+      }, 800);
     },
 
     //绑定微信

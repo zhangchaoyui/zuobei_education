@@ -27,6 +27,7 @@
 </template>
 
 <script>
+// import stroage from './stroage/index'
 export default {
   name: "App",
   data() {
@@ -36,7 +37,7 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("userStatus", 0);
+  //  stroage.setItem('zuobei' ,0, "type");
   },
   watch: {
     selected: function(val) {

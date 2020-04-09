@@ -116,10 +116,16 @@ export default {
 
     //获取个人信息
     getMineInfo() {
-      this.axios.get("/personal/index", { params: {} }).then(res => {
-        console.log(res);
-        this.user_info = res;
-      });
+      this.axios
+        .get("/personal/index", {
+          params: {
+            toekn: this.$cookie.get("token")
+          }
+        })
+        .then(res => {
+          console.log(res);
+          this.user_info = res;
+        });
     },
     //获取老师信息
     getTeacherInfo() {
