@@ -10,7 +10,7 @@
     <div class="search" @click="search">
       <img src="/images/search.png" alt />请输入您要搜索的名称
     </div>
-    <div class="nav-list">
+    <div class="nav-list" v-if="Usertype==1">
       <div class="nav_row" @click="nav(1)">
         <img src="/images/category1.png" />
         作品排行
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import stroage from "../stroage/index";
 export default {
   name: "index",
   data() {
@@ -98,13 +99,15 @@ export default {
       btn: 1,
       swiper: [],
       Article: [],
-      Works: []
+      Works: [],
+      Usertype: ""
     };
   },
   mounted() {
     this.getSwiper();
     this.getArticle();
     this.getWorks();
+    this.Usertype = stroage.getItem("user_type") || 1;
   },
   methods: {
     //跳转作品详情页
@@ -199,6 +202,7 @@ export default {
     font-size: 0.24rem;
     color: #858585;
     margin-top: 4%;
+    margin-bottom: 2%;
     background: #f9f9f9;
     border-radius: 0.3rem;
     padding: 0;

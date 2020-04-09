@@ -27,7 +27,7 @@
 </template>
 
 <script>
-// import stroage from './stroage/index'
+import stroage from "./stroage/index";
 export default {
   name: "App",
   data() {
@@ -37,7 +37,11 @@ export default {
     };
   },
   mounted() {
-  //  stroage.setItem('zuobei' ,0, "type");
+    if (this.$cookie.get("token")) {
+      stroage.setItem("status", 1);
+    } else {
+      stroage.setItem("status", 0);
+    }
   },
   watch: {
     selected: function(val) {

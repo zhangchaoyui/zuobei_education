@@ -10,7 +10,7 @@
       </div>
       <div class="user_info" @click="perfect">完善信息</div>
     </div>
-    <div class="record">
+    <div class="record" v-if="Usertype==1">
       <div class="record_left">
         <span>{{user_info.num}}</span>
         <span>上传作品次数</span>
@@ -20,8 +20,27 @@
         <span>点赞次数</span>
       </div>
     </div>
-    <div class="functionList">
+    <div class="record" v-else-if="Usertype==2">
+      <div class="record_left">
+        <span>{{user_info.num}}</span>
+        <span>点评作品数量</span>
+      </div>
+      <div class="record_right">
+        <span>{{user_info.praise}}</span>
+        <span>回复我的点评</span>
+      </div>
+    </div>
+    <div class="functionList" v-if="Usertype==1">
       <div class="function" v-for="(item,index) in list" :key="index" @click="click(item.type)">
+        <img class="icon" :src="`/images/`+item.icon" />
+        {{item.name}}
+        <span class="span_img">
+          <img src="/images/icon41.png" alt />
+        </span>
+      </div>
+    </div>
+    <div class="functionList" v-else-if="Usertype==2">
+      <div class="function" v-for="(item,index) in list2" :key="index" @click="click(item.type)">
         <img class="icon" :src="`/images/`+item.icon" />
         {{item.name}}
         <span class="span_img">
@@ -34,6 +53,8 @@
 </template>
 
  <script>
+import stroage from "../stroage/index";
+
 export default {
   name: "mine",
   data() {
@@ -75,11 +96,31 @@ export default {
           type: 7
         }
       ],
-      user_info: {}
+      list2: [
+        {
+          icon: "icon13.png",
+          name: "我的点评",
+          type: 8
+        },
+        {
+          icon: "icon12.png",
+          name: "关于我们",
+          type: 5
+        },
+        {
+          icon: "icon13.png",
+          name: "意见反馈",
+          type: 6
+        }
+      ],
+      user_info: {},
+      Usertype: ""
     };
   },
   mounted() {
     this.getMineInfo();
+    console.log(stroage.getItem("user_type"), 222);
+    this.Usertype = stroage.getItem("user_type") || 1;
   },
   methods: {
     //功能跳转
@@ -106,6 +147,9 @@ export default {
         case 7:
           <a href="tel:0147-88469258"></a>;
           break;
+        case 8:
+          this.$router.push("/reply");
+          break;
       }
     },
 
@@ -119,7 +163,7 @@ export default {
       this.axios
         .get("/personal/index", {
           params: {
-            toekn: this.$cookie.get("token")
+            token: this.$cookie.get("token")
           }
         })
         .then(res => {

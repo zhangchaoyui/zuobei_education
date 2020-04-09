@@ -5,9 +5,10 @@
     </div>
     <div class="img">
       <div class="img_cloumn" v-for="(item,index) in imgList" :key="index">
-        <img v-bind:src="item" @click="deleteImg(index)" />
+        <img v-bind:src="item" @click="replaceImg(index)" />
+        <div class="options" @click="deleteImg(index)">x</div>
       </div>
-      <div class="img_cloumn" v-if="imgList.length<=3">
+      <div class="img_cloumn" v-if="imgList.length<3">
         <img src="/images/icon38.png" @click="onClickUp" />
       </div>
     </div>
@@ -18,7 +19,7 @@
 <script>
 import wx from "weixin-js-sdk";
 import Btn from "../components/Button";
-// import util from "../util/util";
+import util from "../util/util";
 export default {
   name: "upload",
   data() {
@@ -76,10 +77,10 @@ export default {
           success: function(res) {
             //    alert(res.serverId);
             var serverId = {
-              id: "",
+              // id: "",
               serverid: res.serverId
             };
-            _this.serverId.push(serverId);
+            _this.showImg.push(serverId);
             i++;
             i < length && upload();
           },
@@ -115,21 +116,35 @@ export default {
 
     //上传
     fromData() {
-      let { value, imgList } = this;
+      let { value, showImg } = this;
       this.http
         .post("/works/work", {
-          title: "111",
-          image: imgList
+          token: this.$cookie.get("token"),
+          title: value,
+          image: JSON.stringify(showImg)
         })
         .then(res => {
           alert(res);
           console.log(res);
           // util.toast("登陆成功~");
         });
+    },
+
+    //替换图片
+    replaceImg(index) {},
+
+    //删除图片
+    deleteImg(index) {
+      this.imgList = this.imgList.splice(index, 1);
+      this.showImg = this.showImg.splice(index, 1);
+
+      console.log(1, this.imgList);
+      console.log(2, this.showImg);
     }
   },
 
   created() {
+     util.login(); //判断用户登录
     this.axios
       .post("/token/sdksign", { url: location.href.split("#")[0] })
       .then(res => {
@@ -187,6 +202,8 @@ export default {
       height: auto;
       position: relative;
       margin-left: 0.18rem;
+      position: relative;
+      overflow: hidden;
       img {
         width: 2.09rem;
         height: 2.09rem;
@@ -198,6 +215,21 @@ export default {
         top: 0;
         left: 0;
         opacity: 0;
+      }
+      div {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 30px;
+        height: 30px;
+        font-size: 0.3rem;
+        font-weight: bold;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 30px;
+        background: black;
+        color: white;
+        opacity: 0.5;
       }
     }
   }

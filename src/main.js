@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import store from './store'
+
 import vueAxios from 'vue-axios'
 import vueCookie from 'vue-cookie'
 import MintUI from 'mint-ui'
@@ -10,7 +11,6 @@ import 'mint-ui/lib/style.css'
 import http from './https'
 //挂载到VUE实例，以便全局使用;
 Vue.prototype.http = http;
-
 
 import Distpicker from 'v-distpicker'
 Vue.component('v-distpicker', Distpicker)

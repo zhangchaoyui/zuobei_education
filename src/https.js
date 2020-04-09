@@ -6,17 +6,17 @@ import { Toast, Indicator } from "mint-ui";
 axios.interceptors.response.use(function (response) {
     let res = response.data;
     let path = location.hash;
-    if (res.code == 1 || res.code == 2) {   //拦截业务错误码
+    console.log(res)
+    if (res.code == 1 || res.code == 2) {  //拦截业务错误码
         return res.data;
-    } else if (res.code == 0) {
+    } else if (res.code == 3) {
         if (path != "#/index") {
             window.location.href = "/#/login"
         } else {
-            window.location.href = "/#/login"
             Toast(res.msg);
         }
         return Promise.reject(res);
-    } else {
+    } else if (res.code == 0) {
         Toast(res.msg);
     }
 }, (error) => { //这部分拦截服务器错误码
@@ -27,23 +27,15 @@ axios.interceptors.response.use(function (response) {
 
 
 function successfun(res) {//处理后台返回的非200错误
-    if (res.code === 1) {
-        return res
-    } else {
-        // Toast(res.message);
-        return res;
-    }
+    // Toast(res.message);
+    return res;
 }
 function errorfun(res) {
-    if (res.code != 1) {
-        Toast(res.message);
-        return res;
-    }
+    Toast(res.message);
+    return res;
 }
 export default {
     post(url, data) {//post请求
-        data.token = ;
-        console.log(data.token,22222)
         return axios({
             method: 'post',
             url,

@@ -3,7 +3,7 @@ import { MessageBox, Indicator, Toast } from 'mint-ui';
 export default {
     //判断公共登录方法
     login() {
-        let type = storage.getItem("userStatus");
+        let type = storage.getItem("status")
         if (type == 0) {
             MessageBox.confirm('请先登录~', '友情提示').then(action => {
                 if (action == 'confirm') {

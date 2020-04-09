@@ -35,6 +35,7 @@
  <script>
 import Btn from "../components/Button";
 import util from "../util/util";
+import stroage from "../stroage/index";
 export default {
   name: "login",
   data() {
@@ -65,13 +66,16 @@ export default {
       setTimeout(() => {
         this.http
           .post("/login/login", {
+            token: this.$cookie.get("token"),
             phone,
             password
           })
           .then(res => {
+            console.log(res)
             util.toast("登陆成功~");
             this.$cookie.set("token", res.token);
-            this.$cookie.set("user_type", res.user_type);
+            stroage.setItem("status", 1);
+            stroage.setItem("user_type", res.user_type);
             setTimeout(() => {
               this.$router.push("/");
             }, 2000);
@@ -100,19 +104,21 @@ export default {
     getOpenId() {
       this.http
         .post("/login/getToken", {
-          code: util.GetQueryString("code")
+          code: util.GetQueryString("code"),
+          token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res);
-          if (res.user_type) {
+          console.log(res,222,res.user_type);
+          if ( res.user_type != undefined) {
             util.toast("登陆成功~");
             setTimeout(() => {
-              this.$cookie.set("token", res.token);
-              this.$cookie.set("user_type", res.user_type);
+              this.$cookie.set("token", res.token, { expires: "Session" });
+              stroage.setItem("user_type", res.user_type);
+              stroage.setItem("status", 1);
               this.$router.push("/");
             }, 1800);
           } else {
-            this.$cookie.set("token", res.token);
+            this.$cookie.set("token", res,{ expires: "Session" });
             this.$router.push("/register");
           }
         });

@@ -71,6 +71,7 @@ export default {
       util.Indicator("加载中");
       this.http
         .post("/login/reg", {
+          token: this.$cookie.get("token"),
           phone,
           code,
           password
@@ -85,32 +86,39 @@ export default {
 
     //验证码倒计时
     codeTime() {
-      this.http.post("/Sms/index", { phone: this.phone }).then(() => {
-        util.toast("验证码发送成功~");
-        this.timeStatus = 0;
-        let { time } = this,
-          a;
-        a = setInterval(() => {
-          if (time == 0) {
-            this.timeStatus = 1;
-            this.time = 60;
-            clearInterval(a);
-          } else {
-            --time;
-            this.time = time;
-          }
-        }, 1000);
-      });
+      this.http
+        .post("/Sms/index", {
+          phone: this.phone,
+          token: this.$cookie.get("token")
+        })
+        .then(() => {
+          util.toast("验证码发送成功~");
+          this.timeStatus = 0;
+          let { time } = this,
+            a;
+          a = setInterval(() => {
+            if (time == 0) {
+              this.timeStatus = 1;
+              this.time = 60;
+              clearInterval(a);
+            } else {
+              --time;
+              this.time = time;
+            }
+          }, 1000);
+        });
     },
 
     //身份选择
     type(e) {
+      console.log(e);
       this.page = 2;
-       this.http.post("/login/iden", {
+      this.http
+        .post("/login/iden", {
           tid: e,
+          token: this.$cookie.get("token")
         })
-        .then(() => {
-        });
+        .then(() => {});
     }
   },
   components: {

@@ -2,10 +2,10 @@
   <div class="worksdetail">
     <div class="header">
       <div class="header_img">
-        <img v-bind:src="data.result.avatar" alt />
+        <img v-bind:src="data.review.avatar" alt />
       </div>
       <div class="header_userinfo">
-        <span>{{data.result.nickname}}</span>
+        <span>{{data.review.nickname}}</span>
         <!-- <span>14分钟前</span> -->
         <span>{{data.result.time}}</span>
       </div>
@@ -41,14 +41,13 @@
         </div>
       </div>
     </div>
+    <div @click="voiceStart">录音开始</div>
+    <div @click="voiceEnd">录音结束</div>
+    <div @click="voiceHandle">录音上传</div>
     <div class="br2"></div>
-    <div class="bottom">
-      <div
-        class="user"
-        @touchstart="recording($event)"
-        @touchmove="touchend($event)"
-        @touchend="endVoice"
-      >
+
+    <div class="bottom" v-if="Usertype==1">
+      <div class="user">
         <img src="/images/user.jpg" alt />
         小新老师
       </div>
@@ -71,11 +70,31 @@
         </div>
       </div>
     </div>
+    <div class="bottom" v-if="Usertype==2">
+      <div class="user">
+        <img src="/images/user.jpg" alt />
+        我要点评
+      </div>
+      <div class="icon">
+        <div>
+          <img src="/images/icon5.png" alt @click="initShareInfo" />分享
+        </div>
+        <div>
+          <img src="/images/icon30.png" />留言
+        </div>
+        <div>
+          <img src="/images/fabulous.png" alt />点赞
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import stroage from "../stroage/index";
+
 import wx from "weixin-js-sdk";
+import util from "../util/util";
 let START,
   END,
   recordTimer,
@@ -85,14 +104,128 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      data: {}
+      data: {},
+      Usertype: "",
+
+      id: "",
+      startTime: 0,
+      recordTimer: null,
+      localId: "", // 录音本地id
+      serverId: "", // 录音微信服务id
+      showMask: false,
+      tip: 1, //提交 0- 重录
+      isVoice: 0, // 0-未录音 1-录音中 2-录完音
+      isListen: 0, // 0-未试听/试听结束 1-试听中 2-暂停试听
+      data1: 0,
+      work: {},
+      isPlay: false, // 是否播放
+      isSubmit: false // 是否已提交
     };
   },
   mounted() {
-    // util.login(); 判断用户登录
+    util.login(); //判断用户登录
     this.getWorksDetail();
+    this.Usertype = stroage.getItem("user_type") || 1;
   },
   methods: {
+    // 开始录音
+    voiceStart(event) {
+      let _this = this;
+      event.preventDefault();
+      // 延时后录音，避免误操作
+      this.recordTimer = setTimeout(function() {
+        wx.startRecord({
+          success: function(res) {
+            console.log(res);
+            _this.startTime = new Date().getTime();
+            _this.isVoice = 1;
+          },
+          cancel: function() {
+            _this.isVoice = 0;
+          }
+        });
+      }, 300);
+    },
+    // 停止录音
+    voiceEnd(event) {
+      this.isVoice = 2;
+      let _this = this;
+      event.preventDefault();
+      // 间隔太短
+      if (new Date().getTime() - this.startTime < 300) {
+        this.startTime = 0;
+        // 不录音
+        clearTimeout(this.recordTimer);
+      } else {
+        wx.stopRecord({
+          success: function(res) {
+            // 微信生成的localId，此时语音还未上传至微信服务器
+            _this.localId = res.localId;
+          },
+          fail: function(res) {
+            console.log(JSON.stringify(res));
+          }
+        });
+      }
+    },
+
+    // // 试听
+    // tryListen() {
+    //   let _this = this;
+    //   wx.playVoice({
+    //     localId: _this.localId // 需要播放的音频的本地ID，由stopRecord接口获得
+    //   });
+    //   console.log("试听。。。");
+    //   wx.onVoicePlayEnd({
+    //     // 监听播放结束
+    //     success: function(res) {
+    //       console.log("试听监听结束");
+    //       _this.isListen = 0;
+    //     }
+    //   });
+    // },
+    // // 试听停止
+    // tryStop() {
+    //   let _this = this;
+    //   wx.pauseVoice({
+    //     localId: _this.localId // 需要停止的音频的本地ID，由stopRecord接口获得
+    //   });
+    // },
+
+    // 处理录音数据
+    voiceHandle() {
+      let _this = this;
+      wx.uploadVoice({
+        localId: this.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+        isShowProgressTips: 1, // 默认为1，显示进度提示
+        success: function(res) {
+          // 微信语音已上传至 微信服务器并返回一个服务器id
+          _this.serverId = res.serverId; // 返回音频的服务器端ID
+          _this.upVoice();
+        }
+      });
+    },
+    // 自己后台上传接口
+    upVoice() {
+      let data = {
+        id: this.id,
+        serviceId: this.serverId
+      };
+      voiceApi
+        .upVoice(data)
+        .then(res => {
+          if (res.data.code == 200) {
+            // ！！ todo 隐藏loading
+            this.isSubmit = true;
+
+            this.closeMask();
+          } else {
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     //获取作品详情
     getWorksDetail() {
       this.axios
@@ -105,75 +238,6 @@ export default {
           console.log(res);
           this.data = res;
         });
-    },
-
-    //录音功能
-    recording(event) {
-      event.preventDefault();
-      START = new Date().getTime();
-      recordTimer = setTimeout(function() {
-        wx.startRecord({
-          success: function(res) {
-            console.log(res);
-            // localStorage.rainAllowRecord = "true";
-          },
-          cancel: function() {
-            alert("用户拒绝授权录音");
-          }
-        });
-      }, 300);
-    },
-    //松手结束录音
-    touchend(event) {
-      event.preventDefault();
-      END = new Date().getTime();
-      if (END - START < 300) {
-        END = 0;
-        START = 0;
-        //小于300ms，不录音
-        clearTimeout(recordTimer);
-      } else {
-        wx.stopRecord({
-          success: function(res) {
-            voice.localId = res.localId;
-            this.uploadVoice();
-          },
-          fail: function(res) {
-            alert(JSON.stringify(res));
-          }
-        });
-      }
-    },
-
-    //上传录音
-    uploadVoice() {
-      //调用微信的上传录音接口把本地录音先上传到微信的服务器
-      //不过，微信只保留3天，而我们需要长期保存，我们需要把资源从微信服务器下载到自己的服务器
-      wx.uploadVoice({
-        localId: voice.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
-        isShowProgressTips: 1, // 默认为1，显示进度提示
-        success: function(res) {
-          console.log(res);
-          //把录音在微信服务器上的id（res.serverId）发送到自己的服务器供下载。
-          this.http
-            .post("", {
-              data: JSON.stringify(res)
-            })
-            .then(res => {
-              console.log(res);
-            });
-        }
-      });
-    },
-
-    endVoice() {
-      //注册微信播放录音结束事件【一定要放在wx.ready函数内】
-      wx.onVoicePlayEnd({
-        success: function(res) {
-          console.log(res);
-          // stopWave();
-        }
-      });
     },
 
     //分享功能
@@ -194,7 +258,7 @@ export default {
   },
   created() {
     this.axios
-      .post("/token/responseMsg", { url: location.href.split("#")[0] })
+      .post("/token/sdksign", { url: location.href.split("#")[0] })
       .then(res => {
         console.log(res);
         wx.config({
@@ -206,12 +270,22 @@ export default {
           jsApiList: [
             "startRecord",
             "stopRecord",
-            "onVoicePlayEnd",
-            "uploadVoice"
+            "onVoiceRecordEnd",
+            "uploadVoice",
+            "downloadVoice",
+            "playVoice",
+            "pauseVoice",
+            "onVoicePlayEnd"
           ]
         });
         wx.ready(function() {
-          console.log("ready");
+          wx.onVoiceRecordEnd({
+            // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+            complete: function(res) {
+              _this.isVoice = 2;
+              _this.localId = res.localId;
+            }
+          });
         });
       })
       .catch(function(error) {
