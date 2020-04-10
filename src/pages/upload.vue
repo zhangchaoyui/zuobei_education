@@ -117,6 +117,14 @@ export default {
     //上传
     fromData() {
       let { value, showImg } = this;
+      if (value == "") {
+        util.toast("请输入标题~");
+        return;
+      } else if (showImg.length <= 0) {
+        util.toast("请输入标题~");
+        return;
+      }
+      util.Indicator("加载中");
       this.http
         .post("/works/work", {
           token: this.$cookie.get("token"),
@@ -124,17 +132,16 @@ export default {
           image: JSON.stringify(showImg)
         })
         .then(res => {
-          alert(res);
           console.log(res);
-          // util.toast("登陆成功~");
+          alert(res);
+          this.value = "";
+          this.showImg = [];
         });
     },
 
-    //替换图片
-    replaceImg(index) {},
-
     //删除图片
     deleteImg(index) {
+      console.log(index);
       this.imgList = this.imgList.splice(index, 1);
       this.showImg = this.showImg.splice(index, 1);
 
@@ -144,12 +151,12 @@ export default {
   },
 
   created() {
-     util.login(); //判断用户登录
+    util.login(); //判断用户登录
     this.axios
       .post("/token/sdksign", { url: location.href.split("#")[0] })
       .then(res => {
         wx.config({
-          debug: true,
+          debug: false,
           appId: res.appid,
           timestamp: parseInt(res.timestamp),
           nonceStr: res.nonceStr,

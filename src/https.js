@@ -18,6 +18,7 @@ axios.interceptors.response.use(function (response) {
         return Promise.reject(res);
     } else if (res.code == 0) {
         Toast(res.msg);
+        return false;
     }
 }, (error) => { //这部分拦截服务器错误码
     let res = error.response;

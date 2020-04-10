@@ -2,22 +2,22 @@
   <div class="worksdetail">
     <div class="header">
       <div class="header_img">
-        <img v-bind:src="data.review.avatar" alt />
+        <img :src="result.avatar" alt />
       </div>
       <div class="header_userinfo">
-        <span>{{data.review.nickname}}</span>
+        <span>{{result.nickname}}</span>
         <!-- <span>14分钟前</span> -->
-        <span>{{data.result.time}}</span>
+        <span>{{result.time}}</span>
       </div>
       <div class="header_right">
-        <img src="/images/fabulous_red.png" alt />
-        {{data.result.praise}}
+        <img src="/images/fabulous_red.png" />
+        {{result.praise}}
       </div>
     </div>
-    <div class="works_title">{{data.result.title}}</div>
+    <div class="works_title">{{result.title}}</div>
     <!-- 轮播图 -->
     <mt-swipe :auto="4000">
-      <mt-swipe-item v-for="(item,index) in data.result.image" :key="index">
+      <mt-swipe-item v-for="(item,index) in result.image" :key="index">
         <img v-lazy="item" />
       </mt-swipe-item>
     </mt-swipe>
@@ -27,7 +27,7 @@
         <span>留言</span>
       </div>
       <div class="evaluate_list">
-        <div class="evaluate_detail" v-for="(item,index) in data.message" :key="index">
+        <div class="evaluate_detail" v-for="(item,index) in message" :key="index">
           <div class="evaluate_img">
             <img v-bind:src="item.avatar" alt />
           </div>
@@ -41,21 +41,18 @@
         </div>
       </div>
     </div>
-    <div @click="voiceStart">录音开始</div>
-    <div @click="voiceEnd">录音结束</div>
-    <div @click="voiceHandle">录音上传</div>
     <div class="br2"></div>
-
     <div class="bottom" v-if="Usertype==1">
       <div class="user">
-        <img src="/images/user.jpg" alt />
-        小新老师
+        <img :src="review.avatar" alt />
+        {{review.nickname}}
       </div>
-      <!-- <div class="content">他把具有丰富想象力的4-14岁的小朋友聚集在一起，通过头脑风碌、发明课程，把世界变成我们他把具有丰富…</div> -->
-      <div class="content">
+      <div class="content" v-show="review">他把具有丰富想象力的4-14岁的小朋友聚集在一起，通过头脑风碌、发明课程，把世界变成我们他把具有丰富…</div>
+      <div class="content" v-show="review">
         <div class="voice">
           <img src="/images/icon28.png" alt />
-          收听老师点评
+          <audio :src="review.content" controls="controls"></audio>
+          点击收听老师点评
         </div>
       </div>
       <div class="icon">
@@ -70,20 +67,59 @@
         </div>
       </div>
     </div>
-    <div class="bottom" v-if="Usertype==2">
+    <div class="bottom" v-if="Usertype==2&&review">
       <div class="user">
-        <img src="/images/user.jpg" alt />
+        <img src="/images/user.jpg" />
         我要点评
       </div>
       <div class="icon">
         <div>
-          <img src="/images/icon5.png" alt @click="initShareInfo" />分享
+          <img src="/images/icon5.png" @click="text" />文字点评
         </div>
         <div>
-          <img src="/images/icon30.png" />留言
+          <img src="/images/icon30.png" @click="showMask" />语音点评
         </div>
         <div>
-          <img src="/images/fabulous.png" alt />点赞
+          <img src="/images/fabulous.png" @click="initShareInfo" />分享
+        </div>
+      </div>
+    </div>
+    <div class="bottom" v-else-if="Usertype==2&&!review">
+      <div class="user">
+        <img :src="review.avatar||''" />
+        {{review.nickname}}
+      </div>
+      <div class="content" v-show="review">他把具有丰富想象力的4-14岁的小朋友聚集在一起，通过头脑风碌、发明课程，把世界变成我们他把具有丰富…</div>
+      <div class="content" v-show="review">
+        <div class="voice">
+          <img src="/images/icon28.png" alt />
+          <audio :src="review.content" controls="controls"></audio>
+          点击收听老师点评
+        </div>
+      </div>
+      <div class="icon">
+        <div>
+          <img src="/images/fabulous.png" @click="initShareInfo" />分享
+        </div>
+      </div>
+    </div>
+
+    <div class="Mask" v-show="!showMask" @click="showMask=false"></div>
+    <div class="Eject" v-show="!showMask">
+      <img src="/images/icon47.png" v-if="isVoice ==0" />
+      <div class="vm-voice-box" v-if="isVoice <=1">
+        <p v-show="!isVoice" @click="voiceStart">点击录音</p>
+        <img v-show="isVoice" @click="voiceEnd" src="/images/luyin.jpg" alt />
+      </div>
+
+      <!-- // isListen  // 0-未试听/试听结束 1-试听中 2-暂停试听
+      // 录完音 按钮展示-->
+      <img src="/images/icon48.png" class="img2" v-if="isVoice == 2" />
+      <div class="vm-voice-player" v-if="isVoice == 2">
+        <div class="vm-vp-button">
+          <p class="vm-vp-revoice" @click="Reset">重录</p>
+          <p class="vm-vp-submit" :class="{'vm-vp-no-submit' : isSubmit}" @click="voiceHandle()">提交</p>
+          <p class="vm-vp-pause" @click="tryListen">试听</p>
         </div>
       </div>
     </div>
@@ -95,29 +131,24 @@ import stroage from "../stroage/index";
 
 import wx from "weixin-js-sdk";
 import util from "../util/util";
-let START,
-  END,
-  recordTimer,
-  voice = {};
 export default {
   name: "worksdetail",
   data() {
     return {
       id: this.$route.params.id,
-      data: {},
+      avatar: "",
+      message: {},
+      result: {},
+      review: {},
       Usertype: "",
-
-      id: "",
       startTime: 0,
       recordTimer: null,
       localId: "", // 录音本地id
       serverId: "", // 录音微信服务id
-      showMask: false,
+      showMask: true,
       tip: 1, //提交 0- 重录
       isVoice: 0, // 0-未录音 1-录音中 2-录完音
       isListen: 0, // 0-未试听/试听结束 1-试听中 2-暂停试听
-      data1: 0,
-      work: {},
       isPlay: false, // 是否播放
       isSubmit: false // 是否已提交
     };
@@ -134,6 +165,7 @@ export default {
       event.preventDefault();
       // 延时后录音，避免误操作
       this.recordTimer = setTimeout(function() {
+        // util.toast("开始录音了");
         wx.startRecord({
           success: function(res) {
             console.log(res);
@@ -146,6 +178,7 @@ export default {
         });
       }, 300);
     },
+
     // 停止录音
     voiceEnd(event) {
       this.isVoice = 2;
@@ -154,13 +187,17 @@ export default {
       // 间隔太短
       if (new Date().getTime() - this.startTime < 300) {
         this.startTime = 0;
+        util.toast("录音时间太短~");
         // 不录音
         clearTimeout(this.recordTimer);
       } else {
         wx.stopRecord({
           success: function(res) {
+            console.log(res);
+            // util.toast("停止录音了");
             // 微信生成的localId，此时语音还未上传至微信服务器
             _this.localId = res.localId;
+            _this.isVoice = 2;
           },
           fail: function(res) {
             console.log(JSON.stringify(res));
@@ -169,21 +206,21 @@ export default {
       }
     },
 
-    // // 试听
-    // tryListen() {
-    //   let _this = this;
-    //   wx.playVoice({
-    //     localId: _this.localId // 需要播放的音频的本地ID，由stopRecord接口获得
-    //   });
-    //   console.log("试听。。。");
-    //   wx.onVoicePlayEnd({
-    //     // 监听播放结束
-    //     success: function(res) {
-    //       console.log("试听监听结束");
-    //       _this.isListen = 0;
-    //     }
-    //   });
-    // },
+    // 试听
+    tryListen() {
+      let _this = this;
+      wx.playVoice({
+        localId: _this.localId // 需要播放的音频的本地ID，由stopRecord接口获得
+      });
+      wx.onVoicePlayEnd({
+        // 监听播放结束
+        success: function(res) {
+          // util.toast("试听监听结束");
+          _this.isListen = 0;
+        }
+      });
+    },
+
     // // 试听停止
     // tryStop() {
     //   let _this = this;
@@ -195,48 +232,43 @@ export default {
     // 处理录音数据
     voiceHandle() {
       let _this = this;
+      util.Indicator("加载中");
       wx.uploadVoice({
         localId: this.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
         isShowProgressTips: 1, // 默认为1，显示进度提示
         success: function(res) {
+          // util.toast("提交微信服务器中");
           // 微信语音已上传至 微信服务器并返回一个服务器id
           _this.serverId = res.serverId; // 返回音频的服务器端ID
           _this.upVoice();
         }
       });
     },
+
     // 自己后台上传接口
     upVoice() {
       let data = {
-        id: this.id,
-        serviceId: this.serverId
+        wid: this.id,
+        serviceId: this.serverId,
+        token: this.$cookie.get("token")
       };
-      voiceApi
-        .upVoice(data)
-        .then(res => {
-          if (res.data.code == 200) {
-            // ！！ todo 隐藏loading
-            this.isSubmit = true;
-
-            this.closeMask();
-          } else {
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this.http.post("/works/amr", data).then(res => {
+        util.toast(res);
+      });
     },
+
     //获取作品详情
     getWorksDetail() {
       this.axios
         .get("/works/detail", {
           params: {
-            id: this.id
+            id: this.$route.params.id
           }
         })
         .then(res => {
-          console.log(res);
-          this.data = res;
+          this.message = res.message || {};
+          this.result = res.result || {};
+          this.review = res.review || {};
         });
     },
 
@@ -254,19 +286,30 @@ export default {
       wx.onMenuShareQZone(shareInfo);
       // wx.updateAppMessageShareData(shareInfo);
       // wx.updateTimelineShareData(shareInfo);
+    },
+
+    //文字评论
+    text() {
+      this.$router.push(`/uploadText/${(toekn = this.$cookie.get("token"))}`);
+    },
+
+    //重置录音
+    Reset() {
+      this.isVoice = 0;
+      this.voiceStart();
     }
   },
   created() {
+    let _this = this;
     this.axios
       .post("/token/sdksign", { url: location.href.split("#")[0] })
       .then(res => {
-        console.log(res);
         wx.config({
-          debug: true,
-          appId: res.data.appId,
-          timestamp: parseInt(res.data.timestamp),
-          nonceStr: res.data.nonceStr,
-          signature: res.data.signanonceStrture,
+          debug: false,
+          appId: res.appid,
+          timestamp: parseInt(res.timestamp),
+          nonceStr: res.nonceStr,
+          signature: res.signature,
           jsApiList: [
             "startRecord",
             "stopRecord",
@@ -562,6 +605,95 @@ export default {
           height: 0.28rem;
           vertical-align: middle;
           margin-right: 2%;
+        }
+      }
+    }
+  }
+  .Mask {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: black;
+    opacity: 0.5;
+    z-index: 10;
+  }
+  .Eject {
+    width: 75%;
+    padding: 0.2rem 0 0.7rem;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 0.2rem;
+    z-index: 11;
+    img {
+      display: block;
+      width: auto;
+      margin: 0.5rem auto;
+      height: 1rem;
+      border-radius: 0.4rem;
+    }
+    .img2 {
+      display: block;
+      margin: 0.1rem auto;
+      width: 90%;
+      height: 3rem;
+    }
+    .vm-voice-box {
+      width: 100%;
+      display: flex;
+      margin-top: 0.6rem;
+      overflow: hidden;
+      p {
+        display: inline-block;
+        width: 80%;
+        height: 0.8rem;
+        line-height: 0.8rem;
+        margin: 0 auto;
+        border-radius: 0.4rem;
+        text-align: center;
+        color: white;
+        background: #f5bb0e;
+        font-size: 0.22rem;
+      }
+    }
+    .vm-voice-player {
+      width: 100%;
+      display: flex;
+      overflow: hidden;
+      display: flex;
+      margin-top: 0.5rem;
+      justify-content: space-around;
+      .vm-vp-button {
+        width: 80%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        padding-bottom: 0.1rem;
+        p {
+          height: 0.8rem;
+          line-height: 0.8rem;
+          font-size: 0.22rem;
+          text-align: center;
+          border-radius: 0.5rem;
+          color: #f5bb0e;
+        }
+        .vm-vp-revoice {
+          width: 0.8rem;
+          box-shadow: 1px 1px 1px 1px #ccc;
+        }
+        .vm-vp-submit {
+          width: 2rem;
+          background: #f5bb0e;
+          color: white;
+        }
+        .vm-vp-pause {
+          width: 0.8rem;
+          box-shadow: 1px 1px 1px 1px #ccc;
         }
       }
     }

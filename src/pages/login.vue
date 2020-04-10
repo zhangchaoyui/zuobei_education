@@ -71,7 +71,7 @@ export default {
             password
           })
           .then(res => {
-            console.log(res)
+            console.log(res);
             util.toast("登陆成功~");
             this.$cookie.set("token", res.token);
             stroage.setItem("status", 1);
@@ -108,18 +108,19 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res,222,res.user_type);
-          if ( res.user_type != undefined) {
-            util.toast("登陆成功~");
-            setTimeout(() => {
-              this.$cookie.set("token", res.token, { expires: "Session" });
-              stroage.setItem("user_type", res.user_type);
-              stroage.setItem("status", 1);
-              this.$router.push("/");
-            }, 1800);
-          } else {
-            this.$cookie.set("token", res,{ expires: "Session" });
-            this.$router.push("/register");
+          if (res) {
+            if (res.user_type != undefined) {
+              util.toast("登陆成功~");
+              setTimeout(() => {
+                this.$cookie.set("token", res.token, { expires: "Session" });
+                stroage.setItem("user_type", res.user_type);
+                stroage.setItem("status", 1);
+                this.$router.push("/");
+              }, 1800);
+            } else {
+              this.$cookie.set("token", res, { expires: "Session" });
+              this.$router.push("/register");
+            }
           }
         });
     },

@@ -79,7 +79,7 @@
             <div class="num">{{item.praise}}</div>
           </div>
           <div class="user">
-            <img src="/images/user.jpg" />
+            <img :src="item.avatar" />
             <div class="user_name">{{item.name}}</div>
             <div class="submit">{{item.time}}</div>
           </div>
