@@ -168,18 +168,30 @@ export default new Router({
             component: resolve => require(['./pages/rules'], resolve),
         },
         {
-            path: '/newList',//积分规则
+            path: '/newList',//新闻列表
             name: 'newList',
             meta: { title: '新闻列表' },
             component: resolve => require(['./pages/newList'], resolve),
         },
         {
-            path: '/search',//积分规则
+            path: '/search',//搜索列表
             name: 'search',
             meta: { title: '搜索列表' },
             component: resolve => require(['./pages/search'], resolve),
-        }
+        },
 
+        {
+            path: '/uploadText/:id',//用户评论
+            name: 'uploadText',
+            meta: { title: '用户评论' },
+            component: resolve => require(['./pages/uploadText'], resolve),
+        },
+        {
+            path: '/teacherWorks',//老师点评
+            name: 'teacherWorks',
+            meta: { title: '我的点评' },
+            component: resolve => require(['./pages/teacherWorks'], resolve),
+        }
 
     ]
 }) 

@@ -1,9 +1,9 @@
 <template>
   <div class="upload">
     <div class="text">
-      <textarea class="textarea" placeholder="输入你作品的标题…" v-model="value"></textarea>
+      <textarea class="textarea" placeholder="输入内容~" v-model="value"></textarea>
     </div>
-    <div class="img">
+    <div class="img" v-if="Usertype==2">
       <div class="img_cloumn" v-for="(item,index) in imgList" :key="index">
         <img v-bind:src="item" @click="replaceImg(index)" />
         <div class="options" @click="deleteImg(index)">x</div>
@@ -12,11 +12,13 @@
         <img src="/images/icon38.png" @click="onClickUp" />
       </div>
     </div>
-    <Btn btnType="1" sureText="发表" v-on:submit="fromData"></Btn>
+    <Btn btnType="1" sureText="发表" v-on:submit="fromData" v-if="Usertype==2"></Btn>
+    <Btn btnType="1" sureText="发表" v-on:submit="Userfrom" v-else></Btn>
   </div>
 </template>
 
 <script>
+import stroage from "../stroage/index";
 import wx from "weixin-js-sdk";
 import Btn from "../components/Button";
 import util from "../util/util";
@@ -24,12 +26,16 @@ export default {
   name: "upload",
   data() {
     return {
+      id: this.$route.params.id,
       imgList: [], //图片列表
       showImg: [], //图片显示列表
       value: "", //内容
       title: "", //title
       imgaesMaxLenght: 3
     };
+  },
+  mounted() {
+    this.Usertype = stroage.getItem("user_type") || 1;
   },
   methods: {
     //选择图片
@@ -114,28 +120,54 @@ export default {
       upload();
     },
 
-    //上传
+    //老师评论
     fromData() {
-      let { value, showImg } = this;
+      let { value, showImg, id } = this;
       if (value == "") {
-        util.toast("请输入标题~");
-        return;
-      } else if (showImg.length <= 0) {
-        util.toast("请选择发布图片~");
+        util.toast("请输入评论内容~");
         return;
       }
       util.Indicator("加载中");
       this.http
-        .post("/works/work", {
+        .post("/works/review", {
+          wid: id,
           token: this.$cookie.get("token"),
           title: value,
           image: JSON.stringify(showImg)
         })
         .then(res => {
           console.log(res);
-          alert(res);
+          util.toast("评论成功~");
           this.value = "";
           this.showImg = [];
+          setTimeout(() => {
+            this.$router.go(-1);
+          }, 1500);
+        });
+    },
+
+    //用户评论
+    Userfrom() {
+      let { value, id } = this;
+      if (value == "") {
+        util.toast("请输入评论内容~");
+        return;
+      }
+      util.Indicator("加载中");
+      this.http
+        .post("/works/review", {
+          wid: id,
+          token: this.$cookie.get("token"),
+          title: value,
+          showImg: []
+        })
+        .then(res => {
+          console.log(res);
+          util.toast("留言成功~");
+          this.value = "";
+          setTimeout(() => {
+            this.$router.go(-1);
+          }, 1500);
         });
     },
 
@@ -144,7 +176,6 @@ export default {
       console.log(index);
       this.imgList = this.imgList.splice(index, 1);
       this.showImg = this.showImg.splice(index, 1);
-
       console.log(1, this.imgList);
       console.log(2, this.showImg);
     }

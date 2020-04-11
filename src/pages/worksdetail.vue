@@ -9,7 +9,11 @@
         <!-- <span>14分钟前</span> -->
         <span>{{result.time}}</span>
       </div>
-      <div class="header_right">
+      <div class="header_right" v-if="result.like==1">
+        <img src="/images/fabulous_red.png" />
+        {{result.praise}}
+      </div>
+      <div class="header_right2" v-else @click="Fabulous">
         <img src="/images/fabulous_red.png" />
         {{result.praise}}
       </div>
@@ -26,7 +30,7 @@
       <div class="title">
         <span>留言</span>
       </div>
-      <div class="evaluate_list">
+      <div class="evaluate_list" v-if="message">
         <div class="evaluate_detail" v-for="(item,index) in message" :key="index">
           <div class="evaluate_img">
             <img v-bind:src="item.avatar" alt />
@@ -40,15 +44,18 @@
           </div>
         </div>
       </div>
+      <div class="evaluate_empty">暂无留言</div>
     </div>
     <div class="br2"></div>
+    <!-- 客户端 -->
     <div class="bottom" v-if="Usertype==1">
-      <div class="user">
+      <div class="user" v-if="review">
         <img :src="review.avatar" alt />
         {{review.nickname}}
+        <span v-if="review.reply==1" @click="text">回复</span>
       </div>
-      <div class="content" v-show="review">他把具有丰富想象力的4-14岁的小朋友聚集在一起，通过头脑风碌、发明课程，把世界变成我们他把具有丰富…</div>
-      <div class="content" v-show="review">
+      <div class="content" v-if="review.type==1&&review!=null">{{review.content}}</div>
+      <div class="content" v-else-if="review.type==2&&review!=null">
         <div class="voice">
           <img src="/images/icon28.png" alt />
           <audio :src="review.content" controls="controls"></audio>
@@ -56,56 +63,58 @@
         </div>
       </div>
       <div class="icon">
-        <div>
-          <img src="/images/icon5.png" alt @click="initShareInfo" />分享
+        <div @click="initShareInfo">
+          <img src="/images/icon5.png" alt />分享
         </div>
-        <div>
+        <div @click="text(id)">
           <img src="/images/icon30.png" />留言
         </div>
-        <div>
-          <img src="/images/fabulous.png" alt />点赞
+        <div @click="Fabulous">
+          <img src="/images/fabulous.png" />点赞
         </div>
       </div>
     </div>
-    <div class="bottom" v-if="Usertype==2&&review">
+    <!-- 老师未点评 -->
+    <div class="bottom2" v-if="Usertype==2&&!review.content">
       <div class="user">
         <img src="/images/user.jpg" />
         我要点评
       </div>
       <div class="icon">
-        <div>
-          <img src="/images/icon5.png" @click="text" />文字点评
+        <div @click="text(id)">
+          <img src="/images/icon5.png" />文字点评
         </div>
-        <div>
-          <img src="/images/icon30.png" @click="showMask" />语音点评
+        <div @click="showMask=!showMask">
+          <img src="/images/icon30.png" />语音点评
         </div>
-        <div>
-          <img src="/images/fabulous.png" @click="initShareInfo" />分享
+        <div @click="initShareInfo">
+          <img src="/images/fabulous.png" />分享
         </div>
       </div>
     </div>
-    <div class="bottom" v-else-if="Usertype==2&&!review">
+    <!-- 老师点评完 -->
+    <div class="bottom" v-if="Usertype==2&&review.content">
       <div class="user">
-        <img :src="review.avatar||''" />
+        <img :src="review.avatar" />
         {{review.nickname}}
       </div>
-      <div class="content" v-show="review">他把具有丰富想象力的4-14岁的小朋友聚集在一起，通过头脑风碌、发明课程，把世界变成我们他把具有丰富…</div>
-      <div class="content" v-show="review">
+      <div class="content" v-if="review.type==1">{{review.content}}</div>
+      <div class="content" v-else-if="review.type==2">
         <div class="voice">
           <img src="/images/icon28.png" alt />
-          <audio :src="review.content" controls="controls"></audio>
           点击收听老师点评
         </div>
       </div>
       <div class="icon">
-        <div>
-          <img src="/images/fabulous.png" @click="initShareInfo" />分享
+        <div @click="initShareInfo">
+          <img src="/images/fabulous.png" />分享
         </div>
       </div>
     </div>
 
-    <div class="Mask" v-show="!showMask" @click="showMask=false"></div>
-    <div class="Eject" v-show="!showMask">
+    <!-- 录音 -->
+    <div class="Mask" v-show="showMask" @click="showMask=!showMask"></div>
+    <div class="Eject" v-show="showMask">
       <img src="/images/icon47.png" v-if="isVoice ==0" />
       <div class="vm-voice-box" v-if="isVoice <=1">
         <p v-show="!isVoice" @click="voiceStart">点击录音</p>
@@ -128,7 +137,6 @@
 
 <script>
 import stroage from "../stroage/index";
-
 import wx from "weixin-js-sdk";
 import util from "../util/util";
 export default {
@@ -136,16 +144,16 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      avatar: "",
-      message: {},
-      result: {},
-      review: {},
-      Usertype: "",
-      startTime: 0,
+      avatar: "", //头像
+      message: {}, //留言
+      result: {}, //作品作者
+      review: {}, //老师数据
+      Usertype: "", //用户类型
+      startTime: 0, //录音开始时间
       recordTimer: null,
       localId: "", // 录音本地id
       serverId: "", // 录音微信服务id
-      showMask: true,
+      showMask: false,
       tip: 1, //提交 0- 重录
       isVoice: 0, // 0-未录音 1-录音中 2-录完音
       isListen: 0, // 0-未试听/试听结束 1-试听中 2-暂停试听
@@ -214,7 +222,7 @@ export default {
       });
       wx.onVoicePlayEnd({
         // 监听播放结束
-        success: function(res) {
+        success: function() {
           // util.toast("试听监听结束");
           _this.isListen = 0;
         }
@@ -254,21 +262,24 @@ export default {
       };
       this.http.post("/works/amr", data).then(res => {
         util.toast(res);
+        this.showMask = !this.showMask;
+        this.getWorksDetail();
       });
     },
 
     //获取作品详情
     getWorksDetail() {
-      this.axios
-        .get("/works/detail", {
-          params: {
-            id: this.$route.params.id
-          }
+      util.Indicator("加载中");
+      this.http
+        .post("/works/detail", {
+          id: this.$route.params.id,
+          token: this.$cookie.get("token")
         })
         .then(res => {
           this.message = res.message || {};
           this.result = res.result || {};
           this.review = res.review || {};
+          console.log(this.review, 2222);
         });
     },
 
@@ -289,14 +300,30 @@ export default {
     },
 
     //文字评论
-    text() {
-      this.$router.push(`/uploadText/${(toekn = this.$cookie.get("token"))}`);
+    text(id) {
+      this.$router.push(`/uploadText/${id}`);
     },
 
     //重置录音
     Reset() {
       this.isVoice = 0;
       this.voiceStart();
+    },
+    //点赞
+    Fabulous() {
+      util.Indicator("加载中");
+      this.http
+        .post("/works/dianzan", {
+          tid: this.$route.params.id,
+          token: this.$cookie.get("token")
+        })
+        .then(res => {
+          util.toast(res);
+          console.log(res);
+          setTimeout(() => {
+            this.getWorksDetail();
+          }, 1500);
+        });
     }
   },
   created() {
@@ -403,6 +430,23 @@ export default {
         margin-right: 5%;
       }
     }
+    .header_right2 {
+      width: 30%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.34rem;
+      color: #ccc;
+      img {
+        display: block;
+        margin-top: -0.1rem;
+        width: 0.32rem;
+        height: 0.34rem;
+        margin-right: 5%;
+      }
+    }
   }
   .works_title {
     width: 90%;
@@ -456,6 +500,15 @@ export default {
       width: 90%;
       height: auto;
       margin: 0.1rem auto;
+    }
+    .evaluate_empty {
+      width: 90%;
+      height: 1.5rem;
+      margin: 0.1rem auto;
+      line-height: 1.5rem;
+      font-size: 0.24rem;
+      color: #ccc;
+      text-align: center;
     }
     .evaluate_detail {
       width: 100%;
@@ -522,7 +575,96 @@ export default {
   }
   .bottom {
     width: 100%;
-    height: 3.2rem;
+    min-height: 3.2rem;
+    position: fixed;
+    bottom: 0;
+    border-top-right-radius: 0.6rem;
+    border-top-left-radius: 0.6rem;
+    background: #f6bc0e;
+    .user {
+      width: 90%;
+      height: 0.77rem;
+      display: flex;
+      flex-direction: row;
+      line-height: 0.77rem;
+      font-size: 0.35rem;
+      color: white;
+      margin: 0.33rem auto 0.2rem;
+      img {
+        width: 0.77rem;
+        height: 0.77rem;
+        margin-right: 0.2rem;
+        border-radius: 0.38rem;
+      }
+    }
+    .content {
+      width: 86%;
+      // height: 0.77rem;
+      font-size: 0.25rem;
+      color: white;
+      margin: 0 auto;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      .voice {
+        width: 80%;
+        height: 0.95rem;
+        line-height: 1rem;
+        margin: 0 auto;
+        background: white;
+        border-radius: 0.6rem;
+        display: flex;
+        align-items: center;
+        color: #f6bc0e;
+        font-size: 0.25rem;
+        img {
+          width: 0.3rem;
+          height: 0.46rem;
+          margin: 0.25rem 0.32rem 0.25rem 0.38rem;
+        }
+      }
+    }
+    .icon {
+      width: 90%;
+      height: 0.28rem;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: row;
+      div {
+        width: 33.33%;
+        font-size: 0.23rem;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        color: white;
+        margin-top: 0.3rem;
+        &::before {
+          width: 1px;
+          height: 0.28rem;
+          background: white;
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+        &:last-child::before {
+          width: 0;
+          height: 0;
+        }
+        img {
+          width: 0.3rem;
+          height: 0.28rem;
+          vertical-align: middle;
+          margin-right: 2%;
+        }
+      }
+    }
+  }
+  .bottom2 {
+    width: 100%;
+    min-height: 2.2rem;
     position: fixed;
     bottom: 0;
     border-top-right-radius: 0.6rem;

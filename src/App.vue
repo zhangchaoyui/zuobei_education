@@ -7,7 +7,7 @@
         <img slot="icon" class="ss" src="../public/images/icon15.png" v-else />
         首页
       </mt-tab-item>
-      <mt-tab-item id="1">
+      <mt-tab-item id="1" v-if="UserType==1">
         <img slot="icon" src="../public/images/icon9.png" v-if="selected!=1" />
         <img slot="icon" src="../public/images/icon9_yellow.png" v-else />
         上传作品
@@ -33,7 +33,8 @@ export default {
   data() {
     return {
       selected: 0,
-      showTab: 0
+      showTab: 0,
+      UserType: stroage.getItem("user_type") || 1
     };
   },
   mounted() {

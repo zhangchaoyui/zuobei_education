@@ -2,10 +2,10 @@
   <div class="mine">
     <div class="header">
       <div class="img">
-        <img src="/images/user.jpg" alt />
+        <img :src="user_info.avatar" alt />
       </div>
       <div class="username">
-        <span>蜡笔小新蜡笔小新蜡笔小新蜡笔小新蜡笔小新</span>
+        <span>{{user_info.nickname}}</span>
         <img src="/images/icon27.png" alt />
       </div>
       <div class="user_info" @click="perfect">完善信息</div>
@@ -21,11 +21,11 @@
       </div>
     </div>
     <div class="record" v-else-if="Usertype==2">
-      <div class="record_left">
+      <div class="record_left" @click="FabulousNum">
         <span>{{user_info.num}}</span>
         <span>点评作品数量</span>
       </div>
-      <div class="record_right">
+      <div class="record_right" @click="Reply">
         <span>{{user_info.praise}}</span>
         <span>回复我的点评</span>
       </div>
@@ -54,7 +54,6 @@
 
  <script>
 import stroage from "../stroage/index";
-
 export default {
   name: "mine",
   data() {
@@ -125,28 +124,28 @@ export default {
     click(type) {
       switch (type) {
         case 1:
-          this.$router.push("/mywroks");
+          this.$router.push("/mywroks"); //我的作品
           break;
         case 2:
-          this.$router.push("/shop");
+          this.$router.push("/shop"); //积分商城
           break;
         case 3:
-          this.$router.push("/myOrder");
+          this.$router.push("/myOrder"); //我的订单
           break;
         case 4:
-          this.$router.push("/addressList");
+          this.$router.push("/addressList"); //我的地址
           break;
         case 5:
-          this.$router.push("/about");
+          this.$router.push("/about"); //关于
           break;
         case 6:
-          this.$router.push("/feedback");
+          this.$router.push("/feedback"); //反馈
           break;
         case 7:
           <a href="tel:0147-88469258"></a>;
           break;
         case 8:
-          this.$router.push("/reply");
+          this.$router.push("/teacherWorks"); //老师点评列表
           break;
       }
     },
@@ -170,6 +169,11 @@ export default {
           this.user_info = res;
           this.Usertype = stroage.getItem("user_type") || 1;
         });
+    },
+
+    //回复列表
+    Reply() {
+      this.$router.push("/reply");
     }
   },
   components: {}
@@ -316,6 +320,7 @@ export default {
     display: flex;
     flex-direction: column;
     padding: 0.2rem 0;
+    margin-top: 1rem;
     .function {
       width: 90%;
       margin: 0 auto;

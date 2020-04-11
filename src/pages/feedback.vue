@@ -1,7 +1,7 @@
 <template>
   <div class="feedback">
     <div class="text">
-      <textarea class="textarea" placeholder="说出你对小小发明家的建议和问题..."></textarea>
+      <textarea class="textarea" placeholder="说出你对小小发明家的建议和问题..." v-modal="value"></textarea>
     </div>
     <Btn btnType="1" sureText="发表"></Btn>
   </div>
@@ -9,6 +9,7 @@
 
 <script>
 import Btn from "../components/Button";
+import util from "../util/util";
 export default {
   name: "feedback",
   data() {
@@ -19,7 +20,17 @@ export default {
   methods: {
     //提交用户内容
     postValue() {
-      this.axios.post("/article/back", { content: this.value }).then(() => {});
+      this.http
+        .post("/article/back", {
+          content: this.value,
+          token: this.$cookie.get("token")
+        })
+        .then(() => {
+          util.toast("反馈成功~");
+          setTimeout(() => {
+            this.$router.go(-1);
+          }, 1500);
+        });
     }
   },
   components: {

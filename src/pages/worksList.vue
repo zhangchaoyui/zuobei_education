@@ -11,10 +11,10 @@
       </div>
       <div class="list">
         <div class="ranking">
-          <div class="one">
+          <div class="one" v-if="oneList">
             <div class="works_left">
               <div class="detail_let">
-                <img v-bind:src="oneList[0].image" alt />
+                <img v-bind:src="oneList[0].image||''" alt />
               </div>
               <div class="works_right">
                 <div class="works_r_top">
@@ -48,31 +48,32 @@
               <div class="bottom_row2">累计上墙</div>
             </div>
           </div>
-          <div class="two">
-            <div class="works_left2">
+          <div class="two" v-for="(item,index) in worksList" :key="index">
+            <div class="works_left2" @click="WorksDetail(item.id)">
               <div class="detail_let">
-                <img src="/images/22.png" alt />
+                <img :src="item.image[0]||''" alt />
               </div>
               <div class="works_right">
                 <div class="works_r_top">
                   <div class="userImage">
-                    <img src="/images/user.jpg" alt />
+                    <img :src="item.avatar" alt />
                   </div>
                   <div class="userDetail">
-                    <div>蜡笔小新</div>
-                    <div>2020.3.13</div>
+                    <div>{{item.nickname}}</div>
+                    <div>{{item.time}}</div>
                   </div>
                 </div>
                 <div class="row">
                   累计上传
-                  <span>100</span>&nbsp;次
+                  <span>{{item.num}}</span>&nbsp;次
                 </div>
                 <div class="row">
                   累计上传
-                  <span>15</span>&nbsp;天
+                  <span>{{item.num}}</span>&nbsp;天
                 </div>
                 <div class="top">
-                  <img src="/images/fabulous_red.png" alt />120
+                  <img src="/images/fabulous_red.png" alt />
+                  {{item.praise}}
                 </div>
               </div>
             </div>
@@ -88,6 +89,7 @@ export default {
   name: "workslist",
   data() {
     return {
+      image: "",
       btn: 1, //按钮类型
       value: "", //搜索框内容
       worksList: [], //列表
@@ -109,11 +111,17 @@ export default {
     //获取排行榜第一名信息
     getoOneList() {
       this.axios.get("/works/one", { params: {} }).then(res => {
-        this.oneList = res;
+        console.log(res.data)
+        this.oneList = res.data;
       });
     },
 
-    search(){
+    //跳转详情
+    WorksDetail(id) {
+      this.$router.push(`/worksdetail/${id}`);
+    },
+
+    search() {
       this.$router.push("/search");
     }
   },
@@ -129,7 +137,7 @@ export default {
   margin: 0.1rem auto 0;
   background: #fff;
   padding-bottom: 1.1rem;
-   .search {
+  .search {
     width: 100%;
     height: 0.62rem;
     display: flex;

@@ -417,7 +417,7 @@ export default {
             color: #333333;
           }
           .submit {
-            width: 28%;
+            width: 30%;
             text-align: right;
             font-size: 0.18rem;
             color: #999999;

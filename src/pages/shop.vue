@@ -79,16 +79,59 @@
 </template>
 
 <script>
+import util from "../util/util";
 export default {
   name: "shop",
   data() {
-    return {};
+    return {
+      data: {
+        id: "",
+        jid: "",
+        page: ""
+      } //商品数据
+    };
   },
-  mounted(){},
-  methods:{
-      productDetail(){
-          this.$router.push('/productDetail')
-      }
+  mounted() {
+    this.getProductDetail();
+    this.getJifen();
+  },
+  methods: {
+    //获取我的积分
+    getJifen() {
+      let data = {};
+      data;
+      this.http
+        .post("/good/index", {
+          tid: this.tid,
+          jid: this.jid,
+          page: this.page
+        })
+        .then(res => {
+          console.log(res);
+          this.data = res.data;
+          util.toast(res);
+        });
+    },
+    //获取商品列表
+    getProductDetail() {
+      let data = {};
+      data;
+      this.http
+        .post("/good/index", {
+          tid: this.tid,
+          jid: this.jid,
+          page: this.page
+        })
+        .then(res => {
+          console.log(res);
+          this.data = res.data;
+          util.toast(res);
+        });
+    },
+    //跳转用户详情
+    productDetail(id) {
+      this.$router.push(`/productDetail/${id}`);
+    }
   },
   components: {}
 };
