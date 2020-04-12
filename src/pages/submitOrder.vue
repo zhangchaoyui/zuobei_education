@@ -35,14 +35,16 @@ export default {
     };
   },
   mounted() {
-    this.axios.get("/article/about", { params: {} }).then(res => {
-      console.log(res);
-      this.data = this.showHtml(res.post_content);
-    });
+    //提交订单
+    this.submitOrder();
   },
   methods: {
-    //提交订单
-    submitOrder() {}
+    submitOrder() {
+      this.axios.get("/article/about", { params: {} }).then(res => {
+        console.log(res);
+        this.data = this.showHtml(res.post_content);
+      });
+    }
   },
   components: {
     Btn
@@ -66,7 +68,7 @@ export default {
     align-items: center;
     margin: 0.2rem auto 0.2rem;
     background: #fff;
-    border-radius: 5px; 
+    border-radius: 5px;
     img {
       display: block;
       width: 0.6rem;

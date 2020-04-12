@@ -101,15 +101,11 @@ export default {
       let data = {};
       data;
       this.http
-        .post("/good/index", {
-          tid: this.tid,
-          jid: this.jid,
-          page: this.page
+        .post("/good/integral", {
+          token: this.$cookie.get("token")
         })
         .then(res => {
           console.log(res);
-          this.data = res.data;
-          util.toast(res);
         });
     },
     //获取商品列表
@@ -128,9 +124,16 @@ export default {
           util.toast(res);
         });
     },
-    //跳转用户详情
+    //跳转商品详情
     productDetail(id) {
       this.$router.push(`/productDetail/${id}`);
+    },
+    
+    about() {
+      this.$router.push(`/productDetail/${id}`);
+    },
+    integral() {
+      this.$router.push("/integral");
     }
   },
   components: {}

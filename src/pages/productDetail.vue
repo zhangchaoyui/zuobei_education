@@ -34,8 +34,36 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.getProductDetail();
+  },
+  methods: {
+    //获取积分详情
+    getProductDetail() {
+      this.http
+        .post("/good/good_det", {
+         params:{
+           id:this.$router.params.id
+         }
+        })
+        .then(res => {
+          console.log(res);
+        });
+    },
+    //立即兑换
+    change() {
+      this.http
+        .post("/good/change", {
+         params:{
+           id:this.$router.params.id,
+           token:this.$cookie.get('token')
+         }
+        })
+        .then(res => {
+          console.log(res);
+        });
+    },
+  },
   components: {}
 };
 </script>

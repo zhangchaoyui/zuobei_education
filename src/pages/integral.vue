@@ -64,8 +64,26 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.getJifen();
+  },
+  methods: {
+    //获取我的积分
+    getJifen(e) {
+      this.http
+        .post("/good/integral", {
+          token: this.$cookie.get("token"),
+          type: e
+        })
+        .then(res => {
+          console.log(res);
+        });
+    },
+
+    router() {
+      this.$router.push("/rules");
+    }
+  },
   components: {}
 };
 </script>
