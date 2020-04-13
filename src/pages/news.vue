@@ -11,6 +11,7 @@
 </template>
  
  <script>
+ import util from '../util/util'
 export default {
   name: "news",
   data() {
@@ -34,17 +35,9 @@ export default {
         })
         .then(res => {
           this.data = res;
-          this.post_content = this.showHtml(res.post_content);
+          this.post_content = util.showHtml(res.post_content);
         });
     },
-    showHtml(str) {
-      return str
-        .replace(str ? /&(?!#?\w+;)/g : /&/g, "&amp;")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'");
-    }
   },
   components: {}
 };

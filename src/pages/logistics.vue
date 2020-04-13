@@ -48,14 +48,21 @@ export default {
   name: "logistics",
   data() {
     return {
+      id: this.$route.params.id,
       data: ""
     };
   },
   mounted() {
-    this.axios.get("/article/about", { params: {} }).then(res => {
-      console.log(res);
-      this.data = this.showHtml(res.post_content);
-    });
+    this.axios
+      .get("/Tran/index", {
+        params: {
+          id: this.id
+        }
+      })
+      .then(res => {
+        console.log(res);
+        this.data = res;
+      });
   },
   methods: {},
   components: {}

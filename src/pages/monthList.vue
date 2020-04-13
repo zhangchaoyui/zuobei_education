@@ -171,7 +171,35 @@
 
 <script>
 export default {
-  name: "monthList"
+  name: "monthList",
+  data() {
+    return {
+      adhere: "",
+      sentiment: ""
+    };
+  },
+  mounted() {
+    this.axios
+      .get("/Works/sentiment", {
+        params: {
+          id: this.id
+        }
+      })
+      .then(res => {
+        this.sentiment = res;
+      });
+    this.axios
+      .get("/works/adhere", {
+        params: {
+          id: this.id
+        }
+      })
+      .then(res => {
+        this.adhere = res;
+      });
+  },
+  methods: {},
+  components: {}
 };
 </script>
 
@@ -271,7 +299,7 @@ export default {
   .header2 {
     width: 100%;
     background: url("/images/background2.png") repeat-y;
-    background-size: 100%;
+    background-size: 100% 100%;
     display: block;
     flex-direction: column;
     padding-bottom: 2%;

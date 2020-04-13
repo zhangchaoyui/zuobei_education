@@ -101,7 +101,7 @@ export default new Router({
             component: resolve => require(['./pages/order'], resolve),
         },
         {
-            path: '/submitOrder',//提交订单
+            path: '/submitOrder/:id',//提交订单
             name: 'submitOrder',
             meta: { title: '提交订单' },
             component: resolve => require(['./pages/submitOrder'], resolve),
@@ -156,7 +156,7 @@ export default new Router({
             component: resolve => require(['./pages/forget'], resolve),
         },
         {
-            path: '/productDetail',//商品详情
+            path: '/productDetail/:id',//商品详情
             name: 'productDetail',
             meta: { title: '商品详情' },
             component: resolve => require(['./pages/productDetail'], resolve),

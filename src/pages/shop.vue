@@ -4,10 +4,10 @@
       <div class="content">
         <div class="content_left">
           <div class="title">我的积分</div>
-          <div class="center">318,325</div>
-          <div class="bottom">如何赚积分任务规则</div>
+          <div class="center">{{integral}}</div>
+          <div class="bottom" @click="about">如何赚积分任务规则</div>
         </div>
-        <div class="content_right">
+        <div class="content_right" @click="Integral">
           <img src="/images/icon7.png" alt />
           明细
           <img src=/images/icon6.png alt />
@@ -25,93 +25,64 @@
       </div>
     </div>
     <div class="product">
-      <div class="cloumn">
+      <div
+        class="cloumn"
+        v-for="(item,index) in productData"
+        :key="index"
+        @click="productDetail(item.id)"
+      >
         <div class="img">
-          <img src="/images/22.png" alt />
+          <img :src="item.good_img" alt />
         </div>
-        <p>松下电吹风</p>
-        <p>300积分</p>
-      </div>
-      <div class="cloumn" @click="productDetail()">
-        <div class="img">
-          <img src="/images/22.png" alt />
-        </div>
-        <p>松下电吹风</p>
-        <p>300积分</p>
-      </div>
-      <div class="cloumn">
-        <div class="img">
-          <img src="/images/22.png" alt />
-        </div>
-        <p>松下电吹风</p>
-        <p>300积分</p>
-      </div>
-      <div class="cloumn">
-        <div class="img">
-          <img src="/images/22.png" alt />
-        </div>
-        <p>松下电吹风</p>
-        <p>300积分</p>
-      </div>
-      <div class="cloumn">
-        <div class="img">
-          <img src="/images/22.png" alt />
-        </div>
-        <p>松下电吹风</p>
-        <p>300积分</p>
-      </div>
-      <div class="cloumn">
-        <div class="img">
-          <img src="/images/22.png" alt />
-        </div>
-        <p>松下电吹风</p>
-        <p>300积分</p>
-      </div>
-      <div class="cloumn">
-        <div class="img">
-          <img src="/images/22.png" alt />
-        </div>
-        <p>松下电吹风</p>
-        <p>300积分</p>
+        <p>{{item.good_name}}</p>
+        <p>{{item.good_money}}积分</p>
       </div>
     </div>
+    <!-- <div class="mask"></div>
+    <div class="sign_in">
+      <div class="top">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>-->
   </div>
 </template>
 
 <script>
-import util from "../util/util";
+// import util from "../util/util";
 export default {
   name: "shop",
   data() {
     return {
-      data: {
-        id: "",
-        jid: "",
-        page: ""
-      } //商品数据
+      id: "",
+      jid: "",
+      page: "",
+      integral: 0, //积分规则
+      productData: {}, //商品数据
+      numberRand: []
     };
   },
   mounted() {
+    this.http.get("/sign/numberRand", {}).then(res => {
+      this.numberRand = res;
+    });
     this.getProductDetail();
     this.getJifen();
   },
   methods: {
     //获取我的积分
     getJifen() {
-      let data = {};
-      data;
       this.http
         .post("/good/integral", {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res);
+          this.integral = res;
         });
     },
     //获取商品列表
     getProductDetail() {
-      let data = {};
-      data;
       this.http
         .post("/good/index", {
           tid: this.tid,
@@ -119,20 +90,22 @@ export default {
           page: this.page
         })
         .then(res => {
-          console.log(res);
-          this.data = res.data;
-          util.toast(res);
+          this.productData = res.data;
         });
     },
+
     //跳转商品详情
     productDetail(id) {
       this.$router.push(`/productDetail/${id}`);
     },
-    
+
+    //积分规则
     about() {
-      this.$router.push(`/productDetail/${id}`);
+      this.$router.push("/rules");
     },
-    integral() {
+
+    //积分记录
+    Integral() {
       this.$router.push("/integral");
     }
   },
@@ -143,7 +116,10 @@ export default {
 <style lang="scss">
 .shop {
   width: 100%;
-  height: auto;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   .header {
     width: 6.9rem;
     height: 2.9rem;
@@ -174,7 +150,7 @@ export default {
           line-height: 1.3rem;
         }
         .bottom {
-          width: 54%;
+          width: 45%;
           font-size: 0.2rem;
           line-height: 0.2rem;
           border-bottom: 1px solid white;
@@ -244,12 +220,13 @@ export default {
     margin: 0 auto;
     padding: 0.3rem 0 0;
     .cloumn {
-      width: 33.3333%;
+      width: 30%;
       height: 3rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
       float: left;
+      margin: 0 1.5%;
       overflow: hidden;
       .img {
         margin: 0 auto;
@@ -268,6 +245,40 @@ export default {
         &:last-child {
           color: #f5bb0e;
         }
+      }
+    }
+  }
+  .mask {
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0.5;
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .sign_in {
+    width: 80%;
+    height: 6.5rem;
+    position: absolute;
+    left: 10%;
+    top: 15%;
+    background: url("/images/background6.png");
+    background-size: 100% 100%;
+    z-index: 13;
+    display: flex;
+    .top {
+      width: 92%;
+      height: 2.2rem;
+      display: flex;
+      margin: 3.5rem auto 0;
+      justify-content: space-around;
+      div {
+        width: 30%;
+        height: 100%;
+        background: url("/images/background_signIn.png");
+        background-size: 100% 100%;
       }
     }
   }

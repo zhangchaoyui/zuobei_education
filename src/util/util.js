@@ -34,11 +34,21 @@ export default {
         });
     },
 
+    //路径
     GetQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
         console.log(window.location.search)//?id=2
         var r = window.location.search.substr(1).match(reg);
         if (r != null) return unescape(r[2]);
         return null;
-    }
+    },
+    //处理富文本问题
+    showHtml(str) {
+        return str
+          .replace(str ? /&(?!#?\w+;)/g : /&/g, "&amp;")
+          .replace(/&lt;/g, "<")
+          .replace(/&gt;/g, ">")
+          .replace(/&quot;/g, '"')
+          .replace(/&#39;/g, "'");
+      }
 }

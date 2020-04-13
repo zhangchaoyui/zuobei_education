@@ -8,69 +8,17 @@
         </div>
       </div>
       <div class="content2">
-        <div class="works" @click="worksDetail(12)">
-          <img src="/images/22.png" />
+        <div class="works" v-for="(item,index) in data " :key="index" @click="worksDetail(item.id)">
+          <img :src="item.image" />
           <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
+            <div class="works_name">{{item.title}}</div>
             <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
+            <div class="num">{{item.praise}}</div>
           </div>
           <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
-          </div>
-        </div>
-        <div class="works">
-          <img src="/images/22.png" />
-          <div class="worksDetail">
-            <div class="works_name">小发明小风车</div>
-            <img src="/images/fabulous_red.png" alt />
-            <div class="num">100</div>
-          </div>
-          <div class="user">
-            <img src="/images/user.jpg" alt />
-            <div class="user_name">蜡笔小新</div>
-            <div class="submit">2分钟</div>
+            <img :src="item.avatar" alt />
+            <div class="user_name">{{item.nickname}}</div>
+            <div class="submit">{{item.time}}</div>
           </div>
         </div>
       </div>
@@ -82,14 +30,26 @@
 export default {
   name: "myworks",
   data() {
-    return {};
+    return {
+      data: {}
+    };
   },
   mounted() {
-    this.axios.get("personal/works", { params: {} }).then(res => {
-      this.user_info = res.data;
-    });
+    this.axios
+      .get("personal/works", {
+        params: {
+          token: this.$cookie.get("token")
+        }
+      })
+      .then(res => {
+        this.data = res.data;
+      });
   },
-  methods: {},
+  methods: {
+    worksDetail(id) {
+      this.$router.push(`/worksDetail/${id}`);
+    }
+  },
   components: {}
 };
 </script>

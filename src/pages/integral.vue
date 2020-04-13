@@ -4,14 +4,14 @@
       <div class="content">
         <div class="content_left">
           <div class="title">我的积分</div>
-          <div class="center">318,325</div>
+          <div class="center">{{integral}}</div>
           <div class="bottom">如何赚积分任务规则</div>
         </div>
       </div>
     </div>
     <div class="nav">
-      <div>获取记录</div>
-      <div>使用记录</div>
+      <div @click="nav(1)">获取记录</div>
+      <div @click="nav(2)">使用记录</div>
     </div>
     <div class="list">
       <div class="row">
@@ -62,21 +62,34 @@
 export default {
   name: "integral",
   data() {
-    return {};
+    return {
+      integral: 0,
+      nav: 1
+    };
   },
   mounted() {
     this.getJifen();
+    this.getJifenList();
   },
   methods: {
     //获取我的积分
-    getJifen(e) {
+    getJifen() {
       this.http
         .post("/good/integral", {
-          token: this.$cookie.get("token"),
-          type: e
+          token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res);
+          this.integral = res;
+        });
+    },
+    //获取我的积分记录
+    getJifenList() {
+      this.http
+        .post("/sign/use", {
+          token: this.$cookie.get("token")
+        })
+        .then(res => {
+          this.integralList = res.data;
         });
     },
 
@@ -122,7 +135,7 @@ export default {
           line-height: 1rem;
         }
         .bottom {
-          width: 53%;
+          width: 45%;
           font-size: 0.2rem;
           line-height: 0.2rem;
           border-bottom: 1px solid white;
@@ -171,20 +184,20 @@ export default {
       text-align: center;
       padding: 0.3rem 0;
       position: relative;
-      &::before {
-        content: "";
-        width: 50%;
-        height: 2px;
-        background: #f5bb0e;
-        position: absolute;
-        bottom: 0;
-        left: 15%;
-      }
       img {
         margin-left: 0.2rem;
         width: 0.18rem;
         height: 0.12rem;
       }
+    }
+    .on {
+      width: 50%;
+      height: 2px;
+      background: #f5bb0e;
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      border-bottom: 1px solid #f5bb0e;
     }
   }
   .list {

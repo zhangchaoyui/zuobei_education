@@ -4,20 +4,22 @@
       <img src="/images/icon36.png" alt />
       <div class="content">
         <div class="title">
-          蜡笔小新
-          <span>1869615000</span>
+          {{address.name}}
+          <span>{{address.tel}}</span>
         </div>
-        <div class="address_content">山东省临沂市兰山区颐高上海街1103</div>
+        <div
+          class="address_content"
+        >{{address.sheng}} {{address.shi}} {{address.qu}} {{address.adress}}</div>
       </div>
       <img src="/images/icon41.png" alt />
     </div>
     <div class="orderinfo">
-      <img src="/images/user.jpg" alt />
+      <img :src="orderInfo.good_img" alt />
       <div class="ordercontent">
-        <div class="name">Keep旗舰店LINE布朗熊手环智能运动心率手表多功能计步器防水游泳</div>
+        <div class="name">{{orderInfo.good_name}}</div>
         <div class="bottom">
-          <span>799积分</span>
-          <span>X1</span>
+          <span>{{orderInfo.good_money}}积分</span>
+          <span>x{{orderInfo.good_num}}</span>
         </div>
       </div>
     </div>
@@ -27,23 +29,47 @@
 
 <script>
 import Btn from "../components/Button";
+import util from "../util/util";
 export default {
   name: "myorder",
   data() {
     return {
-      data: ""
+      id: this.$route.params.id,
+      orderInfo: {},
+      address: {}
     };
   },
   mounted() {
     //提交订单
-    this.submitOrder();
+    this.getOrder();
   },
   methods: {
+    getOrder() {
+      this.http
+        .post("/good/change", {
+          id: this.id,
+          token: this.$cookie.get("token")
+        })
+        .then(res => {
+          console.log(res);
+          this.address = res.adress;
+          this.orderInfo = res.good;
+        });
+    },
     submitOrder() {
-      this.axios.get("/article/about", { params: {} }).then(res => {
-        console.log(res);
-        this.data = this.showHtml(res.post_content);
-      });
+      this.http
+        .post("/good/order", {
+          aid: this.address.id,
+          gid: this.orderInfo.id,
+          token: this.$cookie.get("token")
+        })
+        .then(res => {
+          console.log(res);
+          util.toast("提交成功~");
+          setTimeout(() => {
+            this.$router.push("/order");
+          }, 1500);
+        });
     }
   },
   components: {

@@ -23,7 +23,7 @@
         </div>
         <div class="function" @click="choose">
           <img class="icon" src="/images/address.png" />
-          <input type="text" placeholder="邮寄发明材料的地址" v-model="address" />
+          {{address}}
         </div>
         <!--省市区三级联动-->
         <div class="divwrap" v-if="show">
@@ -45,7 +45,7 @@
  <script>
 import VDistpicker from "v-distpicker";
 import Btn from "../components/Button";
-import { Toast } from "mint-ui";
+import util from "../util/util";
 export default {
   name: "userinfo",
   data() {
@@ -54,9 +54,7 @@ export default {
       sex: "", //性别
       phone: "", //手机
       birthday: "", //生日
-      address: "", //地址
-      lxr: "",
-      lxdh: "",
+      address: "邮寄发明材料的地址", //地址
       show: false,
       //省市区
       province: "",
@@ -76,10 +74,15 @@ export default {
         address
       } = this;
       if (name == "" || sex == "" || phone == "" || birthday == "") {
-        Toast("请完善用户信息~");
+        util.toast("请完善用户信息~");
         return;
       } else if (address == "") {
-        Toast("请完善邮寄地址信息~");
+        util.toast("请完善邮寄地址信息~");
+        return;
+      }
+      var myreg = /^[1]([3-9])[0-9]{9}$/;
+      if (phone == "" || !myreg.test(phone)) {
+        util.toast("请输入正确的手机号码！");
         return;
       }
       this.axios
@@ -88,10 +91,14 @@ export default {
           sex,
           phone,
           birthday,
-          address
+          address,
+          token: this.$cookie.get("token")
         })
-        .then(res => {
-          console.log(res);
+        .then(() => {
+          util.toast("添加信息成功~");
+          setTimeout(() => {
+            this.$router.go(-1);
+          }, 1500);
         });
     },
 
@@ -105,17 +112,20 @@ export default {
     },
     onChangeProvince1: function(a) {
       this.province = a.value;
+      console.log(a.value);
       if (a.value == "台湾省") {
         this.show = false;
       }
     },
     onChangeCity: function(a) {
+      console.log(a.value);
       this.city = a.value;
     },
     onChangeArea: function(a) {
+      console.log(a.value);
       this.area = a.value;
       this.show = false;
-      this.city = this.province + this.city + this.area;
+      this.address = this.province + this.city + this.area;
     }
   },
   components: {
@@ -166,6 +176,7 @@ export default {
         border-bottom: 0.002rem solid #ebebed;
         padding: 0.1rem 0;
         display: flex;
+        color: #757575;
         .icon {
           display: inline-block;
           width: 0.4rem;
@@ -199,6 +210,7 @@ export default {
     bottom: 0;
     width: 100%;
     z-index: 99;
+    font-size: 0.24rem;
   }
 
   /*外部*/
@@ -209,12 +221,11 @@ export default {
 
   /*头部*/
   .divwrap .address-header {
-    background: #000;
+    background: #f5bb0e;
     color: #fff;
     width: 100%;
     position: fixed;
     bottom: 50%;
-    height: 0.5rem;
     font-size: 0.2rem;
   }
 
@@ -227,7 +238,7 @@ export default {
   /*选择过省市区的头部*/
   .divwrap .address-header .active {
     color: #fff;
-    border-bottom: 0.05rem solid #666;
+    border-bottom: 0.05rem solid #fff;
   }
 
   /*内容部分*/

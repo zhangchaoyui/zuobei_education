@@ -2,31 +2,31 @@
   <div class="order">
     <div class="nav">
       <div class="frame">
-        <div>全部</div>
-        <div class="on">待发货</div>
-        <div>待收货</div>
-        <div>已完成</div>
+        <div :class="{'on':nid==1}" @click="nav(1)">全部</div>
+        <div :class="{'on':nid==2}" @click="nav(2)">待发货</div>
+        <div :class="{'on':nid==3}" @click="nav(3)">待收货</div>
+        <div :class="{'on':nid==4}" @click="nav(4)">已完成</div>
       </div>
     </div>
     <div class="content">
-      <div class="orderinfo">
+      <div class="orderinfo" v-for="(item,index) in data" :key="index">
         <div class="a">
           <img src="/images/user.jpg" alt />
           <div class="ordercontent">
             <div class="name">
-              <div>Keep旗舰店LINE布朗熊手环智能运动心率手表多功能计步器防水游泳</div>
-              <span>订单编号：S2019002</span>
-              <span>时间：2020.3.14</span>
+              <div>{{item.ex_good_name}}</div>
+              <span>订单编号：{{item.order}}</span>
+              <span>时间：{{item.ex_time}}</span>
             </div>
             <div class="right">
-              <span>799积分</span>
-              <span>X1</span>
+              <span>{{item.ex_good_price}}积分</span>
+              <span>X{{item.num}}</span>
             </div>
           </div>
         </div>
         <div class="button2">
-          <div class="left">查看物流</div>
-          <div class="right">确认收货</div>
+          <div class="left" @click="logistics">查看物流</div>
+          <div class="right" @click="confirm(item.id)">确认收货</div>
         </div>
       </div>
     </div>
@@ -38,16 +38,45 @@ export default {
   name: "order",
   data() {
     return {
-      data: ""
+      data: "",
+      nid: 1
     };
   },
   mounted() {
-    this.axios.get("/article/about", { params: {} }).then(res => {
-      console.log(res);
-      this.data = this.showHtml(res.post_content);
-    });
+    this.nav(1);
   },
-  methods: {},
+  methods: {
+    //导航切换
+    nav(i) {
+      this.nid = i;
+      if (i == 1) {
+        i = "";
+      }
+      this.http
+        .post("/good/goods", {
+          tid: i,
+          token: this.$cookie.get("token")
+        })
+        .then(res => {
+          console.log(res);
+          this.data = res;
+        });
+    },
+    //物流页面
+    logistics() {
+      this.$router.push("/logistics");
+    },
+    //确认收货
+    confirm(id) {
+      this.http
+        .post("/good/confirm", {
+          gid: id
+        })
+        .then(res => {
+          console.log(res);
+        });
+    }
+  },
   components: {}
 };
 </script>
@@ -123,6 +152,7 @@ export default {
             color: #333333;
             div {
               width: 100%;
+              height: .8rem;
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 3;

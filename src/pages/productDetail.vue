@@ -2,37 +2,38 @@
   <div class="productDetail">
     <!-- 轮播图 -->
     <mt-swipe :auto="4000">
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner3.jpg'" />
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner3.jpg'" />
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <img v-lazy="'/images/banner3.jpg'" />
+      <mt-swipe-item v-for="(item,index) in data" :key="index">
+        <img v-lazy="item.img" />
       </mt-swipe-item>
     </mt-swipe>
     <div class="content">
       <div class="title">
         积分
-        <span>799</span>
+        <span>{{data.good_money}}</span>
       </div>
-      <div class="product_name">Keep旗舰店LINE布朗熊手环智能运动心率手表多功能计步器防水游泳</div>
-      <div class="bottom_title">Keep旗舰店 LINE布朗熊手环 智能运动</div>
+      <div class="product_name">{{data.good_name}}</div>
+      <div class="bottom_title">{{data.good_desc}}</div>
     </div>
     <div class="br"></div>
     <div class="detail">
       <p>产品详情</p>
-      <img src="/images/banner3.jpg" alt />
+      <div v-html="content">{{content}}</div>
     </div>
+    <Btn btnType="3" sureText="提交订单" v-on:submit="change"></Btn>
   </div>
 </template>
 
 <script>
+import Btn from "../components/Button";
+import util from "../util/util";
 export default {
   name: "productDetail",
   data() {
-    return {};
+    return {
+      id: this.$route.params.id,
+      data: {},
+      content: ""
+    };
   },
   mounted() {
     this.getProductDetail();
@@ -42,29 +43,24 @@ export default {
     getProductDetail() {
       this.http
         .post("/good/good_det", {
-         params:{
-           id:this.$router.params.id
-         }
+          token: this.$cookie.get("token"),
+          id: this.id
         })
         .then(res => {
-          console.log(res);
+          this.data = res;
+          this.content = util.showHtml(res.good_content);
         });
     },
+
     //立即兑换
     change() {
-      this.http
-        .post("/good/change", {
-         params:{
-           id:this.$router.params.id,
-           token:this.$cookie.get('token')
-         }
-        })
-        .then(res => {
-          console.log(res);
-        });
-    },
+      this.$router.push(`/submitOrder/${this.id}`);
+    }
   },
-  components: {}
+
+  components: {
+    Btn
+  }
 };
 </script>
 

@@ -1,17 +1,17 @@
 <template>
   <div class="addressList">
-    <div class="address">
+    <div class="address" v-for="(item,index) in data" :key="index">
       <img src="/images/icon36.png" alt />
       <div class="content">
         <div class="title">
-          蜡笔小新
-          <span>1869615000</span>
+          {{item.name}}
+          <span>{{item.tel}}</span>
         </div>
-        <div class="address_content">山东省临沂市兰山区颐高上海街1103</div>
+        <div class="address_content">{{item.sheng}} {{item.shi}} {{item.qu}} {{item.adress}}</div>
       </div>
       <div class="right">编辑</div>
     </div>
-    <Btn btnType="3" sureText="提交订单" v-on:submit="submitOrder"></Btn>
+    <Btn btnType="3" sureText="添加收货地址" v-on:submit="addAddress"></Btn>
   </div>
 </template>
 <script>
@@ -24,13 +24,17 @@ export default {
     };
   },
   mounted() {
-    this.axios.get("/article/about", { params: {} }).then(res => {
-      console.log(res);
-      this.data = this.showHtml(res.post_content);
-    });
+    this.axios
+      .post("/good/adreslist", { token: this.$cookie.get("token") })
+      .then(res => {
+        console.log(res);
+        this.data = res;
+      });
   },
   methods: {
-    submitOrder() {}
+    addAddress() {
+      this.$router.push("/addAddress");
+    }
   },
   components: {
     Btn

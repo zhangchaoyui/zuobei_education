@@ -130,7 +130,7 @@ export default {
           this.$router.push("/shop"); //积分商城
           break;
         case 3:
-          this.$router.push("/myOrder"); //我的订单
+          this.$router.push("/order"); //我的订单
           break;
         case 4:
           this.$router.push("/addressList"); //我的地址
