@@ -38,14 +38,13 @@
         <p>{{item.good_money}}积分</p>
       </div>
     </div>
-    <!-- <div class="mask"></div>
+    <div class="mask"></div>
     <div class="sign_in">
       <div class="top">
-        <div></div>
-        <div></div>
-        <div></div>
+        <div>饭</div>
+        <div>整</div>
       </div>
-    </div>-->
+    </div>
   </div>
 </template>
 
@@ -81,6 +80,8 @@ export default {
           this.integral = res;
         });
     },
+
+    fanzhuan() {},
     //获取商品列表
     getProductDetail() {
       this.http
@@ -274,11 +275,17 @@ export default {
       display: flex;
       margin: 3.5rem auto 0;
       justify-content: space-around;
+      position: relative;
       div {
         width: 30%;
         height: 100%;
-        background: url("/images/background_signIn.png");
-        background-size: 100% 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        &:last-child {
+          background: url("/images/background_signIn.png");
+          background-size: 100% 100%;
+        }
       }
     }
   }

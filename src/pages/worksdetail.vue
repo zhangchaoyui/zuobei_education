@@ -56,9 +56,9 @@
       </div>
       <div class="content" v-if="review.type==1&&review!=null">{{review.content}}</div>
       <div class="content" v-else-if="review.type==2&&review!=null">
-        <div class="voice">
+        <div class="voice" @click="myplay">
           <img src="/images/icon28.png" alt />
-          <audio :src="review.content" controls="controls"></audio>
+          <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
           点击收听老师点评
         </div>
       </div>
@@ -100,8 +100,9 @@
       </div>
       <div class="content" v-if="review.type==1">{{review.content}}</div>
       <div class="content" v-else-if="review.type==2">
-        <div class="voice">
+        <div class="voice" @click="myplay">
           <img src="/images/icon28.png" alt />
+          <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
           点击收听老师点评
         </div>
       </div>
@@ -285,6 +286,7 @@ export default {
 
     //分享功能
     initShareInfo() {
+      console.log(111);
       let shareInfo = {
         title: "做呗科技", // 分享标题
         desc: "做呗科技做呗科技做呗科技", // 分享描述
@@ -324,6 +326,9 @@ export default {
             this.getWorksDetail();
           }, 1500);
         });
+    },
+    myplay() {
+      document.getElementById("audio").play();
     }
   },
   created() {
@@ -345,7 +350,9 @@ export default {
             "downloadVoice",
             "playVoice",
             "pauseVoice",
-            "onVoicePlayEnd"
+            "onVoicePlayEnd",
+            "onMenuShareAppMessage",
+            "onMenuShareTimeline"
           ]
         });
         wx.ready(function() {
@@ -619,6 +626,10 @@ export default {
         align-items: center;
         color: #f6bc0e;
         font-size: 0.25rem;
+        audio {
+          opacity: 0;
+          display: none;
+        }
         img {
           width: 0.3rem;
           height: 0.46rem;
