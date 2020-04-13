@@ -53,11 +53,9 @@ export default {
     };
   },
   mounted() {
-    this.axios
-      .get("/Tran/index", {
-        params: {
-          id: this.id
-        }
+    this.http
+      .post("/Tran/index", {
+        id: this.id
       })
       .then(res => {
         console.log(res);

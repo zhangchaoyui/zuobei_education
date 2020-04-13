@@ -120,7 +120,7 @@ export default new Router({
         },
 
         {
-            path: '/logistics',//物流
+            path: '/logistics/:id',//物流
             name: 'logistics',
             meta: { title: '物流信息' },
             component: resolve => require(['./pages/logistics'], resolve),

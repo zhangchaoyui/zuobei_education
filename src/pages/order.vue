@@ -11,7 +11,7 @@
     <div class="content">
       <div class="orderinfo" v-for="(item,index) in data" :key="index">
         <div class="a">
-          <img src="/images/user.jpg" alt />
+          <img :src="item.good_image" alt />
           <div class="ordercontent">
             <div class="name">
               <div>{{item.ex_good_name}}</div>
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="button2">
-          <div class="left" @click="logistics">查看物流</div>
+          <div class="left" @click="logistics(item.id)">查看物流</div>
           <div class="right" @click="confirm(item.id)">确认收货</div>
         </div>
       </div>
@@ -63,8 +63,8 @@ export default {
         });
     },
     //物流页面
-    logistics() {
-      this.$router.push("/logistics");
+    logistics(id) {
+      this.$router.push(`/logistics/${id}`);
     },
     //确认收货
     confirm(id) {
@@ -152,7 +152,7 @@ export default {
             color: #333333;
             div {
               width: 100%;
-              height: .8rem;
+              height: 0.8rem;
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 3;
