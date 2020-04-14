@@ -1,12 +1,11 @@
 <template>
   <div class="index">
     <!-- 轮播图 -->
-    <mt-swipe :auto="4000" v-for="(item,index) in swiper" v-bind:key="index">
-      <mt-swipe-item>
-        <img v-lazy="item.image" />
+    <mt-swipe :auto="4000">
+      <mt-swipe-item v-for="(item,index) in swiper" :key="index">
+        <img :src="item.image" />
       </mt-swipe-item>
     </mt-swipe>
-    <!-- <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search> -->
     <div class="search" @click="search">
       <img src="/images/search.png" alt />请输入您要搜索的名称
     </div>
@@ -214,8 +213,11 @@ export default {
     }
   }
   .mint-search {
+    width: 100%;
     height: auto;
     margin-top: 0.2rem;
+    display: flex;
+    overflow: hidden;
     .mint-searchbar {
       padding: 0px 10px;
       border-radius: 0.4rem;

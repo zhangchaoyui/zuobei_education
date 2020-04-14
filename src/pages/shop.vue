@@ -15,13 +15,23 @@
       </div>
     </div>
     <div class="nav">
-      <div>
-        积分值
+      <div @click="getNav(2)" class="nav_child">
+        {{showText}}
         <img src="/images/icon46.png" alt />
+        <div class="integralList" v-show="showType">
+          <div v-for="(item,index) in integralList" :key="index">
+            <div class="row" @click="nav(2,index)">{{item.name}}</div>
+          </div>
+        </div>
       </div>
-      <div>
-        商品分类
+      <div @click="getNav(1)" class="nav_child">
+        {{showproduct}}
         <img src="/images/icon46.png" alt />
+        <div class="integralList" v-show="showStatus">
+          <div v-for="(item,index) in classification" :key="index">
+            <div class="row" @click="nav(1,index)">{{item.name}}</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="product">
@@ -38,34 +48,57 @@
         <p>{{item.good_money}}积分</p>
       </div>
     </div>
-    <div class="mask"></div>
-    <div class="sign_in">
+    <div class="mask" v-if="!status"></div>
+    <div class="sign_in" v-if="!status">
       <div class="top">
-        <div>饭</div>
-        <div>整</div>
+        <div class="cloumn" v-for="(item,index) in numberRand" :key="index">
+          <div class="list1" :class="{'Onlist1':fan==index}" @click="fanzhuan(index)">
+            <img src="/images/fan.png" />
+          </div>
+          <div class="list2" :class="{'Onlist2':fan==index}">
+            <div>
+              x
+              <span>{{item}}</span>
+            </div>
+            <div>已获得积分</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import util from "../util/util";
+import util from "../util/util";
 export default {
   name: "shop",
   data() {
     return {
-      id: "",
+      tid: "",
       jid: "",
-      page: "",
+      page: 1,
       integral: 0, //积分规则
       productData: {}, //商品数据
-      numberRand: []
+      numberRand: [], //翻拍积分数据
+      fan: 10, //翻拍下标
+      status: 1, //今日是否签到
+      num: 0, //判断是否点击签到
+      showType: false, //显示积分值
+      showStatus: true, //显示商品类型
+      integralList: {}, //显示积分类型数据
+      classification: {}, //显示商品类型数据
+      showText: "积分值",
+      showproduct: "商品分类"
     };
   },
   mounted() {
-    this.http.get("/sign/numberRand", {}).then(res => {
-      this.numberRand = res;
-    });
+    this.http
+      .post("/sign/numberRand", { token: this.$cookie.get("token") })
+      .then(res => {
+        console.log(res);
+        this.status = res.status;
+        this.numberRand = res.num;
+      });
     this.getProductDetail();
     this.getJifen();
   },
@@ -80,8 +113,26 @@ export default {
           this.integral = res;
         });
     },
-
-    fanzhuan() {},
+    //翻拍
+    fanzhuan(index) {
+      if (this.num == 0) {
+        this.num = 1;
+        this.fan = index;
+        this.http
+          .post("/sign/sign", {
+            score: this.numberRand[index],
+            token: this.$cookie.get("token")
+          })
+          .then(() => {
+            util.toast("签到成功~");
+            setTimeout(() => {
+              this.status = 1;
+            });
+          });
+      } else {
+        return;
+      }
+    },
     //获取商品列表
     getProductDetail() {
       this.http
@@ -108,6 +159,31 @@ export default {
     //积分记录
     Integral() {
       this.$router.push("/integral");
+    },
+
+    //获取导航
+    getNav(i) {
+      this.http.post("/good/limit", { tid: i }).then(res => {
+        if (i == 2) {
+          this.integralList = res;
+          this.showType = !this.showType;
+        } else {
+          this.classification = res;
+          this.showStatus = !this.showStatus;
+        }
+      });
+    },
+
+    //选择导航
+    nav(type, index) {
+      if (type == 2) {
+        this.jid = this.integralList[index].id;
+        this.showText = this.integralList[index].name;
+      } else if (type == 1) {
+        this.tid = this.classification[index].id;
+        this.showproduct = this.classification[index].name;
+      }
+      this.getProductDetail();
     }
   },
   components: {}
@@ -192,7 +268,7 @@ export default {
     text-align: center;
     font-size: 0.32rem;
     border-bottom: 1px solid #f6f6f6;
-    div {
+    .nav_child {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -212,6 +288,27 @@ export default {
         margin-left: 0.2rem;
         width: 0.18rem;
         height: 0.12rem;
+      }
+    }
+    .integralList {
+      position: absolute;
+      top: 1rem;
+      left: -100;
+      background: #efefef;
+      width: 2.17rem;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      div {
+        width: 90%;
+        height: 0.6rem;
+        font-size: 0.24rem;
+        line-height: 0.6rem;
+        margin: 0 auto;
+        border-bottom: 1px solid #bfbfbf;
+        &:last-child {
+          border: none;
+        }
       }
     }
   }
@@ -272,20 +369,107 @@ export default {
     .top {
       width: 92%;
       height: 2.2rem;
-      display: flex;
       margin: 3.5rem auto 0;
+      display: flex;
       justify-content: space-around;
-      position: relative;
-      div {
+      .cloumn {
         width: 30%;
         height: 100%;
+        transition: transform 0.6s ease-out;
+        transition: transform 0.5s ease-in-out;
+        -webkit-transition: transform 0.5s ease-in-out;
+        -moz-transition: transform 0.5s ease-in-out;
+        -ms-transition: transform 0.5s ease-in-out;
+        -o-transition: transform 0.5s ease-in-out;
+        -webkit-transform-style: preserve-3d;
+        /*使其子类变换后得以保留 3d转换后的位置*/
+        -moz-transform-style: preserve-3d;
+        -ms-transform-style: preserve-3d;
+        -o-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        display: block;
+        position: relative;
+      }
+
+      div {
+        width: 100%;
+        height: 100%;
+      }
+      .list1,
+      .list2 {
+        backface-visibility: hidden;
+        transition: 0.6s ease-out;
+        -webkit-transition: 0.6s ease-out;
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        -ms-transform-style: preserve-3d;
+        -o-transform-style: preserve-3d;
+        transform-style: preserve-3d;
         position: absolute;
         top: 0;
         left: 0;
-        &:last-child {
-          background: url("/images/background_signIn.png");
-          background-size: 100% 100%;
+      }
+      .list1 {
+        z-index: 11;
+        transform: rotateY(0deg);
+        transform: rotateY(0deg);
+        -webkit-transform: rotateY(0deg);
+        -moz-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        -o-transform: rotateY(0deg);
+        background: url("/images/background_signIn.png");
+        background-size: 100% 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          display: block;
+          width: 0.55rem;
+          height: 0.55rem;
         }
+      }
+      .Onlist1 {
+        transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
+        z-index: 10;
+      }
+      .list2 {
+        z-index: 10;
+        transform: rotateY(-180deg);
+        transform: rotateY(-180deg);
+        -webkit-transform: rotateY(-180deg);
+        -moz-transform: rotateY(-180deg);
+        -ms-transform: rotateY(-180deg);
+        -o-transform: rotateY(-180deg);
+        font-size: 0.24rem;
+        background-size: 100% 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        div {
+          width: 100%;
+          height: 0.5rem;
+          font-size: 0.36rem;
+          line-height: 0.5rem;
+          color: #fff;
+          text-align: center;
+          span {
+            font-size: 0.55rem;
+          }
+          &:last-child {
+            font-size: 0.22rem;
+            height: 0.33rem;
+            line-height: 0.33rem;
+          }
+        }
+      }
+      .Onlist2 {
+        transform: rotateY(0deg);
+        -webkit-transform: rotateY(0deg);
+        z-index: 11;
+        background: url("/images/background_signIn.png");
+        background-size: 100% 100%;
       }
     }
   }

@@ -174,8 +174,8 @@ export default {
     //删除图片
     deleteImg(index) {
       console.log(index);
-      this.imgList = this.imgList.splice(index, 1);
-      this.showImg = this.showImg.splice(index, 1);
+      this.imgList = delete this.imgList[index];
+      this.showImg = delete this.showImg[index];
       console.log(1, this.imgList);
       console.log(2, this.showImg);
     }

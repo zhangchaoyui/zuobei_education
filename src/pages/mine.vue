@@ -225,7 +225,7 @@ export default {
       padding-left: 2%;
 
       span {
-        width: 90%;
+        max-width: 90%;
         @include textWidth();
       }
       img {

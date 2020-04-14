@@ -2,7 +2,7 @@
   <div class="worksdetail">
     <div class="header">
       <div class="header_img">
-        <img :src="result.avatar" alt />
+        <img v-image-preview :src="result.avatar" alt />
       </div>
       <div class="header_userinfo">
         <span>{{result.nickname}}</span>
@@ -22,7 +22,7 @@
     <!-- 轮播图 -->
     <mt-swipe :auto="4000">
       <mt-swipe-item v-for="(item,index) in result.image" :key="index">
-        <img v-lazy="item" />
+        <img v-image-preview :src="item" />
       </mt-swipe-item>
     </mt-swipe>
     <div class="br"></div>

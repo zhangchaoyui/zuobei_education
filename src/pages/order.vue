@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div class="button2">
+        <div class="button2" v-if="item.status!=4&&item.status!=2">
           <div class="left" @click="logistics(item.id)">查看物流</div>
           <div class="right" @click="confirm(item.id)">确认收货</div>
         </div>

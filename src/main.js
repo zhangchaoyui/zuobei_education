@@ -11,6 +11,9 @@ import 'mint-ui/lib/style.css'
 import http from './https'
 //挂载到VUE实例，以便全局使用;
 Vue.prototype.http = http;
+import VueDirectiveImagePreviewer from 'vue-directive-image-previewer'
+import 'vue-directive-image-previewer/dist/assets/style.css'
+Vue.use(VueDirectiveImagePreviewer) 
 
 import Distpicker from 'v-distpicker'
 Vue.component('v-distpicker', Distpicker)

@@ -38,7 +38,8 @@ export default {
     return {
       data: [],
       isLoading: false,
-      page: 1
+      page: 1,
+      loadMore: false
     };
   },
   mounted() {
@@ -51,12 +52,16 @@ export default {
         .get("/article/index", {
           params: {
             page: this.page,
-            limit: 1
+            limit: 6
           }
         })
         .then(res => {
           console.log(res);
-          this.loading = false;
+          if (res.data == []) {
+          } else {
+            this.loadMore = false;
+          }
+          this.isLoading = true;
           this.data = this.data.concat(res.data);
         });
     },
@@ -66,7 +71,8 @@ export default {
     },
 
     loadMore() {
-      this.loading = true;
+      this.loadMore = true;
+      this.isLoading = false;
       this.page++;
       setTimeout(() => {
         this.getDetail();

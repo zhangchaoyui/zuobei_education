@@ -2,39 +2,19 @@
   <div class="logistics">
     <div class="title">
       <img src="/images/icon14.png" alt />
-      韵达快递：4158454548556
+      {{data.brand}}：{{data.no}}
     </div>
     <div class="package-status">
       <div class="status-box">
         <ul class="status-list">
-          <li>
+          <!-- <li>
             <div class="status-content-before">您的订单开始处理</div>
             <div class="status-time-before">2017-08-17 23:31 周四</div>
             <div class="status-line"></div>
-          </li>
-          <li>
-            <div class="status-content-before">卖家发货</div>
-            <div class="status-time-before">2017-08-18 09:11 周五</div>
-            <div class="status-line"></div>
-          </li>
-          <li>
-            <div class="status-content-before">发往深圳中转站</div>
-            <div class="status-time-before">2017-08-19 01:21 周六</div>
-            <div class="status-line"></div>
-          </li>
-          <li>
-            <div class="status-content-before">到达深圳</div>
-            <div class="status-time-before">2017-08-19 06:21 周六</div>
-            <div class="status-line"></div>
-          </li>
-          <li>
-            <div class="status-content-before">发往潮汕中心</div>
-            <div class="status-time-before">2017-08-19 09:21 周六</div>
-            <div class="status-line"></div>
-          </li>
-          <li class="latest">
-            <div class="status-content-latest">快件到达 潮汕中心</div>
-            <div class="status-time-latest">2017-08-20 14:16 周日</div>
+          </li>-->
+          <li class="latest" v-for="(item,index) in data.data" :key="index">
+            <div class="status-content-latest">{{item.context}}</div>
+            <div class="status-time-latest">{{item.time}}</div>
             <div class="status-line"></div>
           </li>
         </ul>
@@ -49,7 +29,7 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      data: ""
+      data: {}
     };
   },
   mounted() {
@@ -58,8 +38,7 @@ export default {
         id: this.id
       })
       .then(res => {
-        console.log(res);
-        this.data = res;
+        this.data = res.data[0];
       });
   },
   methods: {},
@@ -71,12 +50,13 @@ export default {
 .logistics {
   .title {
     width: 95%;
-    padding: 0 2.5%;
+    margin: 0 auto;
     height: 1rem;
     line-height: 1rem;
     font-size: 0.28rem;
     display: flex;
     align-items: center;
+    border-bottom: 1px solid #f6f6f6;
     img {
       width: 0.39rem;
       height: 0.31rem;
@@ -86,6 +66,8 @@ export default {
   }
   .package-status {
     padding: 18px 0 0 0;
+    width: 90%;
+    margin: 0 auto;
   }
   .package-status .status-list {
     margin: 0;
@@ -95,8 +77,12 @@ export default {
     list-style: none;
   }
   .package-status .status-list li {
-    border-left: 2px solid #d9d9d9;
+    border-left: 2px solid #f5bb0e;
+    border-bottom: none;
     text-align: left;
+    &:first-child {
+      color: black;
+    }
   }
   .package-status .status-list li:before {
     /* 流程点的样式 */
@@ -111,7 +97,7 @@ export default {
     margin-right: 10px;
   }
   .package-status .status-list .latest:before {
-    background-color: #0dad12;
+    background-color: #f5bb0e;
     border-color: #f8e9e4;
   }
   .package-status .status-box {
@@ -139,12 +125,6 @@ export default {
   .package-status .status-list {
     margin-top: 0px;
   }
-  /* .package-status .status-list .latest{border:none} */
-  /* .package-status .status-list li{margin-bottom:-2px} */
-
-  .status-list li:not(:first-child) {
-    padding-top: 10px;
-  }
 
   .status-content-before {
     text-align: left;
@@ -155,8 +135,12 @@ export default {
   .status-content-latest {
     text-align: left;
     margin-left: 25px;
-    color: green;
+    color: #999999;
     margin-top: -20px;
+    font-size: 0.28rem;
+    &:first-child {
+      color: black;
+    }
   }
   .status-time-before {
     text-align: left;
@@ -167,8 +151,8 @@ export default {
   .status-time-latest {
     text-align: left;
     margin-left: 25px;
-    color: green;
-    font-size: 10px;
+    color: #999999;
+    font-size: 12px;
     margin-top: 5px;
   }
   .status-line {

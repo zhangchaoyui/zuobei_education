@@ -15,7 +15,7 @@
             />
           </div>
           <div class="phone">
-            <input type="password" placeholder="请输入密码" v-model="password" />
+            <input type="password" placeholder="请输入密码" v-model="password" @blur="blurIn" />
           </div>
         </div>
         <Btn btnType="2" sureText="登录" v-on:submit="login"></Btn>
@@ -51,6 +51,10 @@ export default {
     }
   },
   methods: {
+    blurIn() {
+      window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
+    },
+
     //登录
     login() {
       let { phone, password } = this;
@@ -73,7 +77,7 @@ export default {
           .then(res => {
             console.log(res);
             util.toast("登陆成功~");
-            this.$cookie.set("token", res.token);
+            this.$cookie.set("token", res.token, { expires: "3D" });
             stroage.setItem("status", 1);
             stroage.setItem("user_type", res.user_type);
             setTimeout(() => {

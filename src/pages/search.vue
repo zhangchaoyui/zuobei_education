@@ -1,8 +1,15 @@
 <template>
   <div class="search">
-    <mt-search v-model="value" placeholder="请输入您要搜索的名称"></mt-search>
+    <form action v-on:submit.prevent>
+      <mt-search
+        v-model="value"
+        placeholder="请输入查询作品名称"
+        @keyup.enter.native="search"
+        class="font-size-8"
+      ></mt-search>
+    </form>
     <!-- 作品列表 -->
-    <div class="articleList" v-if="Works">
+    <div class="articleList" v-if="data=={}">
       <div class="title">
         <div class="title_content">
           <img src="/images/icon39.png" />作品列表
@@ -12,7 +19,7 @@
         <div
           class="works"
           @click="worksDetail(item.id)"
-          v-for="(item,index) in Works"
+          v-for="(item,index) in data"
           v-bind:key="index"
         >
           <img v-lazy="item.image" />
@@ -37,13 +44,25 @@ export default {
   name: "index",
   data() {
     return {
-      value: ""
+      value: "",
+      data: {}
     };
   },
   mounted() {},
   methods: {
+    blurIn() {
+      window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
+    },
     search() {
-      this.$router.push("/search");
+      console.log(111);
+      this.http
+        .post("/Works/index", {
+          key: this.value
+        })
+        .then(res => {
+          console.log(res);
+          this.data = res;
+        });
     }
   },
   components: {}
@@ -89,6 +108,7 @@ export default {
     background: url("/images/background10.png");
     background-size: 100%;
     box-sizing: border-box;
+    margin-top: 5%;
     .title {
       width: 100%;
       display: flex;

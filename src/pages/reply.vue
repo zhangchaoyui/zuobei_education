@@ -2,64 +2,19 @@
   <div class="reply">
     <div class="evaluate">
       <div class="evaluate_list">
-        <div class="evaluate_detail">
+        <div class="evaluate_detail" v-for="(item,index) in data" :key="index">
           <div class="evaluate_img">
-            <img src="/images/user.jpg" alt />
+            <img :src="item.avatar" alt />
           </div>
           <div class="evaluate_title">
             <div class="top">
-              <div class="title_left">刘小洋</div>
-              <div class="evaluate_content">谢谢张老师的细心点评，听了老师的点评后，孩子进步不少呀！</div>
-              <div class="title_right">2020.3.13</div>
+              <div class="title_left">{{item.nickname}}</div>
+              <div class="evaluate_content">{{item.content}}</div>
+              <div class="title_right">{{item.time}}</div>
             </div>
           </div>
           <div class="img2">
-            <img src="/images/22.png" alt />
-          </div>
-        </div>
-        <div class="evaluate_detail">
-          <div class="evaluate_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="evaluate_title">
-            <div class="top">
-              <div class="title_left">刘小洋</div>
-              <div class="evaluate_content">谢谢张老师的细心点评，听了老师的点评后，孩子进步不少呀！</div>
-              <div class="title_right">2020.3.13</div>
-            </div>
-          </div>
-          <div class="img2">
-            <img src="/images/22.png" alt />
-          </div>
-        </div>
-        <div class="evaluate_detail">
-          <div class="evaluate_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="evaluate_title">
-            <div class="top">
-              <div class="title_left">刘小洋</div>
-              <div class="evaluate_content">谢谢张老师的细心点评，听了老师的点评后，孩子进步不少呀！</div>
-              <div class="title_right">2020.3.13</div>
-            </div>
-          </div>
-          <div class="img2">
-            <img src="/images/22.png" alt />
-          </div>
-        </div>
-        <div class="evaluate_detail">
-          <div class="evaluate_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="evaluate_title">
-            <div class="top">
-              <div class="title_left">刘小洋</div>
-              <div class="evaluate_content">谢谢张老师的细心点评，听了老师的点评后，孩子进步不少呀！</div>
-              <div class="title_right">2020.3.13</div>
-            </div>
-          </div>
-          <div class="img2">
-            <img src="/images/22.png" alt />
+            <img :src="item.url" alt />
           </div>
         </div>
       </div>
@@ -71,7 +26,20 @@
 export default {
   name: "reply",
   data() {
-    return {};
+    return {
+      data: {}
+    };
+  },
+  mounted() {
+    this.axios
+      .get("/works/reply", {
+        params: {
+          token: this.$cookie.get("token")
+        }
+      })
+      .then(res => {
+        this.data = res.data;
+      });
   },
   components: {}
 };

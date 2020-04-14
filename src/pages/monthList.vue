@@ -5,44 +5,44 @@
         <img src="/images/icon19.png" alt />人气王
       </div>
       <div class="userList">
-        <div class="user">
+        <div class="user" v-if="sentiment[0]">
           <div class="img">
-            <img src="/images/user.jpg" alt />
+            <img :src="sentiment[0].avatar" alt />
           </div>
-          <span class="username">蜡笔小新</span>
+          <span class="username">{{sentiment[0].nickname}}</span>
           <span class="fabulous">
             获赞
-            <span class="ci">2600</span>次
+            <span class="ci">{{sentiment[0].praise}}</span>次
           </span>
         </div>
-        <div class="user">
+        <div class="user" v-if="sentiment[1]">
           <div class="img2">
-            <img src="/images/user.jpg" alt />
+            <img :src="sentiment[1].avatar" alt />
           </div>
-          <span class="username">蜡笔小新</span>
+          <span class="username">{{sentiment[1].nickname}}</span>
           <span class="fabulous">
             获赞
-            <span class="ci">2600</span>次
+            <span class="ci">{{sentiment[1].praise}}</span>次
           </span>
         </div>
-        <div class="user">
+        <div class="user" v-if="sentiment[2]">
           <div class="img3">
-            <img src="/images/user.jpg" alt />
+            <img :src="sentiment[2].avatar" alt />
           </div>
-          <span class="username">蜡笔小新</span>
+          <span class="username">{{sentiment[2].nickname}}</span>
           <span class="fabulous">
             获赞
-            <span class="ci">2600</span>次
+            <span class="ci">{{sentiment[2].praise}}</span>次
           </span>
         </div>
-        <div class="user">
+        <div class="user" v-if="sentiment[3]">
           <div class="img4">
-            <img src="/images/user.jpg" alt />
+            <img :src="sentiment[3].avatar" alt />
           </div>
-          <span class="username">蜡笔小新</span>
+          <span class="username">{{sentiment[3].nickname}}</span>
           <span class="fabulous">
             获赞
-            <span class="ci">2600</span>次
+            <span class="ci">{{sentiment[3].praise}}</span>次
           </span>
         </div>
       </div>
@@ -53,115 +53,27 @@
       </div>
       <div class="userList">
         <div class="row">
-          <div class="user">
+          <div class="user" v-for="(item,index) in adhere" :key="index">
             <div class="img">
-              <img src="/images/user.jpg" alt />
+              <img :src="item.avatar" alt />
               <img src="/images/icon44.png" class="biao" alt />
             </div>
-            <span class="username">蜡笔小新</span>
+            <span class="username">{{item.nickname}}</span>
             <span class="fabulous">
               上传
-              <span class="ci">2600</span>次
-            </span>
-          </div>
-          <div class="user">
-            <div class="img">
-              <img src="/images/user.jpg" alt />
-              <img src="/images/icon44.png" class="biao" alt />
-            </div>
-            <span class="username">蜡笔小新</span>
-            <span class="fabulous">
-              上传
-              <span class="ci">2600</span>次
-            </span>
-          </div>
-          <div class="user">
-            <div class="img">
-              <img src="/images/user.jpg" alt />
-              <img src="/images/icon44.png" class="biao" alt />
-            </div>
-            <span class="username">蜡笔小新</span>
-            <span class="fabulous">
-              上传
-              <span class="ci">2600</span>次
-            </span>
-          </div>
-          <div class="user">
-            <div class="img">
-              <img src="/images/user.jpg" alt />
-              <img src="/images/icon44.png" class="biao" alt />
-            </div>
-            <span class="username">蜡笔小新</span>
-            <span class="fabulous">
-              上传
-              <span class="ci">2600</span>次
+              <span class="ci">{{item.num}}</span>次
             </span>
           </div>
         </div>
-        <div class="cloumn">
+        <div class="cloumn" v-for="(item,index) in data" :key="index">
           <div class="let">1</div>
           <div class="let_img">
-            <img src="/images/user.jpg" alt />
+            <img :src="item.avatar" alt />
           </div>
-          <div class="username">多喝热水</div>
+          <div class="username">{{item.nickname}}</div>
           <div class="let_right">
             上传作品
-            <span>400</span>次
-          </div>
-        </div>
-        <div class="cloumn">
-          <div class="let">1</div>
-          <div class="let_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="username">多喝热水</div>
-          <div class="let_right">
-            上传作品
-            <span>400</span>次
-          </div>
-        </div>
-        <div class="cloumn">
-          <div class="let">2</div>
-          <div class="let_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="username">多喝热水</div>
-          <div class="let_right">
-            上传作品
-            <span>400</span>次
-          </div>
-        </div>
-        <div class="cloumn">
-          <div class="let">3</div>
-          <div class="let_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="username">多喝热水</div>
-          <div class="let_right">
-            上传作品
-            <span>400</span>次
-          </div>
-        </div>
-        <div class="cloumn">
-          <div class="let">4</div>
-          <div class="let_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="username">多喝热水</div>
-          <div class="let_right">
-            上传作品
-            <span>400</span>次
-          </div>
-        </div>
-        <div class="cloumn">
-          <div class="let">5</div>
-          <div class="let_img">
-            <img src="/images/user.jpg" alt />
-          </div>
-          <div class="username">多喝热水</div>
-          <div class="let_right">
-            上传作品
-            <span>400</span>次
+            <span>{{item.num}}</span>次
           </div>
         </div>
       </div>
@@ -174,8 +86,8 @@ export default {
   name: "monthList",
   data() {
     return {
-      adhere: "",
-      sentiment: ""
+      adhere: {},
+      sentiment: {}
     };
   },
   mounted() {
@@ -195,7 +107,9 @@ export default {
         }
       })
       .then(res => {
-        this.adhere = res;
+        this.adhere = res.splice(0, 4);
+        this.data = res;
+        console.log(res, adhere, 22, data);
       });
   },
   methods: {},
@@ -214,10 +128,10 @@ export default {
   flex-direction: column;
   .header {
     width: 100%;
-    height: 4rem;
     margin: 0 auto;
     background: url("/images/background2.png") no-repeat;
-    background-size: 100%;
+    background-size: 100% 100%;
+    padding-bottom: 0.2rem;
     .title {
       display: flex;
       justify-content: center;
@@ -279,6 +193,7 @@ export default {
           text-align: center;
           font-size: 0.26rem;
           color: #444444;
+          @include textWidth();
         }
         .fabulous {
           display: block;
@@ -303,6 +218,7 @@ export default {
     display: block;
     flex-direction: column;
     padding-bottom: 2%;
+    margin-top: 2%;
     .title {
       display: flex;
       justify-content: center;

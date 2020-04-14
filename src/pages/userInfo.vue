@@ -7,19 +7,19 @@
       <div class="functionList">
         <div class="function">
           <img class="icon" src="/images/icon21.png" />
-          <input type="text" placeholder="发明家的姓名" v-model="name" />
+          <input type="text" placeholder="发明家的姓名" v-model="name" @blur="blurIn" />
         </div>
         <div class="function">
           <img class="icon" src="/images/icon26.png" />
-          <input type="text" placeholder="发明家的性别" v-model="sex" />
+          <input type="text" placeholder="发明家的性别" v-model="sex" @blur="blurIn" />
         </div>
         <div class="function">
           <img class="icon" src="/images/icon16.png" />
-          <input type="text" placeholder="发明家的手机号码" v-model="phone" />
+          <input type="text" placeholder="发明家的手机号码" v-model="phone" @blur="blurIn" />
         </div>
         <div class="function">
           <img class="icon" src="/images/icon8.png" />
-          <input type="text" placeholder="发明家的生日" v-model="birthday" />
+          <input type="text" placeholder="发明家的生日" v-model="birthday" @blur="blurIn" />
         </div>
         <div class="function" @click="choose">
           <img class="icon" src="/images/address.png" />
@@ -64,6 +64,9 @@ export default {
   },
   mounted() {},
   methods: {
+    blurIn() {
+      window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
+    },
     //保存
     preservation() {
       let {
