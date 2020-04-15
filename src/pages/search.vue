@@ -9,7 +9,7 @@
       ></mt-search>
     </form>
     <!-- 作品列表 -->
-    <div class="articleList" v-if="data=={}">
+    <div class="articleList" v-if="data.length>0">
       <div class="title">
         <div class="title_content">
           <img src="/images/icon39.png" />作品列表
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       value: "",
-      data: {}
+      data: []
     };
   },
   mounted() {},
@@ -63,6 +63,10 @@ export default {
           console.log(res);
           this.data = res;
         });
+    },
+
+    worksDetail(id){
+       this.$router.push(`/worksdetail/${id}`);
     }
   },
   components: {}
@@ -98,6 +102,9 @@ export default {
         font-size: 0.34rem;
         color: $colorA;
       }
+    }
+    .mint-search-list {
+      height: 0;
     }
   }
 

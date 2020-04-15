@@ -5,7 +5,7 @@
     </div>
     <div class="img">
       <div class="img_cloumn" v-for="(item,index) in imgList" :key="index">
-        <img v-bind:src="item" @click="replaceImg(index)" />
+        <img v-bind:src="item" />
         <div class="options" @click="deleteImg(index)">x</div>
       </div>
       <div class="img_cloumn" v-if="imgList.length<3||imgList==[]">
@@ -142,8 +142,8 @@ export default {
 
     //删除图片
     deleteImg(index) {
-      console.log(index);
       this.imgList = delete this.imgList[index];
+      console.log(this.imgList);
       this.showImg = delete this.showImg[index];
     }
   },

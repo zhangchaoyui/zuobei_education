@@ -57,13 +57,12 @@ export default {
         })
         .then(res => {
           console.log(res);
+          this.data = this.data.concat(res.data);
           if (res.data.length <= 0) {
-            console.log("为空不走f");
             this.loading = true;
           } else {
             this.loading = false;
           }
-          this.data = this.data.concat(res.data);
         });
     },
     //跳转文章资讯
@@ -73,7 +72,7 @@ export default {
 
     loadMore() {
       this.loading = true;
-      ++this.page;
+      this.page++;
       setTimeout(() => {
         this.getDetail();
       }, 1000);

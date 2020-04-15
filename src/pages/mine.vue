@@ -54,8 +54,6 @@
 
  <script>
 import stroage from "../stroage/index";
-import util from "../util/util";
-import wx from "weixin-js-sdk";
 export default {
   name: "mine",
   data() {

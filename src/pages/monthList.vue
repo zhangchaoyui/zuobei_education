@@ -278,6 +278,7 @@ export default {
             text-align: center;
             font-size: 0.26rem;
             color: #444444;
+            @include textWidth();
           }
           .fabulous {
             display: block;

@@ -9,7 +9,12 @@
         <div v-bind:class="{'btn':btn==2}" @click="getWorksList(2)">季度</div>
         <div v-bind:class="{'btn':btn==3}" @click="getWorksList(3)">年度</div>
       </div>
-      <div class="list">
+      <div
+        class="list"
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="loading"
+        infinite-scroll-distance="30"
+      >
         <div class="ranking">
           <div class="one" v-if="oneList">
             <div class="works_left">
@@ -93,7 +98,9 @@ export default {
       btn: 1, //按钮类型
       value: "", //搜索框内容
       worksList: [], //列表
-      oneList: {} //第一个显示
+      oneList: {}, //第一个显示
+      page: 1,
+      loading: true
     };
   },
   mounted() {
@@ -103,15 +110,22 @@ export default {
   methods: {
     //获取排行榜信息
     getWorksList(e) {
-      this.axios.get("/works/ranking", { params: { tid: e } }).then(res => {
-        this.worksList = res.data;
-        this.btn = e;
-      });
+      this.axios
+        .get("/works/ranking", { params: { tid: e, page: this.page } })
+        .then(res => {
+          this.worksList = this.worksList.concat(res.data);
+          if (res.data.length <= 0) {
+            this.loading = true;
+          } else {
+            this.loading = false;
+          }
+          this.btn = e;
+        });
     },
     //获取排行榜第一名信息
     getoOneList() {
       this.axios.get("/works/one", { params: {} }).then(res => {
-        console.log(res.data)
+        console.log(res.data);
         this.oneList = res.data;
       });
     },
@@ -123,6 +137,15 @@ export default {
 
     search() {
       this.$router.push("/search");
+    },
+
+    loadMore() {
+      console.log(2222);
+      this.loading = true;
+      this.page++;
+      setTimeout(() => {
+        this.getWorksList();
+      }, 1000);
     }
   },
   components: {}
