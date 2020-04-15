@@ -52,7 +52,7 @@
       <div class="user" v-if="review.nickname">
         <img :src="review.avatar" alt />
         {{review.nickname}}
-        <span v-if="review.reply==1" @click="text">回复</span>
+        <span v-if="review.reply==1" @click="do_review(review.id)">回复</span>
       </div>
       <div class="content" v-if="review.type==1&&review!=null">{{review.content}}</div>
       <div class="content" v-else-if="review.type==2&&review!=null">
@@ -82,13 +82,13 @@
       </div>
       <div class="icon">
         <div @click="text(id)">
-          <img src="/images/icon5.png" />文字点评
+          <img src="/images/icon17.png" />文字点评
         </div>
         <div @click="showMask=!showMask">
           <img src="/images/icon30.png" />语音点评
         </div>
         <div @click="initShareInfo">
-          <img src="/images/fabulous.png" />分享
+          <img src="/images/icon5.png" />分享
         </div>
       </div>
     </div>
@@ -133,6 +133,9 @@
         </div>
       </div>
     </div>
+    <div class="mark" v-if="mask" @click="mask=false">
+      <img src="/images/background13.png" alt />
+    </div>
   </div>
 </template>
 
@@ -145,6 +148,7 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      mask: false,
       avatar: "", //头像
       message: {}, //留言
       result: {}, //作品作者
@@ -280,13 +284,13 @@ export default {
           this.message = res.message || {};
           this.result = res.result || {};
           this.review = res.review || {};
-          console.log(this.review, 2222);
         });
     },
 
     //分享功能
     initShareInfo() {
       console.log(111);
+      this.mask = true;
       let shareInfo = {
         title: "做呗科技", // 分享标题
         desc: "做呗科技做呗科技做呗科技", // 分享描述
@@ -304,6 +308,10 @@ export default {
     //文字评论
     text(id) {
       this.$router.push(`/uploadText/${id}`);
+    },
+    //文字评论
+    do_review(id) {
+      this.$router.push(`/do_review/${id}`);
     },
 
     //重置录音
@@ -382,6 +390,22 @@ export default {
   width: 100%;
   margin: 0 auto;
   background: #fff;
+  position: relative;
+  .mark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 15;
+    background: rgba($color: #000000, $alpha: 0.5);
+    img {
+      margin: 10% 5% 0 0%;
+      display: block;
+      width: auto;
+      height: 7rem;
+    }
+  }
   .header {
     width: 90%;
     height: 1.01rem;
@@ -597,11 +621,18 @@ export default {
       font-size: 0.35rem;
       color: white;
       margin: 0.33rem auto 0.2rem;
+      position: relative;
       img {
         width: 0.77rem;
         height: 0.77rem;
         margin-right: 0.2rem;
         border-radius: 0.38rem;
+      }
+      span {
+        display: block;
+        position: absolute;
+        right: 5%;
+        top: 5%;
       }
     }
     .content {

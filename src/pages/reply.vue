@@ -1,8 +1,13 @@
  <template>
   <div class="reply">
-    <div class="evaluate">
+    <div
+      class="evaluate"
+      v-infinite-scroll="loadMore"
+      infinite-scroll-disabled="loading"
+      infinite-scroll-distance="30"
+    >
       <div class="evaluate_list">
-        <div class="evaluate_detail" v-for="(item,index) in data" :key="index">
+        <div class="evaluate_detail" v-for="(item,index) in re_data" :key="index">
           <div class="evaluate_img">
             <img :src="item.avatar" alt />
           </div>
@@ -27,19 +32,39 @@ export default {
   name: "reply",
   data() {
     return {
-      data: {}
+      re_data: [],
+      page: 1,
+      loading: true
     };
   },
   mounted() {
-    this.axios
-      .get("/works/reply", {
-        params: {
-          token: this.$cookie.get("token")
-        }
-      })
-      .then(res => {
-        this.data = res.data;
-      });
+    this.getWorksList();
+  },
+  methods: {
+    getWorksList() {
+      let { re_data } = this;
+      this.http
+        .post("/works/reply", {
+          token: this.$cookie.get("token"),
+          page: this.page
+        })
+        .then(res => {
+          this.re_data = re_data.concat(res.data);
+          if (res.data.length <= 0) {
+            this.loading = true;
+          } else {
+            this.loading = false;
+          }
+        });
+    },
+
+    loadMore() {
+      this.loading = true;
+      this.page++;
+      setTimeout(() => {
+        this.getWorksList();
+      }, 1000);
+    }
   },
   components: {}
 };

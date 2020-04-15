@@ -11,7 +11,7 @@
           class="address_content"
         >{{address.sheng}} {{address.shi}} {{address.qu}} {{address.adress}}</div>
       </div>
-      <img src="/images/icon41.png" alt />
+      <img src="/images/icon41.png" alt @click="addressList(2)" />
     </div>
     <div class="orderinfo">
       <img :src="orderInfo.good_img" alt />
@@ -30,6 +30,7 @@
 <script>
 import Btn from "../components/Button";
 import util from "../util/util";
+import stroage from "../stroage/index";
 export default {
   name: "myorder",
   data() {
@@ -47,12 +48,16 @@ export default {
     getOrder() {
       this.http
         .post("/good/change", {
-          id: this.id,
+          gid: this.id,
           token: this.$cookie.get("token")
         })
         .then(res => {
           console.log(res);
-          this.address = res.adress;
+          if (stroage.getItem("data")) {
+            this.address = stroage.getItem("data");
+          } else {
+            this.address = res.adress;
+          }
           this.orderInfo = res.good;
         });
     },
@@ -66,10 +71,14 @@ export default {
         .then(res => {
           console.log(res);
           util.toast("提交成功~");
+          stroage.clear("data")
           setTimeout(() => {
             this.$router.push("/order");
           }, 1500);
         });
+    },
+    addressList(type) {
+      this.$router.push(`/addressList/${type}`);
     }
   },
   components: {

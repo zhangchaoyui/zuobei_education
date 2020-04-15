@@ -107,13 +107,13 @@ export default new Router({
             component: resolve => require(['./pages/submitOrder'], resolve),
         },
         {
-            path: '/addressList',//地址列表
+            path: '/addressList/:type',//地址列表
             name: 'addressList',
             meta: { title: '地址列表' },
             component: resolve => require(['./pages/addressList'], resolve),
         },
         {
-            path: '/addAddress',//添加地址信息
+            path: '/addAddress/:id',//添加地址信息
             name: 'addAddress',
             meta: { title: '添加地址信息' },
             component: resolve => require(['./pages/addAddress'], resolve),
@@ -191,6 +191,12 @@ export default new Router({
             name: 'teacherWorks',
             meta: { title: '我的点评' },
             component: resolve => require(['./pages/teacherWorks'], resolve),
+        },
+        {
+            path: '/do_review/:id',//老师点评
+            name: 'do_review',
+            meta: { title: '回复老师点评' },
+            component: resolve => require(['./pages/do_review'], resolve),
         }
 
     ]

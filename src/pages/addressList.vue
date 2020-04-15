@@ -1,5 +1,5 @@
 <template>
-  <div class="addressList">
+  <div class="addressList" v-if="type==1">
     <div
       v-show="data"
       class="address"
@@ -18,20 +18,35 @@
         </div>
         <div class="address_content">{{item.sheng}} {{item.shi}} {{item.qu}} {{item.adress}}</div>
       </div>
-      <div class="right">编辑</div>
+      <div class="right" @click="replace(item.id)">编辑</div>
       <div class="remove" @click="deleteAddress(item.id)">删除</div>
     </div>
     <div class="empty" v-show="!data">暂无收货地址</div>
     <Btn btnType="3" sureText="添加收货地址" v-on:submit="addAddress"></Btn>
   </div>
+  <div class="addressList" v-else-if="type==2">
+    <div class="address" v-for="(item,index) in data" :key="index">
+      <img src="/images/icon36.png" alt />
+      <div class="content">
+        <div class="title">
+          {{item.name}}
+          <span>{{item.tel}}</span>
+        </div>
+        <div class="address_content">{{item.sheng}} {{item.shi}} {{item.qu}} {{item.adress}}</div>
+      </div>
+      <div class="right" @click="go(item)">选择</div>
+    </div>
+  </div>
 </template>
 <script>
 import Btn from "../components/Button";
 import util from "../util/util";
+import stroage from "../stroage/index";
 export default {
   name: "addressList",
   data() {
     return {
+      type: this.$route.params.type,
       data: "",
       startX: 0, //触摸位置
       endX: 0, //结束位置
@@ -112,6 +127,14 @@ export default {
           this.getOrderList();
         }, 1500);
       });
+    },
+
+    go(data) {
+      stroage.setItem("data", data);
+      this.$router.go(-1);
+    },
+    replace(id) {
+      this.$router.push(`/addAddress/${id}`);
     }
   },
   components: {

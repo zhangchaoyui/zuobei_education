@@ -7,11 +7,11 @@ export default {
         if (type == 0) {
             MessageBox.confirm('请先登录~', '友情提示').then(action => {
                 if (action == 'confirm') {
-                    window.location.href = "/#/login"
+                    window.location.replace("/#/login");
                 }
             }).catch(err => {
                 if (err == 'cancel') {
-                    window.location.href = "/#/"
+                    window.location.replace("/#/");
                 }
             })
         }
@@ -45,10 +45,10 @@ export default {
     //处理富文本问题
     showHtml(str) {
         return str
-          .replace(str ? /&(?!#?\w+;)/g : /&/g, "&amp;")
-          .replace(/&lt;/g, "<")
-          .replace(/&gt;/g, ">")
-          .replace(/&quot;/g, '"')
-          .replace(/&#39;/g, "'");
-      }
+            .replace(str ? /&(?!#?\w+;)/g : /&/g, "&amp;")
+            .replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+    }
 }

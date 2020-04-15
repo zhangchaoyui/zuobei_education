@@ -1,9 +1,9 @@
 <template>
   <div class="feedback">
     <div class="text">
-      <textarea class="textarea" placeholder="说出你对小小发明家的建议和问题..." v-modal="value"></textarea>
+      <textarea class="textarea" placeholder="说出你对小小发明家的建议和问题..." v-model="value"></textarea>
     </div>
-    <Btn btnType="1" sureText="发表"  v-on:submit="postValue"></Btn>
+    <Btn btnType="1" sureText="发表" v-on:submit="postValue"></Btn>
   </div>
 </template>
 

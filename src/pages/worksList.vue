@@ -16,7 +16,7 @@
         infinite-scroll-distance="30"
       >
         <div class="ranking">
-          <div class="one" v-if="oneList">
+          <div class="one" v-if="oneList[0]">
             <div class="works_left">
               <div class="detail_let">
                 <img v-bind:src="oneList[0].image||''" alt />
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import util from "../util/util";
 export default {
   name: "workslist",
   data() {
@@ -98,7 +99,7 @@ export default {
       btn: 1, //按钮类型
       value: "", //搜索框内容
       worksList: [], //列表
-      oneList: {}, //第一个显示
+      oneList: [], //第一个显示
       page: 1,
       loading: true
     };
@@ -110,7 +111,8 @@ export default {
   methods: {
     //获取排行榜信息
     getWorksList(e) {
-      this.axios
+      util.Indicator("加载中");
+      this.http
         .get("/works/ranking", { params: { tid: e, page: this.page } })
         .then(res => {
           this.worksList = this.worksList.concat(res.data);
@@ -125,8 +127,7 @@ export default {
     //获取排行榜第一名信息
     getoOneList() {
       this.axios.get("/works/one", { params: {} }).then(res => {
-        console.log(res.data);
-        this.oneList = res.data;
+        this.oneList = res;
       });
     },
 

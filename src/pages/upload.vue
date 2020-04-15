@@ -8,7 +8,7 @@
         <img v-bind:src="item" />
         <div class="options" @click="deleteImg(index)">x</div>
       </div>
-      <div class="img_cloumn" v-if="imgList.length<3||imgList==[]">
+      <div class="img_cloumn" v-if="imgList.length<3||imgList.length<=0">
         <img src="/images/icon38.png" @click="onClickUp" />
       </div>
     </div>
@@ -142,9 +142,11 @@ export default {
 
     //删除图片
     deleteImg(index) {
-      this.imgList = delete this.imgList[index];
+      console.log(index);
+      this.imgList = this.imgList.splice(index, 1);
       console.log(this.imgList);
       this.showImg = delete this.showImg[index];
+      console.log(this.showImg);
     }
   },
 

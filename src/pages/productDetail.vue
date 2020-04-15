@@ -2,8 +2,8 @@
   <div class="productDetail">
     <!-- 轮播图 -->
     <mt-swipe :auto="4000">
-      <mt-swipe-item v-for="(item,index) in data" :key="index">
-        <img v-lazy="item.img" />
+      <mt-swipe-item v-for="(item,index) in data.banner" :key="index">
+        <img v-lazy="item" />
       </mt-swipe-item>
     </mt-swipe>
     <div class="content">
@@ -19,13 +19,14 @@
       <p>产品详情</p>
       <div v-html="content">{{content}}</div>
     </div>
-    <Btn btnType="3" sureText="提交订单" v-on:submit="change"></Btn>
+    <Btn btnType="3" sureText="提交订单" v-on:submit="change()"></Btn>
   </div>
 </template>
 
 <script>
 import Btn from "../components/Button";
 import util from "../util/util";
+import stroage from "../stroage/index";
 export default {
   name: "productDetail",
   data() {
@@ -36,6 +37,7 @@ export default {
     };
   },
   mounted() {
+    stroage.clear("data");
     this.getProductDetail();
   },
   methods: {
@@ -54,6 +56,12 @@ export default {
 
     //立即兑换
     change() {
+      if (this.data.good_money > this.data.score) {
+        util.toast("对不起，您积分不足~");
+        return;
+      } else if (this.data.address != 1) {
+        util.toast("对不起，请先选择地址~");
+      }
       this.$router.push(`/submitOrder/${this.id}`);
     }
   },

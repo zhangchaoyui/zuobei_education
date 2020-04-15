@@ -8,7 +8,7 @@
       <mt-switch v-model="click" class="switch">默认收货地址</mt-switch>
     </div>
 
-    <Btn btnType="3" sureText="提交订单" v-on:submit="submitAddress"></Btn>
+    <Btn btnType="3" sureText="确认提交" v-on:submit="submitAddress"></Btn>
 
     <!--省市区三级联动-->
     <div class="divwrap" v-if="show">
@@ -40,10 +40,28 @@ export default {
       qu: "",
       show: false,
       city: "请输入地址",
-      click: ""
+      click: "",
+      id: this.$route.params.id
     };
   },
-  mounted() {},
+  mounted() {
+    if (this.id) {
+      this.http
+        .post("/good/detail", {
+          id: this.id
+        })
+        .then(res => {
+          console.log(res);
+          this.username = res.name;
+          this.tel = res.adress;
+          this.sheng = res.sheng;
+          this.shi = res.shi;
+          this.qu = res.qu;
+          this.city = res.sheng + res.shi + res.qu;
+          this.address = res.adress;
+        });
+    }
+  },
   methods: {
     //提交地址
     submitAddress() {

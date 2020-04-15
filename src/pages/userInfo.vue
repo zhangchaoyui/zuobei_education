@@ -68,10 +68,21 @@ export default {
         token: this.$cookie.get("token")
       })
       .then(res => {
-        this.address = res.address || "邮寄发明材料的地址";
-        this.data = res;
+        console.log(res)
+        this.address = res.adress || "邮寄发明材料的地址";
+        this.name = res.name;
+        this.birthday = res.birth;
+        if (!res.sex) {
+          res.sex = "男";
+        } else {
+          res.sex = "女";
+        }
+        console.log(res.sex)
+        this.sex = res.sex;
+        this.phone = res.mobile;
       });
   },
+  
   methods: {
     blurIn() {
       window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));

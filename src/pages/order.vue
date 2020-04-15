@@ -43,7 +43,9 @@ export default {
   data() {
     return {
       data: "",
-      nid: 1
+      nid: 1,
+      page: 1,
+      loading: true
     };
   },
   mounted() {
@@ -137,6 +139,7 @@ export default {
   .content {
     display: flex;
     flex-direction: column;
+    min-height: 93vh;
     .orderinfo {
       width: 96%;
       display: flex;
