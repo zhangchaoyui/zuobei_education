@@ -75,14 +75,16 @@ export default {
             password
           })
           .then(res => {
-            console.log(res);
-            util.toast("登陆成功~");
-            this.$cookie.set("token", res.token, { expires: "3D" });
-            stroage.setItem("status", 1);
-            stroage.setItem("user_type", res.user_type);
-            setTimeout(() => {
-              this.$router.push("/");
-            }, 2000);
+            if (res) {
+              console.log(res);
+              util.toast("登陆成功~");
+              this.$cookie.set("token", res.token, { expires: "3D" });
+              stroage.setItem("status", 1);
+              stroage.setItem("user_type", res.user_type);
+              setTimeout(() => {
+                this.$router.push("/");
+              }, 2000);
+            }
           });
       }, 800);
     },

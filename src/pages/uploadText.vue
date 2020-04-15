@@ -31,7 +31,7 @@ export default {
       showImg: [], //图片显示列表
       value: "", //内容
       title: "", //title
-      imgaesMaxLenght: 3
+      imgaesMaxLenght: 1
     };
   },
   mounted() {

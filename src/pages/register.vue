@@ -20,15 +20,21 @@
         <div class="input">
           <div class="phone">
             +86
-            <input type="text" placeholder="请输入手机号码" maxlength="11" v-model="phone" />
+            <input
+              type="text"
+              placeholder="请输入手机号码"
+              maxlength="11"
+              v-model="phone"
+              @blur="blurIn"
+            />
           </div>
           <div class="phone">
-            <input type="number" placeholder="请输入验证码" maxlength="4" v-model="code" />
+            <input type="number" placeholder="请输入验证码" maxlength="4" v-model="code" @blur="blurIn" />
             <button @click="codeTime()" v-if="timeStatus==1">获取{{time}}</button>
             <button v-if="timeStatus==0">获取{{time}}</button>
           </div>
           <div class="phone">
-            <input type="password" placeholder="请输入密码" v-model="password" />
+            <input type="password" placeholder="请输入密码" v-model="password" @blur="blurIn" />
           </div>
         </div>
         <Btn btnType="2" sureText="注册" v-on:submit="register"></Btn>
@@ -54,6 +60,9 @@ export default {
   },
   mounted() {},
   methods: {
+    blurIn() {
+      window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
+    },
     //注册
     register() {
       let { phone, password, code } = this;
@@ -76,11 +85,13 @@ export default {
           code,
           password
         })
-        .then(() => {
-          util.toast("注册成功~");
-          setTimeout(() => {
-            window.location.href = "http://zuobei.niu5.cc/#/login";
-          }, 2000);
+        .then(res => {
+          if (res) {
+            util.toast("注册成功~");
+            setTimeout(() => {
+              window.location.href = "http://zuobei.niu5.cc/#/login";
+            }, 2000);
+          }
         });
     },
 

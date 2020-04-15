@@ -30,7 +30,7 @@
       <div class="title">
         <span>留言</span>
       </div>
-      <div class="evaluate_list" v-if="message">
+      <div class="evaluate_list" v-if="message.length>0">
         <div class="evaluate_detail" v-for="(item,index) in message" :key="index">
           <div class="evaluate_img">
             <img v-bind:src="item.avatar" alt />
@@ -44,12 +44,12 @@
           </div>
         </div>
       </div>
-      <div class="evaluate_empty">暂无留言</div>
+      <div class="evaluate_empty" v-if="message.length<=0">暂无留言</div>
     </div>
     <div class="br2"></div>
     <!-- 客户端 -->
     <div class="bottom" v-if="Usertype==1">
-      <div class="user" v-if="review">
+      <div class="user" v-if="review.nickname">
         <img :src="review.avatar" alt />
         {{review.nickname}}
         <span v-if="review.reply==1" @click="text">回复</span>
@@ -327,6 +327,7 @@ export default {
           }, 1500);
         });
     },
+    //播放录音
     myplay() {
       document.getElementById("audio").play();
     }
@@ -582,7 +583,6 @@ export default {
   }
   .bottom {
     width: 100%;
-    min-height: 3.2rem;
     position: fixed;
     bottom: 0;
     border-top-right-radius: 0.6rem;
@@ -639,10 +639,10 @@ export default {
     }
     .icon {
       width: 90%;
-      height: 0.28rem;
       margin: 0 auto;
       display: flex;
       flex-direction: row;
+      padding-bottom: 0.3rem;
       div {
         width: 33.33%;
         font-size: 0.23rem;
@@ -675,7 +675,6 @@ export default {
   }
   .bottom2 {
     width: 100%;
-    min-height: 2.2rem;
     position: fixed;
     bottom: 0;
     border-top-right-radius: 0.6rem;
@@ -728,7 +727,6 @@ export default {
     }
     .icon {
       width: 90%;
-      height: 0.28rem;
       margin: 0 auto;
       display: flex;
       flex-direction: row;

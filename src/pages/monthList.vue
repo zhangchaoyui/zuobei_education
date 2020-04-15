@@ -109,7 +109,6 @@ export default {
       .then(res => {
         this.adhere = res.splice(0, 4);
         this.data = res;
-        console.log(res, adhere, 22, data);
       });
   },
   methods: {},

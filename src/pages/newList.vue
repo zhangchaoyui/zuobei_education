@@ -11,7 +11,7 @@
         class="content"
         v-infinite-scroll="loadMore"
         infinite-scroll-disabled="loading"
-        infinite-scroll-distance="10"
+        infinite-scroll-distance="30"
       >
         <div class="from" @click="news(item.id)" v-for="(item,index) in data" v-bind:key="index">
           <div class="img">
@@ -23,10 +23,10 @@
           </div>
         </div>
       </div>
-      <div class="loading-box tc" v-if="isLoading">
+      <!-- <div class="loading-box tc" v-if="isLoading">
         <mt-spinner type="snake" class="loading-more"></mt-spinner>
         <span class="loading-more-txt">加载中...</span>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -37,12 +37,12 @@ export default {
   data() {
     return {
       data: [],
-      isLoading: false,
-      page: 1,
-      loadMore: false
+      loading: true,
+      page: 1
     };
   },
   mounted() {
+    this.loading = true;
     this.getDetail();
   },
   methods: {
@@ -57,11 +57,12 @@ export default {
         })
         .then(res => {
           console.log(res);
-          if (res.data == []) {
+          if (res.data.length <= 0) {
+            console.log("为空不走f");
+            this.loading = true;
           } else {
-            this.loadMore = false;
+            this.loading = false;
           }
-          this.isLoading = true;
           this.data = this.data.concat(res.data);
         });
     },
@@ -71,9 +72,8 @@ export default {
     },
 
     loadMore() {
-      this.loadMore = true;
-      this.isLoading = false;
-      this.page++;
+      this.loading = true;
+      ++this.page;
       setTimeout(() => {
         this.getDetail();
       }, 1000);

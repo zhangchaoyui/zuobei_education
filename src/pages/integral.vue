@@ -5,54 +5,24 @@
         <div class="content_left">
           <div class="title">我的积分</div>
           <div class="center">{{integral}}</div>
-          <div class="bottom">如何赚积分任务规则</div>
+          <div class="bottom" @click="about">如何赚积分任务规则</div>
         </div>
       </div>
     </div>
     <div class="nav">
-      <div @click="nav(1)">获取记录</div>
-      <div @click="nav(2)">使用记录</div>
+      <div @click="getJifenList(1)" :class="{'on':nav==1}">获取记录</div>
+      <div @click="getJifenList(2)" :class="{'on':nav==2}">使用记录</div>
     </div>
     <div class="list">
-      <div class="row">
+      <div class="row" v-for="(item,index) in integralList" :key="index">
         <div class="row_left">
           <img src="/images/icon37.png" alt />
         </div>
         <div class="row_center">
-          <div class="center_top">点赞</div>
-          <div class="center_bottom">09-28 10:10</div>
+          <div class="center_top">{{item.content}}</div>
+          <div class="center_bottom">{{item.time}}</div>
         </div>
-        <div class="row_right">+10.00</div>
-      </div>
-      <div class="row">
-        <div class="row_left">
-          <img src="/images/icon37.png" alt />
-        </div>
-        <div class="row_center">
-          <div class="center_top">点赞</div>
-          <div class="center_bottom">09-28 10:10</div>
-        </div>
-        <div class="row_right">+10.00</div>
-      </div>
-      <div class="row">
-        <div class="row_left">
-          <img src="/images/icon37.png" alt />
-        </div>
-        <div class="row_center">
-          <div class="center_top">点赞</div>
-          <div class="center_bottom">09-28 10:10</div>
-        </div>
-        <div class="row_right">+10.00</div>
-      </div>
-      <div class="row">
-        <div class="row_left">
-          <img src="/images/icon37.png" alt />
-        </div>
-        <div class="row_center">
-          <div class="center_top">点赞</div>
-          <div class="center_bottom">09-28 10:10</div>
-        </div>
-        <div class="row_right">+10.00</div>
+        <div class="row_right">{{item.type}} {{item.score}}</div>
       </div>
     </div>
   </div>
@@ -64,12 +34,13 @@ export default {
   data() {
     return {
       integral: 0,
-      nav: 1
+      nav: 1,
+      integralList: {}
     };
   },
   mounted() {
     this.getJifen();
-    this.getJifenList();
+    this.getJifenList(1);
   },
   methods: {
     //获取我的积分
@@ -83,10 +54,17 @@ export default {
         });
     },
     //获取我的积分记录
-    getJifenList() {
+    getJifenList(i) {
+      this.nav = i;
+      if (i == 1) {
+        i = "+";
+      } else {
+        i = "-";
+      }
       this.http
         .post("/sign/use", {
-          token: this.$cookie.get("token")
+          token: this.$cookie.get("token"),
+          type: i
         })
         .then(res => {
           this.integralList = res.data;
@@ -94,6 +72,10 @@ export default {
     },
 
     router() {
+      this.$router.push("/rules");
+    },
+    //积分规则
+    about() {
       this.$router.push("/rules");
     }
   },
@@ -191,12 +173,6 @@ export default {
       }
     }
     .on {
-      width: 50%;
-      height: 2px;
-      background: #f5bb0e;
-      position: absolute;
-      bottom: 0;
-      left: 15%;
       border-bottom: 1px solid #f5bb0e;
     }
   }

@@ -3,7 +3,7 @@
     <div class="text">
       <textarea class="textarea" placeholder="说出你对小小发明家的建议和问题..." v-modal="value"></textarea>
     </div>
-    <Btn btnType="1" sureText="发表"></Btn>
+    <Btn btnType="1" sureText="发表"  v-on:submit="postValue"></Btn>
   </div>
 </template>
 

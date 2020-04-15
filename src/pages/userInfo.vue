@@ -62,7 +62,16 @@ export default {
       area: ""
     };
   },
-  mounted() {},
+  mounted() {
+    this.http
+      .post("/login/userinfo", {
+        token: this.$cookie.get("token")
+      })
+      .then(res => {
+        this.address = res.address || "邮寄发明材料的地址";
+        this.data = res;
+      });
+  },
   methods: {
     blurIn() {
       window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
@@ -76,15 +85,18 @@ export default {
         birthday, //生日
         address
       } = this;
-      if (name == "" || sex == "" || phone == "" || birthday == "") {
-        util.toast("请完善用户信息~");
+      if (name == "" || sex == "" || birthday == "") {
+        util.toast("请完善小朋友信息~");
         return;
       } else if (address == "") {
         util.toast("请完善邮寄地址信息~");
         return;
       }
       var myreg = /^[1]([3-9])[0-9]{9}$/;
-      if (phone == "" || !myreg.test(phone)) {
+      if (phone == "") {
+        util.toast("请完善正确的手机号~");
+        return;
+      } else if (phone == "" || !myreg.test(phone)) {
         util.toast("请输入正确的手机号码！");
         return;
       }

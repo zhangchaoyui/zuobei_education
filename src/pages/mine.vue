@@ -2,13 +2,13 @@
   <div class="mine">
     <div class="header">
       <div class="img">
-        <img :src="user_info.avatar" alt />
+        <img :src="user_info.avatar" alt  />
       </div>
       <div class="username">
         <span>{{user_info.nickname}}</span>
         <img src="/images/icon27.png" alt />
       </div>
-      <div class="user_info" @click="perfect">完善信息</div>
+      <div class="user_info">完善信息</div>
     </div>
     <div class="record" v-if="Usertype==1">
       <div class="record_left">
@@ -54,6 +54,8 @@
 
  <script>
 import stroage from "../stroage/index";
+import util from "../util/util";
+import wx from "weixin-js-sdk";
 export default {
   name: "mine",
   data() {
@@ -113,7 +115,10 @@ export default {
         }
       ],
       user_info: {},
-      Usertype: ""
+      Usertype: "",
+      imgList: "", //图片列表
+      showImg: "", //图片显示列表
+      imgaesMaxLenght: 1
     };
   },
   mounted() {
@@ -174,9 +179,9 @@ export default {
     //回复列表
     Reply() {
       this.$router.push("/reply");
-    }
+    },
   },
-  components: {}
+  components: {},
 };
 </script>
 

@@ -28,12 +28,16 @@
           <div class="left" @click="logistics(item.id)">查看物流</div>
           <div class="right" @click="confirm(item.id)">确认收货</div>
         </div>
+        <div class="button3" v-if="item.status==4">
+          <div class="left" @click="deleteOrder(item.id)">删除订单</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import util from "../util/util";
 export default {
   name: "order",
   data() {
@@ -58,7 +62,6 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res);
           this.data = res;
         });
     },
@@ -72,8 +75,24 @@ export default {
         .post("/good/confirm", {
           gid: id
         })
-        .then(res => {
-          console.log(res);
+        .then(() => {
+          util.toast("确认收货成功~");
+          setTimeout(() => {
+            this.nav(this.nid);
+          }, 1500);
+        });
+    },
+
+    deleteOrder(id) {
+      this.http
+        .post("/good/delete", {
+          pid: id
+        })
+        .then(() => {
+          util.toast("删除订单成功~");
+          setTimeout(() => {
+            this.nav(this.nid);
+          }, 1500);
         });
     }
   },
@@ -192,6 +211,28 @@ export default {
         width: 55%;
         display: flex;
         margin-left: 45%;
+        div {
+          margin: 0 0.2rem;
+          padding: 0 0.29rem;
+          height: 100%;
+          line-height: 0.5rem;
+          font-size: 0.22rem;
+          border-radius: 0.4rem;
+          &:first-child {
+            color: #898989;
+            border: 1px solid #898989;
+          }
+          &:last-child {
+            color: #f5bb0e;
+            border: 1px solid #f5bb0e;
+          }
+        }
+      }
+
+      .button3 {
+        width: 30%;
+        display: flex;
+        margin-left: 70%;
         div {
           margin: 0 0.2rem;
           padding: 0 0.29rem;
