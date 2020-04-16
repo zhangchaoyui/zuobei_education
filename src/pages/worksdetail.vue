@@ -295,21 +295,33 @@ export default {
         title: "做呗科技", // 分享标题
         desc: "做呗科技做呗科技做呗科技", // 分享描述
         link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: "" // 分享图标
+        imgUrl: "", // 分享图标
+        success: function() {
+          this.http
+            .post("/sign/share", { toekn: this.$cookie.get("token") })
+            .then(res => {
+              this.mask = false;
+              util.toast("分享成功~");
+            });
+        },
+        cancel: function() {
+          this.mask = false;
+          util.toast("分享取消");
+        }
       };
       wx.onMenuShareAppMessage(shareInfo);
       wx.onMenuShareTimeline(shareInfo);
+
       wx.onMenuShareQQ(shareInfo);
       wx.onMenuShareQZone(shareInfo);
-      // wx.updateAppMessageShareData(shareInfo);
-      // wx.updateTimelineShareData(shareInfo);
     },
 
     //文字评论
     text(id) {
       this.$router.push(`/uploadText/${id}`);
     },
-    //文字评论
+
+    //文字回复
     do_review(id) {
       this.$router.push(`/do_review/${id}`);
     },

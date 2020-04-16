@@ -6,7 +6,7 @@
       </div>
       <div class="username">
         <span>{{user_info.nickname}}</span>
-        <img src="/images/icon27.png" alt />
+        <img src="/images/icon27.png" alt @click="UserInfo" />
       </div>
       <div class="user_info" @click="perfect">完善信息</div>
     </div>
@@ -33,8 +33,8 @@
     <div class="functionList" v-if="Usertype==1">
       <div class="function" v-for="(item,index) in list" :key="index" @click="click(item.type)">
         <img class="icon" :src="`/images/`+item.icon" />
-        <div v-if='item.type!=7'>{{item.name}}</div>
-        <a  v-if="item.type==7" href="tel:0147-88469258" > {{item.name}}</a>
+        <div v-if="item.type!=7">{{item.name}}</div>
+        <a v-if="item.type==7" href="tel:0147-88469258">{{item.name}}</a>
         <span class="span_img" v-show="item.type!=7">
           <img src="/images/icon41.png" alt />
         </span>
@@ -178,6 +178,10 @@ export default {
     //回复列表
     Reply() {
       this.$router.push("/reply");
+    },
+
+    UserInfo() {
+      this.$router.push("/personal");
     }
   },
   components: {}
@@ -342,8 +346,8 @@ export default {
         margin: 0.14rem 0.2rem 0 0.34rem;
         vertical-align: middle;
       }
-      a{
-        color:black;
+      a {
+        color: black;
       }
       .span_img {
         width: 0.13rem;

@@ -1,7 +1,7 @@
 <template>
   <div class="personal">
     <div class="img">
-      <img src="/images/user.jpg" />
+      <img :src="img" />
       点击修改头像
       <input type="file" capture="camera" @click="fileClick()" id="upload_file" />
     </div>
@@ -9,34 +9,158 @@
     <div class="info">
       <div class="name">
         <span>用户名</span>
-        <span>蜡笔小新</span>
+        <input type="text" v-model="username" />
       </div>
       <div class="name">
         <span>手机号</span>
-        <span>188xxxx8888</span>
+        <input type="text" v-model="tel" />
       </div>
       <div class="name">
         <span>个人介绍</span>
-        <span>
-          源自英国Iittle inventors小小发明家
-          挖掘儿童创造力脑洞大开
-        </span>
+        <input type="text" v-model="introduce" />
       </div>
     </div>
-    <Btn btnType="1" sureText="保存"></Btn>
+    <Btn btnType="1" sureText="保存" v-on:submit="submintData"></Btn>
   </div>
 </template>
 
 <script>
 import Btn from "../components/Button";
-
+import util from "../util/util";
+import wx from "weixin-js-sdk";
 export default {
   name: "personal",
   data() {
-    return {};
+    return {
+      username: "",
+      tel: "",
+      introduce: "",
+      imgList: "",
+      img: ""
+    };
+  },
+  mounted() {
+    this.getMineInfo();
+  },
+  methods: {
+    //获取个人信息
+    getMineInfo() {
+      this.http
+        .post("/personal/edit", {
+          token: this.$cookie.get("token")
+        })
+        .then(res => {
+          this.introduce = res.content;
+          this.tel = res.mobile;
+          this.username = res.name;
+          this.img = res.avatar;
+        });
+    },
+    //修改头像
+    fileClick() {
+      let _this = this;
+      wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
+        success: function(res) {
+          let localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          // 判断 ios
+          if (window.__wxjs_is_wkwebview) {
+            _this.wxuploadImage(localIds);
+          } else {
+            localIds.forEach(item => {
+              _this.imgList.push(item);
+              if (_this.imgList.length >= _this.imgaesMaxLenght) {
+                _this.imgLenght = false;
+              }
+            });
+          }
+          _this.wxuploadImage(localIds);
+        },
+        fail: function() {
+          console.log("失败");
+        }
+      });
+    },
+
+    wxuploadImage(localIds) {
+      let _this = this;
+      var length = localIds.length;
+      let loacId = localIds[i];
+      if (window.__wxjs_is_wkwebview) {
+        if (loacId.indexOf("wxlocalresource") != -1) {
+          loacId = loacId.replace("wxlocalresource", "wxLocalResource");
+        }
+      }
+      wx.uploadImage({
+        localId: loacId, // 需要上传的图片的本地ID，由chooseImage接口获得
+        isShowProgressTips: 1, // 默认为1，显示进度提示
+        success: function(res) {
+          var serverId = res.serverid;
+          util.Indicator("加载中");
+          this.http
+            .post("/login/image", {
+              token: this.$cookie.get("token"),
+              serverid: serverId
+            })
+            .then(res => {
+              if (res) {
+                util.toast("上传成功~");
+                setTimeout(() => {
+                  this.getMineInfo();
+                }, 1500);
+              }
+            });
+        },
+        fail: function() {
+          alert("失败11");
+        }
+      });
+    },
+
+    //用户提交信息
+    submintData() {
+      let { username, tel, introduce } = this;
+      util.Indicator("加载中");
+      this.http
+        .post("/Personal/editpost", {
+          token: this.$cookie.get("token"),
+          name: username,
+          mobile: tel,
+          content: introduce
+        })
+        .then(res => {
+          if (res) {
+            util.toast("提交成功~");
+          }
+        });
+    }
   },
   components: {
     Btn
+  },
+  created() {
+    util.login(); //判断用户登录
+    this.axios
+      .post("/token/sdksign", { url: location.href.split("#")[0] })
+      .then(res => {
+        wx.config({
+          debug: false,
+          appId: res.appid,
+          timestamp: parseInt(res.timestamp),
+          nonceStr: res.nonceStr,
+          signature: res.signature,
+          jsApiList: ["chooseImage", "uploadImage", "downloadImage"]
+        });
+        wx.ready(function() {
+          console.log("ready");
+        });
+        wx.error(function() {
+          console.log(res);
+          // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+        });
+      });
   }
 };
 </script>
@@ -109,6 +233,11 @@ export default {
           text-align: left;
           color: #999999;
         }
+      }
+      input {
+        border: none;
+        width: 78%;
+        font-size: 0.26rem;
       }
     }
   }

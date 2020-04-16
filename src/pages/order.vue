@@ -15,7 +15,7 @@
           <div class="ordercontent">
             <div class="name">
               <div>{{item.ex_good_name}}</div>
-              <span>订单编号：{{item.order}}</span>
+              <span>订单编号：{{item.out_trade_no}}</span>
               <span>时间：{{item.ex_time}}</span>
             </div>
             <div class="right">

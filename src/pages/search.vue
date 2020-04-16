@@ -36,6 +36,7 @@
         </div>
       </div>
     </div>
+    <div class="mask" v-if="value!=''&&data.length<=0">暂无搜索作品</div>
   </div>
 </template>
 
@@ -45,7 +46,8 @@ export default {
   data() {
     return {
       value: "",
-      data: []
+      data: [],
+      mask: true
     };
   },
   mounted() {},
@@ -54,7 +56,6 @@ export default {
       window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
     },
     search() {
-      console.log(111);
       this.http
         .post("/Works/index", {
           key: this.value
@@ -65,8 +66,8 @@ export default {
         });
     },
 
-    worksDetail(id){
-       this.$router.push(`/worksdetail/${id}`);
+    worksDetail(id) {
+      this.$router.push(`/worksdetail/${id}`);
     }
   },
   components: {}
@@ -296,6 +297,14 @@ export default {
         color: $colorA;
       }
     }
+  }
+  .mask {
+    width: 100%;
+    height: 50vh;
+    line-height: 50vh;
+    font-size: 0.28rem;
+    text-align: center;
+    color: #cccccc;
   }
 }
 </style>
