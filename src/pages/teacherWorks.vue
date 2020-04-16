@@ -4,7 +4,7 @@
     <div class="articleList">
       <div class="title">
         <div class="title_content">
-          <img src="/images/icon39.png" />我的作品集
+          <img src="/images/icon39.png" />点评作品集
         </div>
       </div>
       <div class="content2">
@@ -31,15 +31,13 @@ export default {
   name: "myworks",
   data() {
     return {
-      data:{}
+      data: {}
     };
   },
   mounted() {
     this.axios
-      .get("personal/works", {
-        params: {
-          token: this.$cookie.get("token")
-        }
+      .post("/works/review_list", {
+        token: this.$cookie.get("token")
       })
       .then(res => {
         console.log(res.data);

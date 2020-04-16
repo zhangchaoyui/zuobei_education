@@ -50,16 +50,20 @@
     <!-- 客户端 -->
     <div class="bottom" v-if="Usertype==1">
       <div class="user" v-if="review.nickname">
-        <img :src="review.avatar" alt />
+        <img :src="review.avatar" v-image-preview />
         {{review.nickname}}
         <span v-if="review.reply==1" @click="do_review(review.id)">回复</span>
       </div>
-      <div class="content" v-if="review.type==1&&review!=null">{{review.content}}</div>
+      <div class="content" v-if="review.type==1&&review!=null">
+        <img :src="review.image" v-image-preview v-if="review.image" alt />
+        {{review.content}}
+      </div>
       <div class="content" v-else-if="review.type==2&&review!=null">
         <div class="voice" @click="myplay">
           <img src="/images/icon28.png" alt />
           <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
-          点击收听老师点评
+          <span v-if="play">点击收听老师点评</span>
+          <span v-else>播放语音中</span>
         </div>
       </div>
       <div class="icon">
@@ -95,20 +99,22 @@
     <!-- 老师点评完 -->
     <div class="bottom" v-if="Usertype==2&&review.content">
       <div class="user">
-        <img :src="review.avatar" />
+        <img :src="review.avatar" v-image-preview />
         {{review.nickname}}
+        <div @click="initShareInfo">
+          <img src="/images/fabulous.png" />分享
+        </div>
       </div>
-      <div class="content" v-if="review.type==1">{{review.content}}</div>
+      <div class="content" v-if="review.type==1">
+        <img :src="review.image" v-if="review.image" v-image-preview alt />
+        {{review.content}}
+      </div>
       <div class="content" v-else-if="review.type==2">
         <div class="voice" @click="myplay">
           <img src="/images/icon28.png" alt />
           <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
-          点击收听老师点评
-        </div>
-      </div>
-      <div class="icon">
-        <div @click="initShareInfo">
-          <img src="/images/fabulous.png" />分享
+          <span v-if="play">点击收听老师点评</span>
+          <span v-else>播放语音中</span>
         </div>
       </div>
     </div>
@@ -124,7 +130,6 @@
 
       <!-- // isListen  // 0-未试听/试听结束 1-试听中 2-暂停试听
       // 录完音 按钮展示-->
-      <img src="/images/icon48.png" class="img2" v-if="isVoice == 2" />
       <div class="vm-voice-player" v-if="isVoice == 2">
         <div class="vm-vp-button">
           <p class="vm-vp-revoice" @click="Reset">重录</p>
@@ -163,7 +168,8 @@ export default {
       isVoice: 0, // 0-未录音 1-录音中 2-录完音
       isListen: 0, // 0-未试听/试听结束 1-试听中 2-暂停试听
       isPlay: false, // 是否播放
-      isSubmit: false // 是否已提交
+      isSubmit: false, // 是否已提交
+      play: true
     };
   },
   mounted() {
@@ -289,31 +295,43 @@ export default {
 
     //分享功能
     initShareInfo() {
-      console.log(111);
       this.mask = true;
-      let shareInfo = {
+      wx.onMenuShareAppMessage({
         title: "做呗科技", // 分享标题
         desc: "做呗科技做呗科技做呗科技", // 分享描述
         link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl: "", // 分享图标
+        trigger: function() {
+          this.fenxiang();
+        },
         success: function() {
-          this.http
-            .post("/sign/share", { toekn: this.$cookie.get("token") })
-            .then(res => {
-              this.mask = false;
-              util.toast("分享成功~");
-            });
+          console.log("分享成功");
+        }
+      });
+      wx.onMenuShareTimeline({
+        title: "做呗科技", // 分享标题
+        desc: "做呗科技做呗科技做呗科技", // 分享描述
+        link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "", // 分享图标
+        trigger: function() {
+          this.fenxiang();
         },
         cancel: function() {
           this.mask = false;
           util.toast("分享取消");
         }
-      };
-      wx.onMenuShareAppMessage(shareInfo);
-      wx.onMenuShareTimeline(shareInfo);
+      });
+    },
 
-      wx.onMenuShareQQ(shareInfo);
-      wx.onMenuShareQZone(shareInfo);
+    fenxiang() {
+      console.log(111);
+      this.http
+        .post("/sign/share", { toekn: this.$cookie.get("token") })
+        .then(res => {
+          console.log(res);
+          this.mask = false;
+          util.toast("分享成功~");
+        });
     },
 
     //文字评论
@@ -340,16 +358,21 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          util.toast(res);
-          console.log(res);
-          setTimeout(() => {
-            this.getWorksDetail();
-          }, 1500);
+          if (res) {
+            util.toast(res);
+            setTimeout(() => {
+              this.getWorksDetail();
+            }, 1500);
+          }
         });
     },
     //播放录音
     myplay() {
+      this.play = false;
       document.getElementById("audio").play();
+      document.getElementById("audio").addEventListener("ended", () => {
+        this.play = true;
+      });
     }
   },
   created() {
@@ -404,7 +427,7 @@ export default {
   background: #fff;
   position: relative;
   .mark {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -506,9 +529,18 @@ export default {
     height: 4.15rem;
     overflow: hidden;
     margin: 0.37rem auto;
-    img {
+    .mint-swipe-item {
       width: 100%;
-      height: 4.15rem;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      img {
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
     }
   }
   .br {
@@ -579,7 +611,7 @@ export default {
           height: 0.4rem;
           display: flex;
           flex-direction: row;
-          margin-top: 0.17rem;
+          margin-top: 0.2rem;
           margin-left: 0.2rem;
           .title_left {
             width: 50%;
@@ -624,6 +656,7 @@ export default {
     border-top-right-radius: 0.6rem;
     border-top-left-radius: 0.6rem;
     background: #f6bc0e;
+    padding-bottom: 0.2rem;
     .user {
       width: 90%;
       height: 0.77rem;
@@ -632,8 +665,26 @@ export default {
       line-height: 0.77rem;
       font-size: 0.35rem;
       color: white;
-      margin: 0.33rem auto 0.2rem;
+      margin: 0.25rem auto 0.2rem;
       position: relative;
+      div {
+        width: 15%;
+        float: right;
+        font-size: 0.26rem;
+        line-height: 0.77rem;
+        display: flex;
+        align-items: center;
+        position: absolute;
+        right: 0;
+        top: 0;
+        img {
+          width: 0.3rem;
+          height: 0.28rem;
+          vertical-align: middle;
+          margin-right: 2%;
+          border-radius: 0;
+        }
+      }
       img {
         width: 0.77rem;
         height: 0.77rem;
@@ -658,6 +709,14 @@ export default {
       -webkit-line-clamp: 2;
       overflow: hidden;
       text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      img {
+        width: 1.2rem;
+        height: 1.2rem;
+        margin-right: 2%;
+        border-radius: 5px;
+      }
       .voice {
         width: 80%;
         height: 0.95rem;
@@ -723,6 +782,7 @@ export default {
     border-top-right-radius: 0.6rem;
     border-top-left-radius: 0.6rem;
     background: #f6bc0e;
+    padding-bottom: 0.2rem;
     .user {
       width: 90%;
       height: 0.77rem;
@@ -731,7 +791,7 @@ export default {
       line-height: 0.77rem;
       font-size: 0.35rem;
       color: white;
-      margin: 0.33rem auto 0.2rem;
+      margin: 0.25rem auto 0.1rem;
       img {
         width: 0.77rem;
         height: 0.77rem;
@@ -878,7 +938,7 @@ export default {
         }
         .vm-vp-revoice {
           width: 0.8rem;
-          box-shadow: 1px 1px 1px 1px #ccc;
+          box-shadow: 0px 1px 3px 0px #ebb51f;
         }
         .vm-vp-submit {
           width: 2rem;
@@ -887,7 +947,7 @@ export default {
         }
         .vm-vp-pause {
           width: 0.8rem;
-          box-shadow: 1px 1px 1px 1px #ccc;
+          box-shadow: 0px 1px 3px 0px #ebb51f;
         }
       }
     }

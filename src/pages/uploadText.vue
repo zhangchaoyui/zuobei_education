@@ -31,11 +31,12 @@ export default {
       showImg: [], //图片显示列表
       value: "", //内容
       title: "", //title
-      imgaesMaxLenght: 1
+      imgaesMaxLenght: 1,
+      Usertype: ''
     };
   },
   mounted() {
-    this.Usertype = stroage.getItem("user_type") || 1;
+    this.Usertype = stroage.getItem("user_type");
   },
   methods: {
     //选择图片

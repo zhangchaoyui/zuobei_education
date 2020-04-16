@@ -15,8 +15,11 @@
     </div>
     <div class="list">
       <div class="row" v-for="(item,index) in integralList" :key="index">
-        <div class="row_left">
+        <div class="row_left" v-if="nav==1">
           <img src="/images/icon37.png" alt />
+        </div>
+        <div class="row_left" v-if="nav==2">
+          <img src="/images/icon35.png" alt />
         </div>
         <div class="row_center">
           <div class="center_top">{{item.content}}</div>

@@ -16,7 +16,7 @@
         infinite-scroll-distance="30"
       >
         <div class="ranking">
-          <div class="one" v-if="oneList[0]">
+          <div class="one" v-if="oneList[0]" @click="WorksDetail(oneList[0].id)">
             <div class="works_left">
               <div class="detail_let">
                 <img v-bind:src="oneList[0].image||''" alt />
@@ -47,7 +47,7 @@
             </div>
             <div class="float_img">
               <div class="top_row">
-                12
+                {{oneList[0].nums}}
                 <span>次</span>
               </div>
               <div class="bottom_row2">累计上墙</div>
@@ -141,12 +141,11 @@ export default {
     },
 
     loadMore() {
-      console.log(2222);
       this.loading = true;
       this.page++;
       setTimeout(() => {
         this.getWorksList(this.btn);
-      }, 1000);
+      }, 500);
     }
   },
   components: {}
@@ -212,6 +211,7 @@ export default {
           flex-direction: row;
           align-items: center;
           position: relative;
+          overflow: hidden;
         }
         .two {
           width: 100%;
@@ -232,17 +232,22 @@ export default {
           flex-direction: row;
           justify-content: space-around;
           .detail_let {
-            height: auto;
+            width: 40%;
+            height: 2.44rem;
+            position: relative;
+            overflow: hidden;
             img {
-              width: 3.2rem;
-              height: 2.44rem;
+              width: 100%;
               border-radius: 5px;
               vertical-align: middle;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
             }
           }
           .works_right {
             width: 48%;
-            height: 3.108rem;
             margin-left: 4%;
             .works_r_top {
               width: 100%;
@@ -321,12 +326,18 @@ export default {
           flex-direction: row;
           justify-content: space-around;
           .detail_let {
-            height: auto;
+            width: 40%;
+            height: 2.44rem;
+            position: relative;
+            overflow: hidden;
             img {
-              width: 3.2rem;
-              height: 2.44rem;
+              width: 100%;
               border-radius: 5px;
               vertical-align: middle;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
             }
           }
           .works_right {
@@ -414,8 +425,8 @@ export default {
             width: 65%;
             @include textWidth();
             text-align: center;
-            margin: 0.2rem auto 0;
-            font-size: 0.32rem;
+            margin: 0.1rem auto 0;
+            font-size: 0.34rem;
             color: #ffed9e;
             span {
               font-size: 0.12rem;

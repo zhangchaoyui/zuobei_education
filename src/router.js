@@ -189,7 +189,7 @@ export default new Router({
         {
             path: '/teacherWorks',//老师点评
             name: 'teacherWorks',
-            meta: { title: '我的点评' },
+            meta: { title: '我的点评作品集' },
             component: resolve => require(['./pages/teacherWorks'], resolve),
         },
         {

@@ -36,10 +36,8 @@ export default {
   },
   mounted() {
     this.axios
-      .get("personal/works", {
-        params: {
-          token: this.$cookie.get("token")
-        }
+      .post("personal/works", {
+        token: this.$cookie.get("token")
       })
       .then(res => {
         this.data = res.data;

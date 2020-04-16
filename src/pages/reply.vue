@@ -42,6 +42,7 @@ export default {
   },
   methods: {
     getWorksList() {
+      util.Indicator("加载中");
       let { re_data } = this;
       this.http
         .post("/works/reply", {

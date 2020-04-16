@@ -70,7 +70,6 @@ export default {
         .post("/good/adreslist", { token: this.$cookie.get("token") })
         .then(res => {
           console.log(res);
-          res.deleteSlider = "";
           this.data = res;
         });
     },

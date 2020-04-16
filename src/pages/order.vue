@@ -32,6 +32,7 @@
           <div class="left" @click="deleteOrder(item.id)">删除订单</div>
         </div>
       </div>
+      <div class="wu" v-if="data.length<=0">暂无订单</div>
     </div>
   </div>
 </template>
@@ -144,10 +145,10 @@ export default {
       width: 96%;
       display: flex;
       flex-direction: column;
-      margin: 0.2rem auto 0.5rem;
+      margin: 0.14rem auto 0.08rem;
       background: #fff;
       border-radius: 5px;
-      padding-bottom: 0.2rem;
+      padding-bottom: 0.1rem;
       .a {
         display: flex;
         flex-direction: row;
@@ -155,8 +156,8 @@ export default {
         justify-content: space-around;
         align-items: center;
         img {
-          width: 1.63rem;
-          height: 1.63rem;
+          width: 2rem;
+          height: 1.5rem;
           border-radius: 5px;
         }
         .ordercontent {
@@ -253,6 +254,13 @@ export default {
           }
         }
       }
+    }
+    .wu {
+      width: 100%;
+      line-height: 40vh;
+      text-align: center;
+      font-size: 0.26rem;
+      color: #898989;
     }
   }
 }

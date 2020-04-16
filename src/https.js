@@ -6,7 +6,6 @@ import { Toast, Indicator } from "mint-ui";
 axios.interceptors.response.use(function (response) {
     let res = response.data;
     let path = location.hash;
-    console.log(res)
     if (res.code == 1 || res.code == 2) {  //拦截业务错误码
         return res.data;
     } else if (res.code == 3) {
@@ -18,7 +17,7 @@ axios.interceptors.response.use(function (response) {
         return Promise.reject(res);
     } else if (res.code == 0) {
         Toast(res.msg);
-        return false;
+        return ;
     }
 }, (error) => { //这部分拦截服务器错误码
     let res = error.response;

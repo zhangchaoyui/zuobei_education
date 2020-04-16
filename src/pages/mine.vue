@@ -12,21 +12,21 @@
     </div>
     <div class="record" v-if="Usertype==1">
       <div class="record_left">
-        <span>{{user_info.num}}</span>
+        <span>{{user_info.size1}}</span>
         <span>上传作品次数</span>
       </div>
       <div class="record_right">
-        <span>{{user_info.praise}}</span>
+        <span>{{user_info.size2}}</span>
         <span>点赞次数</span>
       </div>
     </div>
     <div class="record" v-else-if="Usertype==2">
       <div class="record_left">
-        <span>{{user_info.num}}</span>
+        <span>{{user_info.size1}}</span>
         <span>点评作品数量</span>
       </div>
       <div class="record_right" @click="Reply">
-        <span>{{user_info.praise}}</span>
+        <span>{{user_info.size2}}</span>
         <span>回复我的点评</span>
       </div>
     </div>
@@ -261,7 +261,7 @@ export default {
     width: 90%;
     height: 1.49rem;
     position: absolute;
-    top: 2.54rem;
+    top: 20vh;
     left: 5%;
     display: flex;
     justify-content: center;
@@ -328,7 +328,7 @@ export default {
     display: flex;
     flex-direction: column;
     padding: 0.2rem 0;
-    margin-top: 1rem;
+    margin-top: 7vh;
     .function {
       width: 90%;
       margin: 0 auto;

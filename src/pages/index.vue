@@ -71,7 +71,9 @@
           v-for="(item,index) in Works"
           v-bind:key="index"
         >
-          <img v-lazy="item.image" />
+          <div class="img">
+            <img v-lazy="item.image" />
+          </div>
           <div class="worksDetail">
             <div class="works_name">{{item.title}}</div>
             <img src="/images/fabulous_red.png" style="border-radius:0" />
@@ -121,7 +123,7 @@ export default {
 
     //跳转外链
     external() {
-      this.$router.push("/external");
+     wx.miniProgram.navigateTo({url: '/path/index/index'})
     },
 
     //跳转文章资讯
@@ -371,12 +373,22 @@ export default {
         box-sizing: border-box;
         float: left;
         margin-left: 2%;
-        img {
-          width: auto;
+        .img {
+          width: 100%;
           height: 2.22rem;
-          border-radius: 5px;
+          position: relative;
           overflow: hidden;
+          img {
+            width: 100%;
+            border-radius: 5px;
+            overflow: hidden;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
         }
+
         .worksDetail {
           width: 100%;
           line-height: $fontJ;

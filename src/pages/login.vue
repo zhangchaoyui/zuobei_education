@@ -82,7 +82,7 @@ export default {
               stroage.setItem("status", 1);
               stroage.setItem("user_type", res.user_type);
               setTimeout(() => {
-                this.$router.push("/");
+                window.location.replace("/");
               }, 2000);
             }
           });
@@ -121,7 +121,7 @@ export default {
                 this.$cookie.set("token", res.token, { expires: "Session" });
                 stroage.setItem("user_type", res.user_type);
                 stroage.setItem("status", 1);
-                this.$router.push("/");
+                window.location.replace("/");
               }, 1800);
             } else {
               this.$cookie.set("token", res, { expires: "Session" });

@@ -58,7 +58,7 @@ export default {
       }
       util.Indicator("加载中");
       this.http
-        .post("/login/reg", {
+        .post("/login/reset", {
           phone,
           code,
           password

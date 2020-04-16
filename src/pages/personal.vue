@@ -1,9 +1,8 @@
 <template>
   <div class="personal">
-    <div class="img">
+    <div class="img" @click="onClickUp()">
       <img :src="img" />
       点击修改头像
-      <input type="file" capture="camera" @click="fileClick()" id="upload_file" />
     </div>
     <div class="br"></div>
     <div class="info">
@@ -36,7 +35,8 @@ export default {
       tel: "",
       introduce: "",
       imgList: "",
-      img: ""
+      img: "",
+      imgaesMaxLenght: 1
     };
   },
   mounted() {
@@ -56,8 +56,9 @@ export default {
           this.img = res.avatar;
         });
     },
-    //修改头像
-    fileClick() {
+
+    //选择图片
+    onClickUp() {
       let _this = this;
       wx.chooseImage({
         count: 1, // 默认9
@@ -65,17 +66,6 @@ export default {
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: function(res) {
           let localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-          // 判断 ios
-          if (window.__wxjs_is_wkwebview) {
-            _this.wxuploadImage(localIds);
-          } else {
-            localIds.forEach(item => {
-              _this.imgList.push(item);
-              if (_this.imgList.length >= _this.imgaesMaxLenght) {
-                _this.imgLenght = false;
-              }
-            });
-          }
           _this.wxuploadImage(localIds);
         },
         fail: function() {
@@ -85,38 +75,30 @@ export default {
     },
 
     wxuploadImage(localIds) {
+      let that=this;
+      console.log(localIds, "我开始走了");
       let _this = this;
+      var i = 0;
       var length = localIds.length;
-      let loacId = localIds[i];
-      if (window.__wxjs_is_wkwebview) {
-        if (loacId.indexOf("wxlocalresource") != -1) {
-          loacId = loacId.replace("wxlocalresource", "wxLocalResource");
+      var upload = function() {
+        let loacId = localIds[i];
+        if (window.__wxjs_is_wkwebview) {
+          if (loacId.indexOf("wxlocalresource") != -1) {
+            loacId = loacId.replace("wxlocalresource", "wxLocalResource");
+          }
         }
-      }
-      wx.uploadImage({
-        localId: loacId, // 需要上传的图片的本地ID，由chooseImage接口获得
-        isShowProgressTips: 1, // 默认为1，显示进度提示
-        success: function(res) {
-          var serverId = res.serverid;
-          util.Indicator("加载中");
-          this.http
-            .post("/login/image", {
-              token: this.$cookie.get("token"),
-              serverid: serverId
-            })
-            .then(res => {
-              if (res) {
-                util.toast("上传成功~");
-                setTimeout(() => {
-                  this.getMineInfo();
-                }, 1500);
-              }
-            });
-        },
-        fail: function() {
-          alert("失败11");
-        }
-      });
+        wx.uploadImage({
+          localId: loacId, // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 1, // 默认为1，显示进度提示
+          success: function(res) {
+            that.submintImg(res.serverId);
+          },
+          fail: function() {
+            alert("失败11");
+          }
+        });
+      };
+      upload();
     },
 
     //用户提交信息
@@ -134,6 +116,21 @@ export default {
           if (res) {
             util.toast("提交成功~");
           }
+        });
+    },
+
+    submintImg(serverId) {
+      this.axios
+        .post("/login/image", {
+          token: this.$cookie.get("token"),
+          serverid: serverId
+        })
+        .then(res => {
+          console.log(res);
+            util.toast("上传成功~");
+            setTimeout(() => {
+              this.getMineInfo();
+            }, 1500);
         });
     }
   },
