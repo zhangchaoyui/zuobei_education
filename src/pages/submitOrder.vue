@@ -19,7 +19,7 @@
         <div class="name">{{orderInfo.good_name}}</div>
         <div class="bottom">
           <span>{{orderInfo.good_money}}积分</span>
-          <span>x{{orderInfo.good_num}}</span>
+          <span>x1</span>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@ export default {
         .then(res => {
           console.log(res);
           util.toast("提交成功~");
-          stroage.clear("data")
+          stroage.clear("data");
           setTimeout(() => {
             this.$router.push("/order");
           }, 1500);

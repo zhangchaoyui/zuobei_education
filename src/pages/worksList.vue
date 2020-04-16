@@ -113,7 +113,7 @@ export default {
     getWorksList(e) {
       util.Indicator("加载中");
       this.http
-        .get("/works/ranking", { params: { tid: e, page: this.page } })
+        .post("/works/ranking", { tid: e, page: this.page })
         .then(res => {
           this.worksList = this.worksList.concat(res.data);
           if (res.data.length <= 0) {
@@ -145,7 +145,7 @@ export default {
       this.loading = true;
       this.page++;
       setTimeout(() => {
-        this.getWorksList();
+        this.getWorksList(this.btn);
       }, 1000);
     }
   },

@@ -142,10 +142,12 @@ export default {
 
     //删除图片
     deleteImg(index) {
-      console.log(index, this.imgList);
-      this.imgList = this.imgList.splice(index, 1);
-      console.log(this.imgList.splice(index, 1));
-      this.showImg = this.imgList.splice(index, 1);
+      let { imgList, showImg } = this;
+      imgList.splice(index, 1);
+      this.imgList = imgList;
+      showImg.splice(index, 1);
+      this.showImg = showImg;
+      console.log(imgList);
     }
   },
 

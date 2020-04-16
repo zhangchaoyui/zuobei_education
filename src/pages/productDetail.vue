@@ -61,6 +61,10 @@ export default {
         return;
       } else if (this.data.address != 1) {
         util.toast("对不起，请先选择地址~");
+        return;
+      } else if (this.data.good_num <= 0) {
+        util.toast("对不起，商品库存不足~");
+        return;
       }
       this.$router.push(`/submitOrder/${this.id}`);
     }

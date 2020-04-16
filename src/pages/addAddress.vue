@@ -45,7 +45,7 @@ export default {
     };
   },
   mounted() {
-    if (this.id) {
+    if (this.id != 0) {
       this.http
         .post("/good/detail", {
           id: this.id
@@ -53,7 +53,7 @@ export default {
         .then(res => {
           console.log(res);
           this.username = res.name;
-          this.tel = res.adress;
+          this.tel = res.tel;
           this.sheng = res.sheng;
           this.shi = res.shi;
           this.qu = res.qu;
