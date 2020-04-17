@@ -76,12 +76,8 @@ export default {
 
     wxuploadImage(localIds) {
       let that=this;
-      console.log(localIds, "我开始走了");
-      let _this = this;
-      var i = 0;
-      var length = localIds.length;
       var upload = function() {
-        let loacId = localIds[i];
+        let loacId = localIds[0];
         if (window.__wxjs_is_wkwebview) {
           if (loacId.indexOf("wxlocalresource") != -1) {
             loacId = loacId.replace("wxlocalresource", "wxLocalResource");
@@ -126,7 +122,6 @@ export default {
           serverid: serverId
         })
         .then(res => {
-          console.log(res);
             util.toast("上传成功~");
             setTimeout(() => {
               this.getMineInfo();

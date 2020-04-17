@@ -63,11 +63,13 @@ export default {
           code,
           password
         })
-        .then(() => {
-          util.toast("重置密码成功~");
-          setTimeout(() => {
-            this.$router.go(-1);
-          }, 2000);
+        .then(res => {
+          if (res) {
+            util.toast("重置密码成功~");
+            setTimeout(() => {
+              this.$router.go(-1);
+            }, 2000);
+          }
         });
     },
 

@@ -259,8 +259,8 @@ export default {
       width: 100%;
       line-height: 40vh;
       text-align: center;
-      font-size: 0.26rem;
-      color: #898989;
+      font-size: 0.3rem;
+      color: #ccc;
     }
   }
 }

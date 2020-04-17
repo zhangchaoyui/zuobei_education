@@ -9,11 +9,9 @@
                       width: '0.8rem',
                       background:' red',
                       color: '#fff',
-                      
                     },
                     handler: () => deleteAddress(item.id)
                 }   
-                     
             ]"
       >
         <img src="/images/icon36.png" alt />
@@ -27,7 +25,7 @@
         <div class="right" @click="replace(item.id)">编辑</div>
       </mt-cell-swipe>
     </div>
-    <div class="empty" v-show="!data">暂无收货地址</div>
+    <div class="empty" v-if="data.length<=0">暂无收货地址</div>
     <Btn btnType="3" sureText="添加收货地址" v-on:submit="addAddress"></Btn>
   </div>
   <div class="addressList" v-else-if="type==2">
@@ -69,7 +67,6 @@ export default {
       this.axios
         .post("/good/adreslist", { token: this.$cookie.get("token") })
         .then(res => {
-          console.log(res);
           this.data = res;
         });
     },

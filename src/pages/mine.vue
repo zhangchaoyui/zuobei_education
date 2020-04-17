@@ -2,7 +2,7 @@
   <div class="mine">
     <div class="header">
       <div class="img">
-        <img :src="user_info.avatar" alt />
+        <img :src="user_info.avatar" v-image-preview alt />
       </div>
       <div class="username">
         <span>{{user_info.nickname}}</span>
@@ -20,6 +20,7 @@
         <span>点赞次数</span>
       </div>
     </div>
+
     <div class="record" v-else-if="Usertype==2">
       <div class="record_left">
         <span>{{user_info.size1}}</span>
@@ -30,6 +31,7 @@
         <span>回复我的点评</span>
       </div>
     </div>
+    <div class="record2"></div>
     <div class="functionList" v-if="Usertype==1">
       <div class="function" v-for="(item,index) in list" :key="index" @click="click(item.type)">
         <img class="icon" :src="`/images/`+item.icon" />
@@ -162,14 +164,11 @@ export default {
     //获取个人信息
     getMineInfo() {
       this.axios
-        .get("/personal/index", {
-          params: {
-            token: this.$cookie.get("token"),
-            user_type: stroage.getItem("user_type") || 1
-          }
+        .post("/personal/index", {
+          token: this.$cookie.get("token"),
+          user_type: stroage.getItem("user_type") || 1
         })
         .then(res => {
-          console.log(res);
           this.user_info = res;
           this.Usertype = stroage.getItem("user_type") || 1;
         });
@@ -207,17 +206,22 @@ export default {
     background-size: 100%;
     display: flex;
     flex-direction: row;
-    margin-bottom: 0.5rem;
     .img {
       width: 1.33rem;
       height: 1.33rem;
       margin: 0.74rem 0 0 0.38rem;
+      border-radius: 1.33rem;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #fff;
       img {
         width: 100%;
         height: 100%;
         border: 2px solid #fff;
-        border-radius: 1.33rem;
-        overflow: hidden;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
     }
     .username {
@@ -259,9 +263,9 @@ export default {
   }
   .record {
     width: 90%;
-    height: 1.49rem;
+    height: 1.5rem;
     position: absolute;
-    top: 20vh;
+    top: 20vmax;
     left: 5%;
     display: flex;
     justify-content: center;
@@ -320,43 +324,54 @@ export default {
       }
     }
   }
+  .record2 {
+    width: 90%;
+    height: .8rem;
+    opacity: 0;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+  }
   .functionList {
     width: 90%;
-    margin: 0.7rem auto 0;
+    margin: 0 auto 0;
     background: #fff;
     border-radius: 0.2rem;
     display: flex;
     flex-direction: column;
-    padding: 0.2rem 0;
-    margin-top: 7vh;
+    padding: 0.1rem 0;
     .function {
       width: 90%;
       margin: 0 auto;
-      height: 0.76rem;
+      height: 5.8vh;
       line-height: 0.76rem;
       font-size: 0.26rem;
       border-bottom: 0.002rem solid #f3f2f3;
       padding: 0.05rem 0;
       display: flex;
       position: relative;
+      align-items: center;
       .icon {
         display: inline-block;
         width: 0.4rem;
         height: 0.4rem;
-        margin: 0.14rem 0.2rem 0 0.34rem;
+        margin: 0 0.2rem 0 0.34rem;
         vertical-align: middle;
       }
       a {
         color: black;
       }
       .span_img {
-        width: 0.13rem;
         position: absolute;
         top: 0.04rem;
         right: 0.12rem;
+        display: flex;
+        align-items: center;
+        height: 100%;
         img {
-          width: 100%;
-          height: 100%;
+          width: 0.12rem;
+          height: 0.2rem;
+          margin-top: -0.09rem;
         }
       }
     }

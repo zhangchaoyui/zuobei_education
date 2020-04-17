@@ -76,7 +76,6 @@ export default {
           })
           .then(res => {
             if (res) {
-              console.log(res);
               util.toast("登陆成功~");
               this.$cookie.set("token", res.token, { expires: "3D" });
               stroage.setItem("status", 1);
@@ -161,8 +160,8 @@ export default {
       flex-direction: column;
       .logo {
         width: 2.75rem;
-        height: 1.85rem;
-        margin: 1.67rem auto 0.63rem;
+        height: 14vh;
+        margin: 10vh auto 0.63rem;
       }
       .phone {
         width: 5.8rem;
@@ -195,7 +194,7 @@ export default {
       .wx_chat {
         display: flex;
         flex-direction: column;
-        margin: 0.93rem auto 0;
+        margin: 6vh auto 0;
         img {
           display: block;
           margin: 0 auto;

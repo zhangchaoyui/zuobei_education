@@ -29,7 +29,7 @@
             <div class="num">{{item.praise}}</div>
           </div>
           <div class="user">
-            <img src="/images/user.jpg" />
+            <img :src="item.avatar" />
             <div class="user_name">{{item.name}}</div>
             <div class="submit">{{item.time}}</div>
           </div>
@@ -61,7 +61,6 @@ export default {
           key: this.value
         })
         .then(res => {
-          console.log(res);
           this.data = res;
         });
     },

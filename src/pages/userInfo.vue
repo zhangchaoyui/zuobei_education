@@ -15,13 +15,17 @@
         </div>
         <div class="function">
           <img class="icon" src="/images/icon16.png" />
-          <input type="text" placeholder="发明家的手机号码" v-model="phone" @blur="blurIn" />
+          <input type="text" placeholder="发明家的手机号码" maxlength='11' v-model="phone" @blur="blurIn" />
         </div>
         <div class="function">
           <img class="icon" src="/images/icon8.png" />
           <input type="text" placeholder="发明家的生日" v-model="birthday" @blur="blurIn" />
         </div>
-        <div class="function" @click="choose">
+        <div class="function" @click="choose" v-if="address==''">
+          <img class="icon" src="/images/address.png" />
+          邮寄发明材料的地址
+        </div>
+        <div class="function" @click="choose" v-else style="color:black">
           <img class="icon" src="/images/address.png" />
           {{address}}
         </div>
@@ -54,7 +58,7 @@ export default {
       sex: "", //性别
       phone: "", //手机
       birthday: "", //生日
-      address: "邮寄发明材料的地址", //地址
+      address: "", //地址
       show: false,
       //省市区
       province: "",
@@ -68,7 +72,6 @@ export default {
         token: this.$cookie.get("token")
       })
       .then(res => {
-        console.log(res)
         this.address = res.adress || "邮寄发明材料的地址";
         this.name = res.name;
         this.birthday = res.birth;
@@ -77,13 +80,13 @@ export default {
         } else {
           res.sex = "女";
         }
-        console.log(res.sex)
         this.sex = res.sex;
         this.phone = res.mobile;
       });
   },
-  
+
   methods: {
+    //ios上拉回弹
     blurIn() {
       window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
     },
@@ -138,17 +141,14 @@ export default {
     },
     onChangeProvince1: function(a) {
       this.province = a.value;
-      console.log(a.value);
       if (a.value == "台湾省") {
         this.show = false;
       }
     },
     onChangeCity: function(a) {
-      console.log(a.value);
       this.city = a.value;
     },
     onChangeArea: function(a) {
-      console.log(a.value);
       this.area = a.value;
       this.show = false;
       this.address = this.province + this.city + this.area;
@@ -252,7 +252,7 @@ export default {
     width: 100%;
     position: fixed;
     bottom: 50%;
-    font-size: 0.2rem;
+    font-size: 0.3rem;
   }
 
   /*头部内容*/
@@ -271,6 +271,10 @@ export default {
   .divwrap .address-container {
     overflow: scroll;
     height: 100%;
+  }
+  /*内容部分*/
+  .divwrap .address-container li {
+    padding: 10px 10px;
   }
 
   /*点过的地区内容*/

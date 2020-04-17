@@ -40,7 +40,6 @@ export default {
         token: this.$cookie.get("token")
       })
       .then(res => {
-        console.log(res.data);
         this.data = res.data;
       });
   },
@@ -171,7 +170,7 @@ export default {
           flex-direction: row;
           margin-top: 0.21rem;
           .works_name {
-            width: 78%;
+            width: 90%;
             @include textWidth();
             font-size: 0.26rem;
             line-height: 0.28rem;
@@ -197,7 +196,7 @@ export default {
             border-radius: 0.5rem;
           }
           .user_name {
-            width: 60%;
+            width: 50%;
             padding-left: 3%;
             @include textWidth();
             font-size: $fontJ;

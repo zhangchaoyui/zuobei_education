@@ -127,6 +127,7 @@ export default {
             util.toast("签到成功~");
             setTimeout(() => {
               this.status = 1;
+              this.getJifen();
             }, 2000);
           });
       } else {

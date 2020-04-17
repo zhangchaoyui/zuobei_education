@@ -91,6 +91,7 @@
 </template>
 
 <script>
+import wx from "weixin-js-sdk";
 import stroage from "../stroage/index";
 export default {
   name: "index",
@@ -123,7 +124,7 @@ export default {
 
     //跳转外链
     external() {
-     wx.miniProgram.navigateTo({url: '/path/index/index'})
+      wx.miniProgram.navigateTo({ url: "/path/index/index" });
     },
 
     //跳转文章资讯
@@ -137,7 +138,6 @@ export default {
 
     //跳转导航
     nav(e) {
-      console.log(e);
       if (e == 1) {
         this.$router.push("/workslist");
       } else if (e == 2) {

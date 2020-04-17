@@ -132,8 +132,9 @@ export default {
           image: JSON.stringify(showImg)
         })
         .then(res => {
-          console.log(res);
-          alert(res);
+          if (res) {
+            util.toast("发布作品成功~");
+          }
           this.value = "";
           this.showImg = [];
           this.imgList = [];
@@ -147,7 +148,6 @@ export default {
       this.imgList = imgList;
       showImg.splice(index, 1);
       this.showImg = showImg;
-      console.log(imgList);
     }
   },
 

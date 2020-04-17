@@ -8,7 +8,7 @@
         <img v-bind:src="item" @click="replaceImg(index)" />
         <div class="options" @click="deleteImg(index)">x</div>
       </div>
-      <div class="img_cloumn" v-if="imgList.length<3">
+      <div class="img_cloumn" v-if="imgList.length<1">
         <img src="/images/icon38.png" @click="onClickUp" />
       </div>
     </div>
@@ -32,7 +32,7 @@ export default {
       value: "", //内容
       title: "", //title
       imgaesMaxLenght: 1,
-      Usertype: ''
+      Usertype: ""
     };
   },
   mounted() {
@@ -137,7 +137,6 @@ export default {
           image: JSON.stringify(showImg)
         })
         .then(res => {
-          console.log(res);
           util.toast("评论成功~");
           this.value = "";
           this.showImg = [];
@@ -163,7 +162,6 @@ export default {
           showImg: []
         })
         .then(res => {
-          console.log(res);
           util.toast("留言成功~");
           this.value = "";
           setTimeout(() => {
@@ -174,11 +172,11 @@ export default {
 
     //删除图片
     deleteImg(index) {
-      console.log(index);
-      this.imgList = delete this.imgList[index];
-      this.showImg = delete this.showImg[index];
-      console.log(1, this.imgList);
-      console.log(2, this.showImg);
+      let { imgList, showImg } = this;
+      imgList.splice(index, 1);
+      this.imgList = imgList;
+      showImg.splice(index, 1);
+      this.showImg = showImg;
     }
   },
 

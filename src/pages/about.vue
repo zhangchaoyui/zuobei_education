@@ -17,7 +17,6 @@ export default {
   },
   mounted() {
     this.axios.get("/article/about", { params: {} }).then(res => {
-      console.log(res);
       this.data = this.showHtml(res.post_content);
     });
   },

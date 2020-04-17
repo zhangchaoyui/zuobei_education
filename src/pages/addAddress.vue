@@ -2,8 +2,11 @@
   <div class="addAddress">
     <div class="content">
       <mt-field placeholder="收货人" v-model="username"></mt-field>
-      <mt-field placeholder="手机号码" type="email" v-model="tel"></mt-field>
-      <div class="address" @click="choose">{{city}}</div>
+      <mt-field placeholder="手机号码" maxlength='11' v-model="tel"></mt-field>
+      <div class="fu">
+        <mt-field placeholder="请选择地址" v-model="city"></mt-field>
+        <div class="address" @click="choose">{{city}}</div>
+      </div>
       <mt-field placeholder="详细地址：如道路、门牌号、小区、单元等" type="text" v-model="address"></mt-field>
       <mt-switch v-model="click" class="switch">默认收货地址</mt-switch>
     </div>
@@ -39,7 +42,7 @@ export default {
       shi: "",
       qu: "",
       show: false,
-      city: "请输入地址",
+      city: "",
       click: "",
       id: this.$route.params.id
     };
@@ -51,7 +54,6 @@ export default {
           id: this.id
         })
         .then(res => {
-          console.log(res);
           this.username = res.name;
           this.tel = res.tel;
           this.sheng = res.sheng;
@@ -142,11 +144,22 @@ export default {
     padding: 0.2rem;
     border-radius: 5px;
     background: #fff;
+    .fu {
+      position: relative;
+      width: 100%;
+      .address {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        width: 100%;
+      }
+    }
   }
   .address {
     height: 48px;
     line-height: 48px;
-    font-size: 0.29rem;
+    font-size: inherit;
     padding: 0 10px;
     color: #757575;
   }
@@ -192,7 +205,7 @@ export default {
     width: 100%;
     position: fixed;
     bottom: 50%;
-    font-size: 0.2rem;
+    font-size: 0.3rem;
   }
 
   /*头部内容*/
@@ -211,6 +224,9 @@ export default {
   .divwrap .address-container {
     overflow: scroll;
     height: 100%;
+    li {
+      padding: 10px;
+    }
   }
 
   /*点过的地区内容*/

@@ -52,7 +52,6 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res);
           if (stroage.getItem("data")) {
             this.address = stroage.getItem("data");
           } else {
@@ -69,7 +68,6 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res);
           util.toast("提交成功~");
           stroage.clear("data");
           setTimeout(() => {

@@ -14,7 +14,7 @@
         {{result.praise}}
       </div>
       <div class="header_right2" v-else @click="Fabulous">
-        <img src="/images/fabulous_red.png" />
+        <img src="/images/fabulous_ccc.png" />
         {{result.praise}}
       </div>
     </div>
@@ -55,7 +55,9 @@
         <span v-if="review.reply==1" @click="do_review(review.id)">回复</span>
       </div>
       <div class="content" v-if="review.type==1&&review!=null">
-        <img :src="review.image" v-image-preview v-if="review.image" alt />
+        <div class="postion">
+          <img :src="review.image" v-image-preview v-if="review.image" alt />
+        </div>
         {{review.content}}
       </div>
       <div class="content" v-else-if="review.type==2&&review!=null">
@@ -106,7 +108,9 @@
         </div>
       </div>
       <div class="content" v-if="review.type==1">
-        <img :src="review.image" v-if="review.image" v-image-preview alt />
+        <div class="postion">
+          <img :src="review.image" v-if="review.image" v-image-preview alt />
+        </div>
         {{review.content}}
       </div>
       <div class="content" v-else-if="review.type==2">
@@ -123,14 +127,19 @@
     <div class="Mask" v-show="showMask" @click="showMask=!showMask"></div>
     <div class="Eject" v-show="showMask">
       <img src="/images/icon47.png" v-if="isVoice ==0" />
-      <div class="vm-voice-box" v-if="isVoice <=1">
+      <div class="vm-voice-box" v-if="isVoice ==0">
         <p v-show="!isVoice" @click="voiceStart">点击录音</p>
-        <img v-show="isVoice" @click="voiceEnd" src="/images/luyin.jpg" alt />
+      </div>
+
+      <div class="vm-voice-player" v-if="isVoice ==1">
+        <img src="/images/icon48.png" />
+        <div class="suspend" @click="voiceEnd">| |</div>
       </div>
 
       <!-- // isListen  // 0-未试听/试听结束 1-试听中 2-暂停试听
       // 录完音 按钮展示-->
       <div class="vm-voice-player" v-if="isVoice == 2">
+        <img src="/images/icon48.png" />
         <div class="vm-vp-button">
           <p class="vm-vp-revoice" @click="Reset">重录</p>
           <p class="vm-vp-submit" :class="{'vm-vp-no-submit' : isSubmit}" @click="voiceHandle()">提交</p>
@@ -187,7 +196,6 @@ export default {
         // util.toast("开始录音了");
         wx.startRecord({
           success: function(res) {
-            console.log(res);
             _this.startTime = new Date().getTime();
             _this.isVoice = 1;
           },
@@ -212,7 +220,6 @@ export default {
       } else {
         wx.stopRecord({
           success: function(res) {
-            console.log(res);
             // util.toast("停止录音了");
             // 微信生成的localId，此时语音还未上传至微信服务器
             _this.localId = res.localId;
@@ -296,41 +303,16 @@ export default {
     //分享功能
     initShareInfo() {
       this.mask = true;
-      wx.onMenuShareAppMessage({
-        title: "做呗科技", // 分享标题
-        desc: "做呗科技做呗科技做呗科技", // 分享描述
-        link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: "", // 分享图标
-        trigger: function() {
-          this.fenxiang();
-        },
-        success: function() {
-          console.log("分享成功");
-        }
-      });
-      wx.onMenuShareTimeline({
-        title: "做呗科技", // 分享标题
-        desc: "做呗科技做呗科技做呗科技", // 分享描述
-        link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl: "", // 分享图标
-        trigger: function() {
-          this.fenxiang();
-        },
-        cancel: function() {
-          this.mask = false;
-          util.toast("分享取消");
-        }
-      });
     },
 
     fenxiang() {
-      console.log(111);
       this.http
         .post("/sign/share", { toekn: this.$cookie.get("token") })
         .then(res => {
-          console.log(res);
-          this.mask = false;
-          util.toast("分享成功~");
+          if (res) {
+            this.mask = false;
+            util.toast("分享成功~");
+          }
         });
     },
 
@@ -395,8 +377,8 @@ export default {
             "playVoice",
             "pauseVoice",
             "onVoicePlayEnd",
-            "onMenuShareAppMessage",
-            "onMenuShareTimeline"
+            "updateAppMessageShareData",
+            "updateTimelineShareData"
           ]
         });
         wx.ready(function() {
@@ -405,6 +387,22 @@ export default {
             complete: function(res) {
               _this.isVoice = 2;
               _this.localId = res.localId;
+            }
+          });
+          wx.updateTimelineShareData({
+            title: "做呗科技", // 分享标题
+            desc: "做呗科技做呗科技做呗科技", // 分享描述
+            link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: "", // 分享图标
+            success: function() {
+            }
+          });
+          wx.updateAppMessageShareData({
+            title: "做呗科技", // 分享标题
+            desc: "做呗科技做呗科技做呗科技", // 分享描述
+            link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: "", // 分享图标
+            success: function() {
             }
           });
         });
@@ -665,7 +663,7 @@ export default {
       line-height: 0.77rem;
       font-size: 0.35rem;
       color: white;
-      margin: 0.25rem auto 0.2rem;
+      margin: 0.25rem auto 0.1rem;
       position: relative;
       div {
         width: 15%;
@@ -683,6 +681,7 @@ export default {
           vertical-align: middle;
           margin-right: 2%;
           border-radius: 0;
+          margin-top: -7%;
         }
       }
       img {
@@ -711,6 +710,23 @@ export default {
       text-overflow: ellipsis;
       display: flex;
       align-items: center;
+      .postion {
+        width: 2rem;
+        height: 1.2rem;
+        margin-right: 2%;
+        border-radius: 5px;
+        position: relative;
+        overflow: hidden;
+        img {
+          width: 100%;
+          border-radius: 5px;
+          overflow: hidden;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
       img {
         width: 1.2rem;
         height: 1.2rem;
@@ -744,7 +760,7 @@ export default {
       margin: 0 auto;
       display: flex;
       flex-direction: row;
-      padding-bottom: 0.3rem;
+      padding-bottom: 0.1rem;
       div {
         width: 33.33%;
         font-size: 0.23rem;
@@ -810,6 +826,23 @@ export default {
       -webkit-line-clamp: 2;
       overflow: hidden;
       text-overflow: ellipsis;
+      .postion {
+        width: 2rem;
+        height: 1.2rem;
+        margin-right: 2%;
+        border-radius: 5px;
+        position: relative;
+        overflow: hidden;
+        img {
+          width: 100%;
+          border-radius: 5px;
+          overflow: hidden;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
       .voice {
         width: 80%;
         height: 0.95rem;
@@ -877,7 +910,7 @@ export default {
     width: 75%;
     padding: 0.2rem 0 0.7rem;
     position: absolute;
-    top: 40%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
@@ -887,7 +920,7 @@ export default {
       display: block;
       width: auto;
       margin: 0.5rem auto;
-      height: 1rem;
+      height: 1.8rem;
       border-radius: 0.4rem;
     }
     .img2 {
@@ -919,8 +952,25 @@ export default {
       display: flex;
       overflow: hidden;
       display: flex;
-      margin-top: 0.5rem;
+      flex-direction: column;
       justify-content: space-around;
+      img {
+        display: block;
+        width: auto;
+        margin: 0rem auto 0.4rem;
+        height: 3rem;
+        border-radius: 0.4rem;
+      }
+      .suspend {
+        width: 60%;
+        margin: 0 auto;
+        background: #e8b92b;
+        color: #fff;
+        font-size: 0.4rem;
+        line-height: 0.8rem;
+        text-align: center;
+        border-radius: 1rem;
+      }
       .vm-vp-button {
         width: 80%;
         margin: 0 auto;

@@ -56,7 +56,6 @@ export default {
           }
         })
         .then(res => {
-          console.log(res);
           this.data = this.data.concat(res.data);
           if (res.data.length <= 0) {
             this.loading = true;

@@ -174,7 +174,7 @@ export default {
           flex-direction: row;
           margin-top: 0.21rem;
           .works_name {
-            width: 78%;
+            width: 90%;
             @include textWidth();
             font-size: 0.26rem;
             line-height: 0.28rem;
@@ -182,6 +182,7 @@ export default {
           img {
             width: auto;
             height: 0.21rem;
+            margin-right: 2%;
           }
           .num {
             color: #f05556;
