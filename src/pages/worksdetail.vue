@@ -303,6 +303,34 @@ export default {
     //分享功能
     initShareInfo() {
       this.mask = true;
+      wx.updateAppMessageShareData({
+        title: "做呗科技", // 分享标题
+        desc: "做呗科技", // 分享描述
+        link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致,
+        imgUrl:
+          "http://zuobei.400539.com/upload/portal/20200407/463012ed8c20a5f8cbff88fa6d50f625.jpeg",
+        type: "link",
+        success: () => {
+          // 用户点击了分享后执行的回调函数
+          this.fenxiang();
+        }
+      });
+
+      wx.updateTimelineShareData({
+        title: "做呗科技", // 分享标题
+        desc: "做呗科技", // 分享描述
+        link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl:
+          "http://zuobei.400539.com/upload/portal/20200407/463012ed8c20a5f8cbff88fa6d50f625.jpeg",
+        type: "link",
+        success: () => {
+          // 用户点击了分享后执行的回调函数
+          this.fenxiang();
+        },
+        complete: function(err) {
+          console.log(err);
+        }
+      });
     },
 
     fenxiang() {
@@ -363,7 +391,7 @@ export default {
       .post("/token/sdksign", { url: location.href.split("#")[0] })
       .then(res => {
         wx.config({
-          debug: false,
+          debug: true,
           appId: res.appid,
           timestamp: parseInt(res.timestamp),
           nonceStr: res.nonceStr,
@@ -378,7 +406,8 @@ export default {
             "pauseVoice",
             "onVoicePlayEnd",
             "updateAppMessageShareData",
-            "updateTimelineShareData"
+            "updateTimelineShareData",
+            "onMenuShareAppMessage"
           ]
         });
         wx.ready(function() {
@@ -389,21 +418,8 @@ export default {
               _this.localId = res.localId;
             }
           });
-          wx.updateTimelineShareData({
-            title: "做呗科技", // 分享标题
-            desc: "做呗科技做呗科技做呗科技", // 分享描述
-            link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: "", // 分享图标
-            success: function() {
-            }
-          });
-          wx.updateAppMessageShareData({
-            title: "做呗科技", // 分享标题
-            desc: "做呗科技做呗科技做呗科技", // 分享描述
-            link: "http://zuobei.niu5.cc/#/", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: "", // 分享图标
-            success: function() {
-            }
+          wx.error(function(res) {
+            alert(res.errMsg);
           });
         });
       })
