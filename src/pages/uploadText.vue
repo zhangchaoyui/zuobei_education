@@ -36,7 +36,7 @@ export default {
     };
   },
   mounted() {
-    this.Usertype = stroage.getItem("user_type");
+    this.Usertype = this.$cookie.get("user_type");
   },
   methods: {
     //选择图片

@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <mt-swipe :auto="4000">
       <mt-swipe-item v-for="(item,index) in swiper" :key="index">
-        <img :src="item.image" />
+        <img :src="item.image" @click="link(index)" />
       </mt-swipe-item>
     </mt-swipe>
     <div class="search" @click="search">
@@ -109,7 +109,7 @@ export default {
     this.getSwiper();
     this.getArticle();
     this.getWorks();
-    this.Usertype = stroage.getItem("user_type") || 1;
+    this.Usertype = this.$cookie.get("user_type") || 1;
   },
   methods: {
     //跳转作品详情页
@@ -124,7 +124,17 @@ export default {
 
     //跳转外链
     external() {
-      wx.miniProgram.navigateTo({ url: "/path/index/index" });
+      wx.miniProgram.navigateTo({ url: "/page/index/index" });
+    },
+
+    //banner跳转
+    link(index) {
+      let { swiper } = this;
+      if (swiper[index].type == 1) {
+        this.$router.push(`/news/${swiper[index].titles}`);
+      } else {
+        window.location.replace(swiper[index].url);
+      }
     },
 
     //跳转文章资讯

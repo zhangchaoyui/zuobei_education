@@ -34,7 +34,7 @@ export default {
     return {
       selected: 0,
       showTab: 0,
-      UserType: stroage.getItem("user_type") || 1
+      UserType: this.$cookie.get("user_type") || 1
     };
   },
   mounted() {

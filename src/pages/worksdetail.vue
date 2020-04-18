@@ -55,8 +55,8 @@
         <span v-if="review.reply==1" @click="do_review(review.id)">回复</span>
       </div>
       <div class="content" v-if="review.type==1&&review!=null">
-        <div class="postion">
-          <img :src="review.image" v-image-preview v-if="review.image" alt />
+        <div class="postion" v-if="review.image">
+          <img :src="review.image" v-image-preview alt />
         </div>
         {{review.content}}
       </div>
@@ -108,8 +108,8 @@
         </div>
       </div>
       <div class="content" v-if="review.type==1">
-        <div class="postion">
-          <img :src="review.image" v-if="review.image" v-image-preview alt />
+        <div class="postion" v-if="review.image">
+          <img :src="review.image" v-image-preview alt />
         </div>
         {{review.content}}
       </div>
@@ -182,9 +182,8 @@ export default {
     };
   },
   mounted() {
-    util.login(); //判断用户登录
     this.getWorksDetail();
-    this.Usertype = stroage.getItem("user_type") || 1;
+    this.Usertype = this.$cookie.get("user_type") || 1;
   },
   methods: {
     // 开始录音
@@ -290,8 +289,7 @@ export default {
       util.Indicator("加载中");
       this.http
         .post("/works/detail", {
-          id: this.$route.params.id,
-          token: this.$cookie.get("token")
+          id: this.$route.params.id
         })
         .then(res => {
           this.message = res.message || {};
@@ -312,6 +310,7 @@ export default {
         type: "link",
         success: () => {
           // 用户点击了分享后执行的回调函数
+          this.mask = true;
           this.fenxiang();
         }
       });
@@ -326,6 +325,7 @@ export default {
         success: () => {
           // 用户点击了分享后执行的回调函数
           this.fenxiang();
+          this.mask = true;
         },
         complete: function(err) {
           console.log(err);
@@ -335,13 +335,8 @@ export default {
 
     fenxiang() {
       this.http
-        .post("/sign/share", { toekn: this.$cookie.get("token") })
-        .then(res => {
-          if (res) {
-            this.mask = false;
-            util.toast("分享成功~");
-          }
-        });
+        .post("/sign/share", { token: this.$cookie.get("token") })
+        .then(res => {});
     },
 
     //文字评论
@@ -359,8 +354,16 @@ export default {
       this.isVoice = 0;
       this.voiceStart();
     },
+
     //点赞
     Fabulous() {
+      if (this.$cookie.get("token")) {
+        this.dianzan();
+      } else {
+        util.login();
+      }
+    },
+    dianzan() {
       util.Indicator("加载中");
       this.http
         .post("/works/dianzan", {
@@ -369,13 +372,14 @@ export default {
         })
         .then(res => {
           if (res) {
-            util.toast(res);
+            util.toast(res.msg);
             setTimeout(() => {
               this.getWorksDetail();
             }, 1500);
           }
         });
     },
+
     //播放录音
     myplay() {
       this.play = false;
@@ -391,7 +395,7 @@ export default {
       .post("/token/sdksign", { url: location.href.split("#")[0] })
       .then(res => {
         wx.config({
-          debug: true,
+          debug: false,
           appId: res.appid,
           timestamp: parseInt(res.timestamp),
           nonceStr: res.nonceStr,

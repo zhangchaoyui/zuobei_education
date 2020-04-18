@@ -77,28 +77,49 @@ export default {
     list-style: none;
   }
   .package-status .status-list li {
-    border-left: 2px solid #f5bb0e;
+    color: black;
+    border-left: 2px solid #ccc;
     border-bottom: none;
     text-align: left;
     &:first-child {
-      color: black;
+      border-left: 2px solid #f5bb0e;
+      &:before {
+        /* 流程点的样式 */
+        content: "";
+        border: 3px solid #f3f3f3;
+        background-color: #f5bb0e;
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        margin-left: -9px;
+        margin-right: 10px;
+      }
+    }
+    &:before {
+      /* 流程点的样式 */
+      content: "";
+      border: 3px solid #f3f3f3;
+      background-color: #d9d9d9;
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 10px;
+      margin-left: -9px;
+      margin-right: 10px;
     }
   }
-  .package-status .status-list li:before {
-    /* 流程点的样式 */
-    content: "";
-    border: 3px solid #f3f3f3;
-    background-color: #d9d9d9;
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 10px;
-    margin-left: -9px;
-    margin-right: 10px;
-  }
-  .package-status .status-list .latest:before {
-    background-color: #f5bb0e;
-    border-color: #f8e9e4;
+  .package-status .status-list .latest {
+    &:last-child {
+      div {
+        border-bottom: none !important;
+      }
+    }
+    &:first-child:before {
+      content: "";
+      background-color: #f5bb0e;
+      border-color: #f8e9e4;
+    }
   }
   .package-status .status-box {
     overflow: hidden;

@@ -9,15 +9,16 @@ axios.interceptors.response.use(function (response) {
     if (res.code == 1 || res.code == 2) {  //拦截业务错误码
         return res.data;
     } else if (res.code == 3) {
-        if (path != "#/index") {
+        if (path != "/#/index" || path != 'worksdetail/:id') {
             window.location.href = "/#/login"
         } else {
+            console.log(111)
             Toast(res.msg);
         }
-        return Promise.reject(res);
+        // return Promise.reject(res);
     } else if (res.code == 0) {
         Toast(res.msg);
-        return ;
+        return;
     }
 }, (error) => { //这部分拦截服务器错误码
     let res = error.response;

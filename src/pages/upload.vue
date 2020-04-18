@@ -31,6 +31,9 @@ export default {
       imgaesMaxLenght: 3
     };
   },
+  mounted() {
+    util.login();
+  },
   methods: {
     //选择图片
     onClickUp() {

@@ -27,7 +27,7 @@
                     <img v-bind:src="oneList[0].avatar" alt />
                   </div>
                   <div class="userDetail">
-                    <div>{{oneList[0].name}}111</div>
+                    <div>{{oneList[0].name}}</div>
                     <div>{{oneList[0].time}}</div>
                   </div>
                 </div>

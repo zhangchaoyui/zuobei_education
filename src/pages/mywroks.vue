@@ -7,7 +7,7 @@
           <img src="/images/icon39.png" />我的作品集
         </div>
       </div>
-      <div class="content2">
+      <div class="content2" v-if="data.length>0">
         <div class="works" v-for="(item,index) in data " :key="index" @click="worksDetail(item.id)">
           <img :src="item.image" />
           <div class="worksDetail">

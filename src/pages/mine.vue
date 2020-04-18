@@ -166,11 +166,11 @@ export default {
       this.axios
         .post("/personal/index", {
           token: this.$cookie.get("token"),
-          user_type: stroage.getItem("user_type") || 1
+          user_type: this.$cookie.get("user_type") || 1
         })
         .then(res => {
           this.user_info = res;
-          this.Usertype = stroage.getItem("user_type") || 1;
+          this.Usertype = this.$cookie.get("user_type") || 1;
         });
     },
 
@@ -326,7 +326,7 @@ export default {
   }
   .record2 {
     width: 90%;
-    height: .8rem;
+    height: 0.8rem;
     opacity: 0;
     margin: 0 auto;
     background: #fff;

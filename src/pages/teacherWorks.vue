@@ -7,7 +7,7 @@
           <img src="/images/icon39.png" />点评作品集
         </div>
       </div>
-      <div class="content2">
+      <div class="content2" v-if="data.length>0">
         <div class="works" v-for="(item,index) in data" @click="worksDetail(item.id)" :key="index">
           <img :src="item.image" />
           <div class="worksDetail">
@@ -17,7 +17,7 @@
           </div>
           <div class="user">
             <img :src="item.avatar" alt />
-            <div class="user_name">{{item.nickname}}</div>
+            <div class="user_name">{{item.name}}</div>
             <div class="submit">{{item.time}}</div>
           </div>
         </div>
