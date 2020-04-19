@@ -76,13 +76,16 @@ export default {
           })
           .then(res => {
             if (res) {
-              console.log(res)
               util.toast("登陆成功~");
               this.$cookie.set("token", res.token, { expires: "3D" });
               stroage.setItem("status", 1);
               this.$cookie.set("user_type", res.user_type, { expires: "3D" });
               setTimeout(() => {
-                window.location.replace("/");
+                if (this.$route.params.type > -1) {
+                  this.$router.push(`/worksdetail/${this.$route.params.type}`);
+                } else {
+                  window.location.replace("/");
+                }
               }, 2000);
             }
           });
@@ -114,7 +117,7 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res,333)
+          console.log(res, 333);
           if (res) {
             if (res.user_type != undefined) {
               util.toast("登陆成功~");
@@ -122,7 +125,11 @@ export default {
                 this.$cookie.set("token", res.token, { expires: "Session" });
                 this.$cookie.set("user_type", res.user_type, { expires: "3D" });
                 stroage.setItem("status", 1);
-                window.location.replace("/");
+                if (this.$route.params.type == 2) {
+                  this.$router.go(-1);
+                } else {
+                  window.location.replace("/");
+                }
               }, 1800);
             } else {
               this.$cookie.set("token", res, { expires: "Session" });

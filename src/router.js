@@ -45,7 +45,7 @@ export default new Router({
             component: resolve => require(['./pages/personal'], resolve),
         },
         {
-            path: '/login',//登录
+            path: '/login/:type',//登录
             name: 'login',
             meta: { title: '登录' },
             component: resolve => require(['./pages/login'], resolve),

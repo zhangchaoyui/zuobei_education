@@ -7,7 +7,13 @@ export default {
         if (type == 0) {
             MessageBox.confirm('请先登录~', '友情提示').then(action => {
                 if (action == 'confirm') {
-                    window.location.replace("/#/login");
+                    let a = location.href.split("/#/")[1];
+                    if (a.split("/")[0]=='worksdetail') {
+                        window.location.replace(`/#/login/${a.split("/")[1]}`);
+                    } else {
+                        window.location.replace("/#/login/-1");
+                    }
+
                 }
             }).catch(err => {
                 if (err == 'cancel') {
