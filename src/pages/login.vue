@@ -82,7 +82,9 @@ export default {
               this.$cookie.set("user_type", res.user_type, { expires: "3D" });
               setTimeout(() => {
                 if (this.$route.params.type > -1) {
-                  this.$router.push(`/worksdetail/${this.$route.params.type}`);
+                  window.location.replace(
+                    `/#/worksdetail/${this.$route.params.type}`
+                  );
                 } else {
                   window.location.replace("/");
                 }
@@ -97,7 +99,7 @@ export default {
       const appid = "wx4522fb49b27981d6";
       const code = util.GetQueryString("code"); // 截取路径
       if (code == null || code === "") {
-        const local = "http://zuobei.niu5.cc/#/login";
+        const local = `http://zuobei.niu5.cc/#/login/${this.$route.params.type}`;
         window.location.href =
           "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
           appid +
@@ -126,7 +128,9 @@ export default {
                 this.$cookie.set("user_type", res.user_type, { expires: "3D" });
                 stroage.setItem("status", 1);
                 if (this.$route.params.type > -1) {
-                  this.$router.push(`/worksdetail/${this.$route.params.type}`);
+                  window.location.replace(
+                    `/#/worksdetail/${this.$route.params.type}`
+                  );
                 } else {
                   window.location.replace("/");
                 }

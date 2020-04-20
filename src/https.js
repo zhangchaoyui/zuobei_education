@@ -9,8 +9,8 @@ axios.interceptors.response.use(function (response) {
     if (res.code == 1 || res.code == 2) {  //拦截业务错误码
         return res.data;
     } else if (res.code == 3) {
-        if (path != "/#/index" || path != 'worksdetail/:id') {
-            window.location.href = "/#/login"
+        if (path != "/#/index") {
+            window.location.href = "/#/login/-1"
         } else {
             console.log(111)
             Toast(res.msg);

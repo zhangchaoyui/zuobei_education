@@ -289,7 +289,8 @@ export default {
       util.Indicator("加载中");
       this.http
         .post("/works/detail", {
-          id: this.$route.params.id
+          id: this.$route.params.id,
+          token: this.$cookie.get("token") || ""
         })
         .then(res => {
           this.message = res.message || {};
@@ -373,7 +374,7 @@ export default {
         })
         .then(res => {
           if (res) {
-            util.toast(res.msg);
+            util.toast("点赞成功~");
             setTimeout(() => {
               this.getWorksDetail();
             }, 1500);
