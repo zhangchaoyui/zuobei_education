@@ -125,8 +125,8 @@ export default {
                 this.$cookie.set("token", res.token, { expires: "Session" });
                 this.$cookie.set("user_type", res.user_type, { expires: "3D" });
                 stroage.setItem("status", 1);
-                if (this.$route.params.type == 2) {
-                  this.$router.go(-1);
+                if (this.$route.params.type > -1) {
+                  this.$router.push(`/worksdetail/${this.$route.params.type}`);
                 } else {
                   window.location.replace("/");
                 }

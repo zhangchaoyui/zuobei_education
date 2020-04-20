@@ -363,6 +363,7 @@ export default {
         util.login();
       }
     },
+
     dianzan() {
       util.Indicator("加载中");
       this.http
