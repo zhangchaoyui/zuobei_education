@@ -201,7 +201,7 @@ export default {
             border-radius: 0.5rem;
           }
           .user_name {
-            width: 60%;
+            width: 50%;
             padding-left: 3%;
             @include textWidth();
             font-size: $fontJ;

@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <mt-swipe :auto="4000">
       <mt-swipe-item v-for="(item,index) in data.banner" :key="index">
-        <img v-lazy="item" />
+        <img v-lazy='item'>
       </mt-swipe-item>
     </mt-swipe>
     <div class="content">
@@ -81,12 +81,20 @@ export default {
   width: 100%;
   height: auto;
   .mint-swipe {
-    width: 100%;
+    width: auto;
     height: 7.44rem;
+    position: relative;
     overflow: hidden;
-    img {
+    .mint-swipe-item {
       width: 100%;
-      height: 7.44rem;
+      img {
+        height: 7.44rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
     }
   }
   .content {
@@ -122,6 +130,12 @@ export default {
       color: #888888;
     }
   }
+  image[lazy="loading"] {
+    width: 40px;
+    height: 300px;
+    margin: auto;
+    background: black;
+  }
   .br {
     width: 100%;
     height: 0.18rem;
@@ -135,7 +149,7 @@ export default {
     overflow: hidden;
     p {
       display: inline-block;
-      width: 90%;
+      width: 96%;
       margin: 0 auto;
       font-size: 0.28rem;
       line-height: 0.8rem;
@@ -143,8 +157,8 @@ export default {
       font-weight: bold;
     }
     img {
-      width: auto;
-      height: auto;
+      width: 100%;
+      height: 100%;
     }
   }
 }

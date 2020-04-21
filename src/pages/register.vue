@@ -30,8 +30,8 @@
           </div>
           <div class="phone">
             <input type="number" placeholder="请输入验证码" maxlength="4" v-model="code" @blur="blurIn" />
-            <button @click="codeTime()" v-if="timeStatus==1">获取{{time}}</button>
-            <button v-if="timeStatus==0">获取{{time}}</button>
+            <button @click="codeTime()" v-if="timeStatus==1">获取验证码</button>
+            <button v-if="timeStatus==0" style="color:#EFEFEF">获取验证码{{time}}</button>
           </div>
           <div class="phone">
             <input type="password" placeholder="请输入密码" v-model="password" @blur="blurIn" />
@@ -221,7 +221,7 @@ export default {
         border-radius: 0.5rem;
         overflow: hidden;
         input {
-          width: 70%;
+          width: 60%;
           height: 100%;
           border: none;
           font-size: 0.3rem;
@@ -229,7 +229,7 @@ export default {
           box-sizing: border-box;
         }
         button {
-          width: 20%;
+          width: 40%;
           height: 100%;
           font-size: 0.3rem;
           color: #555555;

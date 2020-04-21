@@ -75,7 +75,7 @@ export default {
     },
 
     wxuploadImage(localIds) {
-      let that=this;
+      let that = this;
       var upload = function() {
         let loacId = localIds[0];
         if (window.__wxjs_is_wkwebview) {
@@ -122,10 +122,10 @@ export default {
           serverid: serverId
         })
         .then(res => {
-            util.toast("上传成功~");
-            setTimeout(() => {
-              this.getMineInfo();
-            }, 1500);
+          util.toast("上传成功~");
+          setTimeout(() => {
+            this.getMineInfo();
+          }, 1500);
         });
     }
   },
@@ -162,6 +162,7 @@ export default {
   width: 100%;
   margin: 0.1rem auto 0;
   height: auto;
+  background: white;
   .img {
     width: 1.8rem;
     height: auto;

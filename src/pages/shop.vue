@@ -268,7 +268,7 @@ export default {
     align-items: center;
     text-align: center;
     font-size: 0.32rem;
-    border-bottom: 1px solid #f6f6f6;
+    border-bottom: 1px solid #e1e1e1;
     .nav_child {
       display: flex;
       justify-content: center;
@@ -276,6 +276,7 @@ export default {
       text-align: center;
       padding: 0.3rem 0;
       position: relative;
+      border-radius: 5px;
       &::before {
         content: "";
         width: 50%;
@@ -300,11 +301,12 @@ export default {
       height: auto;
       display: flex;
       flex-direction: column;
+      border-radius: 5px;
       div {
-        width: 90%;
-        height: 0.6rem;
-        font-size: 0.24rem;
-        line-height: 0.6rem;
+        width: 100%;
+        height: 0.8rem;
+        font-size: 0.26rem;
+        line-height: 0.8rem;
         margin: 0 auto;
         border-bottom: 1px solid #bfbfbf;
         &:last-child {

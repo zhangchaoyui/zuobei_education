@@ -105,7 +105,6 @@ export default {
     };
   },
   mounted() {
-    util.login();
     this.getoOneList();
     this.getWorksList(1);
   },

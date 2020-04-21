@@ -1,7 +1,7 @@
 
 
 import axios from 'axios';
-import { Toast, Indicator } from "mint-ui";
+import { Toast, Indicator,MessageBox} from "mint-ui";
 //全局接口错误拦截
 axios.interceptors.response.use(function (response) {
     let res = response.data;
@@ -10,9 +10,22 @@ axios.interceptors.response.use(function (response) {
         return res.data;
     } else if (res.code == 3) {
         if (path != "/#/index") {
-            window.location.href = "/#/login/-1"
+            MessageBox.confirm('请先登录~', '友情提示').then(action => {
+                if (action == 'confirm') {
+                    let a = location.href.split("/#/")[1];
+                    if (a.split("/")[0] == 'worksdetail') {
+                        window.location.replace(`/#/login/${a.split("/")[1]}`);
+                    } else {
+                        window.location.replace("/#/login/-1");
+                    }
+
+                }
+            }).catch(err => {
+                if (err == 'cancel') {
+                    window.location.replace("/#/");
+                }
+            })
         } else {
-            console.log(111)
             Toast(res.msg);
         }
         // return Promise.reject(res);

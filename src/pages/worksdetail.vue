@@ -377,7 +377,7 @@ export default {
             util.toast("点赞成功~");
             setTimeout(() => {
               this.getWorksDetail();
-            }, 1500);
+            }, 500);
           }
         });
     },

@@ -11,6 +11,7 @@ import 'mint-ui/lib/style.css'
 import http from './https'
 //挂载到VUE实例，以便全局使用;
 Vue.prototype.http = http;
+
 import VueDirectiveImagePreviewer from 'vue-directive-image-previewer'
 import 'vue-directive-image-previewer/dist/assets/style.css'
 Vue.use(VueDirectiveImagePreviewer) 
@@ -21,7 +22,7 @@ Vue.component('v-distpicker', Distpicker)
 Vue.config.productionTip = false
 
 //根据前端跨域做调整,/api是接口代理，代理是最安全的
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "/vueapi";
 Vue.use(vueAxios, axios);
 Vue.use(vueCookie);
 Vue.use(MintUI);
