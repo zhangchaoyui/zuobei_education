@@ -89,7 +89,7 @@ export default {
           if (res) {
             util.toast("注册成功~");
             setTimeout(() => {
-              this.$router.go(-1);
+              this.$router.go(-1)
             }, 2000);
           }
         });

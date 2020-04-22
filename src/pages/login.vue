@@ -99,7 +99,7 @@ export default {
       const appid = "wx4522fb49b27981d6";
       const code = util.GetQueryString("code"); // 截取路径
       if (code == null || code === "") {
-        const local = `http://admin.zuobeikeji.com/#/login/${this.$route.params.type}`;
+        const local = `http://zuobei.400539.com/#/login/${this.$route.params.type}`;
         window.location.href =
           "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
           appid +
