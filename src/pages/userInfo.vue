@@ -2,31 +2,31 @@
   <div class="userinfo">
     <div class="container">
       <div class="header">
-        <img src="/images/logo.png" alt />
+        <img src="../../public/images/logo.png" alt />
       </div>
       <div class="functionList">
         <div class="function">
-          <img class="icon" src="/images/icon21.png" />
+          <img class="icon" src="../../public/images/icon21.png" />
           <input type="text" placeholder="发明家的姓名" v-model="name" @blur="blurIn" />
         </div>
         <div class="function">
-          <img class="icon" src="/images/icon26.png" />
+          <img class="icon" src="../../public/images/icon26.png" />
           <input type="text" placeholder="发明家的性别" v-model="sex" @blur="blurIn" />
         </div>
         <div class="function">
-          <img class="icon" src="/images/icon16.png" />
+          <img class="icon" src="../../public/images/icon16.png" />
           <input type="text" placeholder="发明家的手机号码" maxlength='11' v-model="phone" @blur="blurIn" />
         </div>
         <div class="function">
-          <img class="icon" src="/images/icon8.png" />
+          <img class="icon" src="../../public/images/icon8.png" />
           <input type="text" placeholder="发明家的生日" v-model="birthday" @blur="blurIn" />
         </div>
         <div class="function" @click="choose" v-if="address==''">
-          <img class="icon" src="/images/address.png" />
+          <img class="icon" src="../../public/images/address.png" />
           邮寄发明材料的地址
         </div>
         <div class="function" @click="choose" v-else style="color:black">
-          <img class="icon" src="/images/address.png" />
+          <img class="icon" src="../../public/images/address.png" />
           {{address}}
         </div>
         <!--省市区三级联动-->

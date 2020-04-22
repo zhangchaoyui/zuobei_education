@@ -14,7 +14,7 @@
                 }   
             ]"
       >
-        <img src="/images/icon36.png" alt />
+        <img src="../../public/images/icon36.png" alt />
         <div class="content">
           <div class="title">
             {{item.name}}
@@ -30,7 +30,7 @@
   </div>
   <div class="addressList" v-else-if="type==2">
     <div class="address" v-for="(item,index) in data" :key="index">
-      <img src="/images/icon36.png" alt />
+      <img src="../../public/images/icon36.png" alt />
       <div class="content">
         <div class="title">
           {{item.name}}

@@ -2,7 +2,7 @@
   <div class="forget">
     <div class="container">
       <div class="page">
-        <img src="/images/logo.png" alt class="logo" />
+        <img src="../../public/images/logo.png" alt class="logo" />
         <div class="input">
           <div class="phone">
             +86
@@ -110,7 +110,7 @@ export default {
 .forget {
   width: 100%;
   min-height: 100vh;
-  background: url("/images/background10.png") repeat-y;
+  background: url("../../public/images/background10.png") repeat-y;
   background-size: 100% 150%;
   display: flex;
   flex-direction: row;

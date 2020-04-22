@@ -8,16 +8,16 @@
           <div class="bottom" @click="about">如何赚积分任务规则</div>
         </div>
         <div class="content_right" @click="Integral">
-          <img src="/images/icon7.png" alt />
+          <img src="../../public/images/icon7.png" alt />
           明细
-          <img src=/images/icon6.png alt />
+          <img src=../../public/images/icon6.png alt />
         </div>
       </div>
     </div>
     <div class="nav">
       <div @click="getNav(2)" class="nav_child">
         {{showText}}
-        <img src="/images/icon46.png" alt />
+        <img src="../../public/images/icon46.png" alt />
         <div class="integralList" v-show="showType">
           <div v-for="(item,index) in integralList" :key="index">
             <div class="row" @click="nav(2,index)">{{item.name}}</div>
@@ -26,7 +26,7 @@
       </div>
       <div @click="getNav(1)" class="nav_child">
         {{showproduct}}
-        <img src="/images/icon46.png" alt />
+        <img src="../../public/images/icon46.png" alt />
         <div class="integralList" v-show="showStatus">
           <div v-for="(item,index) in classification" :key="index">
             <div class="row" @click="nav(1,index)">{{item.name}}</div>
@@ -53,7 +53,7 @@
       <div class="top">
         <div class="cloumn" v-for="(item,index) in numberRand" :key="index">
           <div class="list1" :class="{'Onlist1':fan==index}" @click="fanzhuan(index)">
-            <img src="/images/fan.png" />
+            <img src="../../public/images/fan.png" />
           </div>
           <div class="list2" :class="{'Onlist2':fan==index}">
             <div>
@@ -202,7 +202,7 @@ export default {
     width: 6.9rem;
     height: 2.9rem;
     margin: 0.2rem auto 0;
-    background: url("/images/background2.png") no-repeat;
+    background: url("../../public/images/background2.png") no-repeat;
     background-size: 100% 100%;
     display: flex;
     align-items: center;
@@ -365,7 +365,7 @@ export default {
     position: absolute;
     left: 10%;
     top: 15%;
-    background: url("/images/background6.png");
+    background: url("../../public/images/background6.png");
     background-size: 100% 100%;
     z-index: 13;
     display: flex;
@@ -420,7 +420,7 @@ export default {
         -moz-transform: rotateY(0deg);
         -ms-transform: rotateY(0deg);
         -o-transform: rotateY(0deg);
-        background: url("/images/background_signIn.png");
+        background: url("../../public/images/background_signIn.png");
         background-size: 100% 100%;
         display: flex;
         justify-content: center;
@@ -471,7 +471,7 @@ export default {
         transform: rotateY(0deg);
         -webkit-transform: rotateY(0deg);
         z-index: 11;
-        background: url("/images/background_signIn.png");
+        background: url("../../public/images/background_signIn.png");
         background-size: 100% 100%;
       }
     }

@@ -16,10 +16,10 @@
     <div class="list">
       <div class="row" v-for="(item,index) in integralList" :key="index">
         <div class="row_left" v-if="nav==1">
-          <img src="/images/icon37.png" alt />
+          <img src="../../public/images/icon37.png" alt />
         </div>
         <div class="row_left" v-if="nav==2">
-          <img src="/images/icon35.png" alt />
+          <img src="../../public/images/icon35.png" alt />
         </div>
         <div class="row_center">
           <div class="center_top">{{item.content}}</div>
@@ -94,7 +94,7 @@ export default {
     width: 6.9rem;
     height: 2.9rem;
     margin: 0.2rem auto 0;
-    background: url("/images/background2.png") no-repeat;
+    background: url("../../public/images/background2.png") no-repeat;
     background-size: 100% 100%;
     display: flex;
     align-items: center;

@@ -5,18 +5,18 @@
       <p class="lastp">帮助我们更好地为您提供服务</p>
       <div class="img">
         <div class="children" @click="type(1)">
-          <img src="/images/2.png" alt />
+          <img src="../../public/images/2.png" alt />
           <p>孩子</p>
         </div>
         <div class="teacher" @click="type(2)">
-          <img src="/images/1.png" alt />
+          <img src="../../public/images/1.png" alt />
           <p>老师</p>
         </div>
       </div>
     </div>
     <div class="container" v-if="page==2">
       <div class="page">
-        <img src="/images/logo.png" alt class="logo" />
+        <img src="../../public/images/logo.png" alt class="logo" />
         <div class="input">
           <div class="phone">
             +86
@@ -89,7 +89,7 @@ export default {
           if (res) {
             util.toast("注册成功~");
             setTimeout(() => {
-              window.location.href = "http://zuobei.niu5.cc/#/login";
+              this.$router.go(-1);
             }, 2000);
           }
         });
@@ -144,7 +144,7 @@ export default {
 .register {
   width: 100%;
   min-height: 100vh;
-  background: url("/images/background10.png") repeat-y;
+  background: url("../../public/images/background10.png") repeat-y;
   background-size: 100% 150%;
   display: flex;
   flex-direction: row;

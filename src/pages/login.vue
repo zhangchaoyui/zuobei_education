@@ -2,7 +2,7 @@
   <div class="login">
     <div class="container">
       <div class="page">
-        <img src="/images/logo.png" alt class="logo" />
+        <img src="../../public/images/logo.png" alt class="logo" />
         <div class="input">
           <div class="phone">
             +86
@@ -24,7 +24,7 @@
           <div @click="forget">忘记密码</div>
         </div>
         <div class="wx_chat" @click="bind">
-          <img src="/images/icon20.png" alt />
+          <img src="../../public/images/icon20.png" alt />
           <div>首次登录绑定微信</div>
         </div>
       </div>
@@ -99,7 +99,7 @@ export default {
       const appid = "wx4522fb49b27981d6";
       const code = util.GetQueryString("code"); // 截取路径
       if (code == null || code === "") {
-        const local = `http://zuobei.niu5.cc/#/login/${this.$route.params.type}`;
+        const local = `http://admin.zuobeikeji.com/#/login/${this.$route.params.type}`;
         window.location.href =
           "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
           appid +
@@ -160,7 +160,7 @@ export default {
 .login {
   width: 100%;
   min-height: 100vh;
-  background: url("/images/background10.png") repeat-y;
+  background: url("../../public/images/background10.png") repeat-y;
   background-size: 100% 150%;
   display: flex;
   flex-direction: row;

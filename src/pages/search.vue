@@ -12,7 +12,7 @@
     <div class="articleList" v-if="data.length>0">
       <div class="title">
         <div class="title_content">
-          <img src="/images/icon39.png" />作品列表
+          <img src="../../public/images/icon39.png" />作品列表
         </div>
       </div>
       <div class="content2">
@@ -25,7 +25,7 @@
           <img v-lazy="item.image" />
           <div class="worksDetail">
             <div class="works_name">{{item.title}}</div>
-            <img src="/images/fabulous_red.png" style="border-radius:0" />
+            <img src="../../public/images/fabulous_red.png" style="border-radius:0" />
             <div class="num">{{item.praise}}</div>
           </div>
           <div class="user">
@@ -112,7 +112,7 @@ export default {
     width: 100%;
     height: auto;
     padding-bottom: 0.14rem;
-    background: url("/images/background10.png");
+    background: url("../../public/images/background10.png");
     background-size: 100%;
     box-sizing: border-box;
     margin-top: 5%;

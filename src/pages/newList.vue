@@ -4,7 +4,7 @@
     <div class="articleList">
       <div class="title">
         <div class="title_content">
-          <img src="/images/icon30.png" />文章资讯
+          <img src="../../public/images/icon30.png" />文章资讯
         </div>
       </div>
       <div
@@ -89,7 +89,7 @@ export default {
     width: 100%;
     min-height: 100vh;
     padding-bottom: 0.14rem;
-    background: url("/images/background10.png") repeat-y;
+    background: url("../../public/images/background10.png") repeat-y;
     background-size: 100% 100%;
     box-sizing: border-box;
     .title {

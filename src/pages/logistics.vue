@@ -1,7 +1,7 @@
 <template>
   <div class="logistics">
     <div class="title">
-      <img src="/images/icon14.png" alt />
+      <img src="../../public/images/icon14.png" alt />
       {{data.brand}}：{{data.no}}
     </div>
     <div class="package-status">

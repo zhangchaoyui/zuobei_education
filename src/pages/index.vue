@@ -7,23 +7,23 @@
       </mt-swipe-item>
     </mt-swipe>
     <div class="search" @click="search">
-      <img src="/images/search.png" alt />请输入您要搜索的名称
+      <img src="../../public/images/search.png" alt />请输入您要搜索的名称
     </div>
     <div class="nav-list" v-if="Usertype==1">
       <div class="nav_row" @click="nav(1)">
-        <img src="/images/category1.png" />
+        <img src="../../public/images/category1.png" />
         作品排行
       </div>
       <div class="nav_row" @click="nav(2)">
-        <img src="/images/category2.png" />
+        <img src="../../public/images/category2.png" />
         月度排行
       </div>
       <div class="nav_row" @click="nav(3)">
-        <img src="/images/category3.png" />
+        <img src="../../public/images/category3.png" />
         我的订单
       </div>
       <div class="nav_row" @click="nav(4)">
-        <img src="/images/category4.png" />
+        <img src="../../public/images/category4.png" />
         积分商城
       </div>
     </div>
@@ -31,9 +31,9 @@
     <div class="articleList">
       <div class="title">
         <div class="title_content">
-          <img src="/images/icon30.png" />文章资讯
+          <img src="../../public/images/icon30.png" />文章资讯
         </div>
-        <img src="/images/icon6.png" class="right_icon" @click="newsList" />
+        <img src="../../public/images/icon6.png" class="right_icon" @click="newsList" />
       </div>
       <div class="content">
         <div class="from" @click="news(item.id)" v-for="(item,index) in Article" v-bind:key="index">
@@ -49,15 +49,15 @@
     </div>
     <!-- 外链 -->
     <div class="nav_img" @click="external">
-      <img src="/images/background4.png" />
+      <img src="../../public/images/background4.png" />
     </div>
     <!-- 作品列表 -->
     <div class="articleList">
       <div class="title">
         <div class="title_content">
-          <img src="/images/icon39.png" />作品列表
+          <img src="../../public/images/icon39.png" />作品列表
         </div>
-        <img src="/images/icon6.png" class="right_icon" @click="worksList" />
+        <img src="../../public/images/icon6.png" class="right_icon" @click="worksList" />
       </div>
       <div class="works_nav">
         <div v-bind:class="{'btn':btn==1}" @click="getWorks(1)">最新点评</div>
@@ -76,7 +76,7 @@
           </div>
           <div class="worksDetail">
             <div class="works_name">{{item.title}}</div>
-            <img src="/images/fabulous_red.png" style="border-radius:0" />
+            <img src="../../public/images/fabulous_red.png" style="border-radius:0" />
             <div class="num">{{item.praise}}</div>
           </div>
           <div class="user">
@@ -275,7 +275,7 @@ export default {
     width: 100%;
     height: auto;
     padding-bottom: 0.14rem;
-    background: url("/images/background10.png");
+    background: url("../../public/images/background10.png");
     background-size: 100%;
     box-sizing: border-box;
     .title {

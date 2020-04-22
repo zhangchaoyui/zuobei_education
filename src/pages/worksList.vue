@@ -1,7 +1,7 @@
  <template>
   <div class="workslist">
     <div class="search" @click="search">
-      <img src="/images/search.png" alt />请输入您要搜索的名称
+      <img src="../../public/images/search.png" alt />请输入您要搜索的名称
     </div>
     <div class="frame">
       <div class="nav">
@@ -40,7 +40,7 @@
                   <span>{{oneList[0].num}}</span>&nbsp;天
                 </div>
                 <div class="top">
-                  <img src="/images/fabulous_red.png" alt />
+                  <img src="../../public/images/fabulous_red.png" alt />
                   {{oneList[0].praise}}
                 </div>
               </div>
@@ -77,7 +77,7 @@
                   <span>{{item.num}}</span>&nbsp;天
                 </div>
                 <div class="top">
-                  <img src="/images/fabulous_red.png" alt />
+                  <img src="../../public/images/fabulous_red.png" alt />
                   {{item.praise}}
                 </div>
               </div>
@@ -205,7 +205,7 @@ export default {
         .one {
           width: 100%;
           height: 4.5rem;
-          background: url("/images/background.png") no-repeat;
+          background: url("../../public/images/background.png") no-repeat;
           background-size: 100% 100%;
           display: flex;
           flex-direction: row;
@@ -217,7 +217,7 @@ export default {
           width: 100%;
           height: 3rem;
           margin-top: 0.1rem;
-          background: url("/images/background7.png") no-repeat;
+          background: url("../../public/images/background7.png") no-repeat;
           background-size: 100% 100%;
           display: flex;
           flex-direction: row;
@@ -419,7 +419,7 @@ export default {
           position: absolute;
           bottom: -0.13rem;
           right: 0.1rem;
-          background: url("/images/background8.png") no-repeat;
+          background: url("../../public/images/background8.png") no-repeat;
           background-size: 100% 99%;
           .top_row {
             width: 65%;

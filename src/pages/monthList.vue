@@ -2,7 +2,7 @@
   <div class="monthList">
     <div class="header">
       <div class="title">
-        <img src="/images/icon19.png" alt />人气王
+        <img src="../../public/images/icon19.png" alt />人气王
       </div>
       <div class="userList">
         <div class="user" v-if="sentiment[0]">
@@ -49,14 +49,14 @@
     </div>
     <div class="header2">
       <div class="title">
-        <img src="/images/vip.png" alt />坚持王
+        <img src="../../public/images/vip.png" alt />坚持王
       </div>
       <div class="userList">
         <div class="row">
           <div class="user" v-for="(item,index) in adhere" :key="index">
             <div class="img">
               <img :src="item.avatar" alt />
-              <img src="/images/icon44.png" class="biao" alt />
+              <img src="../../public/images/icon44.png" class="biao" alt />
             </div>
             <span class="username">{{item.nickname}}</span>
             <span class="fabulous">
@@ -128,7 +128,7 @@ export default {
   .header {
     width: 100%;
     margin: 0 auto;
-    background: url("/images/background2.png") no-repeat;
+    background: url("../../public/images/background2.png") no-repeat;
     background-size: 100% 100%;
     padding-bottom: 0.2rem;
     .title {
@@ -157,16 +157,16 @@ export default {
         width: 24%;
         height: auto;
         .img {
-          background: url("/images/icon1.png") no-repeat;
+          background: url("../../public/images/icon1.png") no-repeat;
         }
         .img2 {
-          background: url("/images/icon2.png") no-repeat;
+          background: url("../../public/images/icon2.png") no-repeat;
         }
         .img3 {
-          background: url("/images/icon3.png") no-repeat;
+          background: url("../../public/images/icon3.png") no-repeat;
         }
         .img4 {
-          background: url("/images/icon4.png") no-repeat;
+          background: url("../../public/images/icon4.png") no-repeat;
         }
         .img,
         .img2,
@@ -212,7 +212,7 @@ export default {
   }
   .header2 {
     width: 100%;
-    background: url("/images/background2.png") repeat-y;
+    background: url("../../public/images/background2.png") repeat-y;
     background-size: 100% 100%;
     display: block;
     flex-direction: column;

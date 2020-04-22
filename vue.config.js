@@ -1,5 +1,5 @@
 module.exports = {
-    publicPath: '/m',
+    publicPath: './m',
     devServer: {
         proxy: {
             '/vueapi': {

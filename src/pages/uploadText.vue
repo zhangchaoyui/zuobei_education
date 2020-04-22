@@ -9,7 +9,7 @@
         <div class="options" @click="deleteImg(index)">x</div>
       </div>
       <div class="img_cloumn" v-if="imgList.length<1">
-        <img src="/images/icon38.png" @click="onClickUp" />
+        <img src="../../public/images/icon38.png" @click="onClickUp" />
       </div>
     </div>
     <Btn btnType="1" sureText="发表" v-on:submit="fromData" v-if="Usertype==2"></Btn>

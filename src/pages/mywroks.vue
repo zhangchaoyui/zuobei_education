@@ -4,7 +4,7 @@
     <div class="articleList">
       <div class="title">
         <div class="title_content">
-          <img src="/images/icon39.png" />我的作品集
+          <img src="../../public/images/icon39.png" />我的作品集
         </div>
       </div>
       <div class="content2" v-if="data.length>0">
@@ -12,7 +12,7 @@
           <img :src="item.image" />
           <div class="worksDetail">
             <div class="works_name">{{item.title}}</div>
-            <img src="/images/fabulous_red.png" alt />
+            <img src="../../public/images/fabulous_red.png" alt />
             <div class="num">{{item.praise}}</div>
           </div>
           <div class="user">
@@ -59,7 +59,7 @@ export default {
   .articleList {
     width: 96%;
     min-height: 98vh;
-    background: url("/images/background10.png") repeat-y;
+    background: url("../../public/images/background10.png") repeat-y;
     background-size: 100% 100%;
     margin: 0.2rem auto 0;
     .title {
@@ -211,6 +211,8 @@ export default {
           .submit {
             font-size: 0.18rem;
             color: #999999;
+            width: 30%;
+            text-align: right;
           }
         }
       }

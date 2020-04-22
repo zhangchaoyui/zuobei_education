@@ -1,7 +1,7 @@
 <template>
   <div class="submitOrder">
     <div class="address">
-      <img src="/images/icon36.png" alt />
+      <img src="../../public/images/icon36.png" alt />
       <div class="content">
         <div class="title">
           {{address.name}}
@@ -11,7 +11,7 @@
           class="address_content"
         >{{address.sheng}} {{address.shi}} {{address.qu}} {{address.adress}}</div>
       </div>
-      <img src="/images/icon41.png" alt @click="addressList(2)" />
+      <img src="../../public/images/icon41.png" alt @click="addressList(2)" />
     </div>
     <div class="orderinfo">
       <img :src="orderInfo.good_img" alt />

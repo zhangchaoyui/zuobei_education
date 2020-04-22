@@ -10,11 +10,11 @@
         <span>{{result.time}}</span>
       </div>
       <div class="header_right" v-if="result.like==1">
-        <img src="/images/fabulous_red.png" />
+        <img src="../../public/images/fabulous_red.png" />
         {{result.praise}}
       </div>
       <div class="header_right2" v-else @click="Fabulous">
-        <img src="/images/fabulous_ccc.png" />
+        <img src="../../public/images/fabulous_ccc.png" />
         {{result.praise}}
       </div>
     </div>
@@ -62,7 +62,7 @@
       </div>
       <div class="content" v-else-if="review.type==2&&review!=null">
         <div class="voice" @click="myplay">
-          <img src="/images/icon28.png" alt />
+          <img src="../../public/images/icon28.png" alt />
           <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
           <span v-if="play">点击收听老师点评</span>
           <span v-else>播放语音中</span>
@@ -70,31 +70,31 @@
       </div>
       <div class="icon">
         <div @click="initShareInfo">
-          <img src="/images/icon5.png" alt />分享
+          <img src="../../public/images/icon5.png" alt />分享
         </div>
         <div @click="text(id)">
-          <img src="/images/icon30.png" />留言
+          <img src="../../public/images/icon30.png" />留言
         </div>
         <div @click="Fabulous">
-          <img src="/images/fabulous.png" />点赞
+          <img src="../../public/images/fabulous.png" />点赞
         </div>
       </div>
     </div>
     <!-- 老师未点评 -->
     <div class="bottom2" v-if="Usertype==2&&!review.content">
       <div class="user">
-        <img src="/images/user.jpg" />
+        <img src="../../public/images/user.jpg" />
         我要点评
       </div>
       <div class="icon">
         <div @click="text(id)">
-          <img src="/images/icon17.png" />文字点评
+          <img src="../../public/images/icon17.png" />文字点评
         </div>
         <div @click="showMask=!showMask">
-          <img src="/images/icon30.png" />语音点评
+          <img src="../../public/images/icon30.png" />语音点评
         </div>
         <div @click="initShareInfo">
-          <img src="/images/icon5.png" />分享
+          <img src="../../public/images/icon5.png" />分享
         </div>
       </div>
     </div>
@@ -104,7 +104,7 @@
         <img :src="review.avatar" v-image-preview />
         {{review.nickname}}
         <div @click="initShareInfo">
-          <img src="/images/fabulous.png" />分享
+          <img src="../../public/images/fabulous.png" />分享
         </div>
       </div>
       <div class="content" v-if="review.type==1">
@@ -115,7 +115,7 @@
       </div>
       <div class="content" v-else-if="review.type==2">
         <div class="voice" @click="myplay">
-          <img src="/images/icon28.png" alt />
+          <img src="../../public/images/icon28.png" alt />
           <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
           <span v-if="play">点击收听老师点评</span>
           <span v-else>播放语音中</span>
@@ -126,20 +126,20 @@
     <!-- 录音 -->
     <div class="Mask" v-show="showMask" @click="showMask=!showMask"></div>
     <div class="Eject" v-show="showMask">
-      <img src="/images/icon47.png" v-if="isVoice ==0" />
+      <img src="../../public/images/icon47.png" v-if="isVoice ==0" />
       <div class="vm-voice-box" v-if="isVoice ==0">
         <p v-show="!isVoice" @click="voiceStart">点击录音</p>
       </div>
 
       <div class="vm-voice-player" v-if="isVoice ==1">
-        <img src="/images/icon48.png" />
+        <img src="../../public/images/icon48.png" />
         <div class="suspend" @click="voiceEnd">| |</div>
       </div>
 
       <!-- // isListen  // 0-未试听/试听结束 1-试听中 2-暂停试听
       // 录完音 按钮展示-->
       <div class="vm-voice-player" v-if="isVoice == 2">
-        <img src="/images/icon48.png" />
+        <img src="../../public/images/icon48.png" />
         <div class="vm-vp-button">
           <p class="vm-vp-revoice" @click="Reset">重录</p>
           <p class="vm-vp-submit" :class="{'vm-vp-no-submit' : isSubmit}" @click="voiceHandle()">提交</p>
@@ -148,7 +148,7 @@
       </div>
     </div>
     <div class="mark" v-if="mask" @click="mask=false">
-      <img src="/images/background13.png" alt />
+      <img src="../../public/images/background13.png" alt />
     </div>
   </div>
 </template>

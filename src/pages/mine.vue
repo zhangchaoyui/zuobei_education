@@ -6,7 +6,7 @@
       </div>
       <div class="username">
         <span>{{user_info.nickname}}</span>
-        <img src="/images/icon27.png" alt @click="UserInfo" />
+        <img src="../../public/images/icon27.png" alt @click="UserInfo" />
       </div>
       <div class="user_info" @click="perfect">完善信息</div>
     </div>
@@ -34,20 +34,20 @@
     <div class="record2"></div>
     <div class="functionList" v-if="Usertype==1">
       <div class="function" v-for="(item,index) in list" :key="index" @click="click(item.type)">
-        <img class="icon" :src="`/images/`+item.icon" />
+        <img class="icon" :src="`../../public/images/`+item.icon" />
         <div v-if="item.type!=7">{{item.name}}</div>
         <a v-if="item.type==7" href="tel:0147-88469258">{{item.name}}</a>
         <span class="span_img" v-show="item.type!=7">
-          <img src="/images/icon41.png" alt />
+          <img src="../../public/images/icon41.png" alt />
         </span>
       </div>
     </div>
     <div class="functionList" v-else-if="Usertype==2">
       <div class="function" v-for="(item,index) in list2" :key="index" @click="click(item.type)">
-        <img class="icon" :src="`/images/`+item.icon" />
+        <img class="icon" :src="`../../public/images/`+item.icon" />
         {{item.name}}
         <span class="span_img">
-          <img src="/images/icon41.png" alt />
+          <img src="../../public/images/icon41.png" alt />
         </span>
       </div>
     </div>
@@ -202,7 +202,7 @@ export default {
   .header {
     width: 100%;
     height: 27vh;
-    background: url("/images/icon31.png") no-repeat;
+    background: url("../../public/images/icon31.png") no-repeat;
     background-size: 100%;
     display: flex;
     flex-direction: row;

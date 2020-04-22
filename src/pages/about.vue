@@ -1,7 +1,7 @@
 <template>
   <div class="personal">
     <div class="img">
-      <img src="/images/logo.png" />
+      <img src="../../public/images/logo.png" />
     </div>
     <div class="content" v-html="data">{{data}}</div>
   </div>
@@ -40,7 +40,7 @@ export default {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: url("/images/background10.png") repeat-y;
+  background: url("../../public/images/background10.png") repeat-y;
   background-size: 100%;
   margin: 0;
   .img {
