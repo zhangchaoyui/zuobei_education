@@ -34,7 +34,7 @@
     <div class="record2"></div>
     <div class="functionList" v-if="Usertype==1">
       <div class="function" v-for="(item,index) in list" :key="index" @click="click(item.type)">
-        <img class="icon" :src="`../../public/images/`+item.icon" />
+        <img class="icon" :src="item.icon" />
         <div v-if="item.type!=7">{{item.name}}</div>
         <a v-if="item.type==7" href="tel:0147-88469258">{{item.name}}</a>
         <span class="span_img" v-show="item.type!=7">
@@ -44,7 +44,7 @@
     </div>
     <div class="functionList" v-else-if="Usertype==2">
       <div class="function" v-for="(item,index) in list2" :key="index" @click="click(item.type)">
-        <img class="icon" :src="`../../public/images/`+item.icon" />
+        <img class="icon" :src="item.icon" />
         {{item.name}}
         <span class="span_img">
           <img src="../../public/images/icon41.png" alt />
@@ -63,54 +63,54 @@ export default {
     return {
       list: [
         {
-          icon: "icon18.png",
+          icon: "m/images/icon18.png",
           name: "我的作品集",
           type: 1
         },
         {
-          icon: "icon25.png",
+          icon: "m/images/icon25.png",
           name: "积分商城 ",
           type: 2
         },
         {
-          icon: "icon23.png",
+          icon: "m/images/icon23.png",
           name: "我的订单",
           type: 3
         },
         {
-          icon: "icon24.png",
+          icon: "m/images/icon24.png",
           name: "收货地址",
           type: 4
         },
         {
-          icon: "icon12.png",
+          icon: "m/images/icon12.png",
           name: "关于我们",
           type: 5
         },
         {
-          icon: "icon13.png",
+          icon: "m/images/icon13.png",
           name: "意见反馈",
           type: 6
         },
         {
-          icon: "icon22.png",
+          icon: "m/images/icon22.png",
           name: "我的老师",
           type: 7
         }
       ],
       list2: [
         {
-          icon: "icon13.png",
+          icon: "m/images/icon13.png",
           name: "我的点评",
           type: 8
         },
         {
-          icon: "icon12.png",
+          icon: "m/images/icon12.png",
           name: "关于我们",
           type: 5
         },
         {
-          icon: "icon13.png",
+          icon: "m/images/icon13.png",
           name: "意见反馈",
           type: 6
         }
