@@ -5,20 +5,12 @@
       {{data.brand}}：{{data.no}}
     </div>
     <div class="package-status">
-      <div class="status-box">
-        <ul class="status-list">
-          <!-- <li>
-            <div class="status-content-before">您的订单开始处理</div>
-            <div class="status-time-before">2017-08-17 23:31 周四</div>
-            <div class="status-line"></div>
-          </li>-->
-          <li class="latest" v-for="(item,index) in data.data" :key="index">
-            <div class="status-content-latest">{{item.context}}</div>
-            <div class="status-time-latest">{{item.time}}</div>
-            <div class="status-line"></div>
-          </li>
-        </ul>
-      </div>
+      <van-steps direction="vertical" :active="0">
+        <van-step v-for="(item,index) in data.data" :key="index">
+          <h3 class="status-content-latest">{{item.context}}</h3>
+          <p class="status-time-latest">{{item.time}}</p>
+        </van-step>
+      </van-steps>
     </div>
   </div>
 </template>
