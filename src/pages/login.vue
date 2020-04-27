@@ -85,7 +85,6 @@ export default {
                   window.location.replace(
                     `/#/worksdetail/${this.$cookie.get("w_id")}`
                   );
-                  this.$cookie.remove("w_id");
                 } else {
                   window.location.replace("/");
                 }
@@ -131,7 +130,7 @@ export default {
                   window.location.replace(
                     `/#/worksdetail/${this.$cookie.get("w_id")}`
                   );
-                  this.$cookie.remove("w_id");
+                  
                 } else {
                   window.location.replace("/");
                 }
