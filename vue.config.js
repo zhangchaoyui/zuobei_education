@@ -4,7 +4,7 @@ module.exports = {
         proxy: {
             '/vapi': {
                 target: '/api.php/home',
-                changeOrigin: true,
+                changeOrigin: false,
                 pathRewrite: {
                     '/vapi': ''
                 }
