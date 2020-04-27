@@ -27,7 +27,7 @@ Vue.component('v-distpicker', Distpicker)
 Vue.config.productionTip = false
 
 //根据前端跨域做调整,/api是接口代理，代理是最安全的
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "/vapi";
 Vue.use(vueAxios, axios);
 Vue.use(vueCookie);
 Vue.use(MintUI);

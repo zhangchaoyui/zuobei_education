@@ -1,12 +1,12 @@
 module.exports = {
-    publicPath: './',
+    publicPath: './m',
     devServer: {
         proxy: {
-            '/api': {
-                target: 'http://zuobei.400539.com/api.php/home',
+            '/vapi': {
+                target: '/api.php/home',
                 changeOrigin: true,
                 pathRewrite: {
-                    '/api': ''
+                    '/vapi': ''
                 }
             },
         }
