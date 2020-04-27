@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import store from './store'
-
 import vueAxios from 'vue-axios'
 import vueCookie from 'vue-cookie'
 import MintUI from 'mint-ui'
@@ -13,13 +12,13 @@ import http from './https'
 Vue.prototype.http = http;
 
 import { Step, Steps } from 'vant';
-
+import 'vant/lib/index.css';
 Vue.use(Step);
 Vue.use(Steps);
 
 import VueDirectiveImagePreviewer from 'vue-directive-image-previewer'
 import 'vue-directive-image-previewer/dist/assets/style.css'
-Vue.use(VueDirectiveImagePreviewer) 
+Vue.use(VueDirectiveImagePreviewer)
 
 import Distpicker from 'v-distpicker'
 Vue.component('v-distpicker', Distpicker)
@@ -27,7 +26,7 @@ Vue.component('v-distpicker', Distpicker)
 Vue.config.productionTip = false
 
 //根据前端跨域做调整,/api是接口代理，代理是最安全的
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "/vapi";
 Vue.use(vueAxios, axios);
 Vue.use(vueCookie);
 Vue.use(MintUI);
