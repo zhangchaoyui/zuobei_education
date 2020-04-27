@@ -13,13 +13,13 @@ import http from './https'
 Vue.prototype.http = http;
 
 import { Step, Steps } from 'vant';
-
+import 'vant/lib/index.css';
 Vue.use(Step);
 Vue.use(Steps);
 
 import VueDirectiveImagePreviewer from 'vue-directive-image-previewer'
 import 'vue-directive-image-previewer/dist/assets/style.css'
-Vue.use(VueDirectiveImagePreviewer) 
+Vue.use(VueDirectiveImagePreviewer)
 
 import Distpicker from 'v-distpicker'
 Vue.component('v-distpicker', Distpicker)
