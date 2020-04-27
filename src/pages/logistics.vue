@@ -68,9 +68,9 @@ export default {
       font-weight: "微软雅黑";
     }
     .van-icon-checked::before {
-    content: "\F02F";
-    color: #F5BB0E;
-}
+      content: "\F02F";
+      color: #f5bb0e;
+    }
   }
 }
 </style>
