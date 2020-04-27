@@ -196,7 +196,7 @@ export default {
             border-radius: 0.5rem;
           }
           .user_name {
-            width: 50%;
+            width: 54%;
             padding-left: 3%;
             @include textWidth();
             font-size: $fontJ;
@@ -204,6 +204,8 @@ export default {
             color: #333333;
           }
           .submit {
+            width: 30%;
+            text-align: right;
             font-size: 0.18rem;
             color: #999999;
           }

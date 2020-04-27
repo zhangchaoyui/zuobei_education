@@ -8,12 +8,8 @@ export default {
             MessageBox.confirm('请先登录~', '友情提示').then(action => {
                 if (action == 'confirm') {
                     let a = location.href.split("/#/")[1];
-                    if (a.split("/")[0]=='worksdetail') {
-                        window.location.replace(`/#/login/${a.split("/")[1]}`);
-                    } else {
-                        window.location.replace("/#/login/-1");
-                    }
-
+                    this.$cookie.set('w_id', a.split("/")[1], { expires: "3D" })
+                    window.location.replace("/#/login/-1");
                 }
             }).catch(err => {
                 if (err == 'cancel') {

@@ -81,10 +81,11 @@ export default {
               stroage.setItem("status", 1);
               this.$cookie.set("user_type", res.user_type, { expires: "3D" });
               setTimeout(() => {
-                if (this.$route.params.type > -1) {
+                if (this.$cookie.get("w_id")) {
                   window.location.replace(
-                    `/#/worksdetail/${this.$route.params.type}`
+                    `/#/worksdetail/${this.$cookie.get("w_id")}`
                   );
+                  this.$cookie.remove("w_id");
                 } else {
                   window.location.replace("/");
                 }
@@ -99,7 +100,7 @@ export default {
       const appid = "wx4522fb49b27981d6";
       const code = util.GetQueryString("code"); // 截取路径
       if (code == null || code === "") {
-        const local = `http://zuobei.400539.com/#/login/${this.$route.params.type}`;
+        const local = `http://zuobei.400539.com/#/login/-1`;
         window.location.href =
           "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
           appid +
@@ -119,24 +120,24 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res, 333);
           if (res) {
             if (res.user_type != undefined) {
               util.toast("登陆成功~");
               setTimeout(() => {
-                this.$cookie.set("token", res.token, { expires: "Session" });
+                this.$cookie.set("token", res.token, { expires: "3D" });
                 this.$cookie.set("user_type", res.user_type, { expires: "3D" });
                 stroage.setItem("status", 1);
-                if (this.$route.params.type > -1) {
+                if (this.$cookie.get("w_id")) {
                   window.location.replace(
-                    `/#/worksdetail/${this.$route.params.type}`
+                    `/#/worksdetail/${this.$cookie.get("w_id")}`
                   );
+                  this.$cookie.remove("w_id");
                 } else {
                   window.location.replace("/");
                 }
               }, 1800);
             } else {
-              this.$cookie.set("token", res, { expires: "Session" });
+              this.$cookie.set("token", res.token, { expires: "3D" });
               this.$router.push("/register");
             }
           }
