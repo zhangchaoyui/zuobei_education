@@ -129,11 +129,13 @@
       <img src="../../public/images/icon47.png" v-if="isVoice ==0" />
       <div class="vm-voice-box" v-if="isVoice ==0">
         <p v-show="!isVoice" @click="voiceStart">点击录音</p>
+        <p>点击任意处取消</p>
       </div>
 
       <div class="vm-voice-player" v-if="isVoice ==1">
         <img src="../../public/images/icon48.png" />
         <div class="suspend" @click="voiceEnd">| |</div>
+        <div class="suspend2" @click="voiceEnd">最多可录60秒</div>
       </div>
 
       <!-- // isListen  // 0-未试听/试听结束 1-试听中 2-暂停试听
@@ -172,9 +174,9 @@ export default {
       recordTimer: null,
       localId: "", // 录音本地id
       serverId: "", // 录音微信服务id
-      showMask: false,
+      showMask: true, //蒙层以及录音显示
       tip: 1, //提交 0- 重录
-      isVoice: 0, // 0-未录音 1-录音中 2-录完音
+      isVoice: 1, // 0-未录音 1-录音中 2-录完音
       isListen: 0, // 0-未试听/试听结束 1-试听中 2-暂停试听
       isPlay: false, // 是否播放
       isSubmit: false, // 是否已提交
@@ -548,7 +550,7 @@ export default {
       height: 100%;
       display: flex;
       flex-direction: row;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
       font-size: 0.34rem;
       color: #ccc;
@@ -750,7 +752,7 @@ export default {
       // height: 0.77rem;
       font-size: 0.25rem;
       color: white;
-      margin: 0 auto;
+      margin: 0.2rem auto 0;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
@@ -955,20 +957,20 @@ export default {
     z-index: 10;
   }
   .Eject {
-    width: 75%;
-    padding: 0.2rem 0 0.7rem;
+    width: 80%;
+    padding: 0.2rem 0 0.4rem;
     position: absolute;
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: #f5bb0e;
     border-radius: 0.2rem;
     z-index: 11;
     img {
       display: block;
       width: auto;
-      margin: 0.5rem auto;
-      height: 1.8rem;
+      margin: 0.7rem auto;
+      height: 1.6rem;
       border-radius: 0.4rem;
     }
     .img2 {
@@ -980,19 +982,31 @@ export default {
     .vm-voice-box {
       width: 100%;
       display: flex;
+      flex-direction: column;
       margin-top: 0.6rem;
       overflow: hidden;
       p {
-        display: inline-block;
-        width: 80%;
-        height: 0.8rem;
-        line-height: 0.8rem;
-        margin: 0 auto;
-        border-radius: 0.4rem;
-        text-align: center;
-        color: white;
-        background: #f5bb0e;
-        font-size: 0.22rem;
+        &:first-child {
+          display: inline-block;
+          width: 80%;
+          height: 0.8rem;
+          line-height: 0.8rem;
+          margin: 0 auto;
+          border-radius: 0.4rem;
+          text-align: center;
+          color: #f5bb0e;
+          background: white;
+          font-size: 0.26rem;
+        }
+        &:last-child {
+          display: inline-block;
+          width: 80%;
+          line-height: 0.4rem;
+          margin: 0.2rem auto 0;
+          text-align: center;
+          color: white;
+          font-size: 0.24rem;
+        }
       }
     }
     .vm-voice-player {
@@ -1006,18 +1020,27 @@ export default {
         display: block;
         width: auto;
         margin: 0rem auto 0.4rem;
-        height: 3rem;
-        border-radius: 0.4rem;
+        height: 3.3rem;
+        border-radius: 0.2rem;
       }
       .suspend {
         width: 60%;
         margin: 0 auto;
-        background: #e8b92b;
+        background: #f5a60d;
         color: #fff;
         font-size: 0.4rem;
         line-height: 0.8rem;
         text-align: center;
         border-radius: 1rem;
+      }
+      .suspend2 {
+        width: 60%;
+        margin: 0.2rem auto 0;
+        color: #FDF2E3;
+        font-size: 0.25rem;
+        line-height: 0.4rem;
+        text-align: center;
+        letter-spacing: 3px;
       }
       .vm-vp-button {
         width: 80%;
