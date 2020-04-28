@@ -1,7 +1,7 @@
 
 
 import axios from 'axios';
-import { Toast, Indicator,MessageBox} from "mint-ui";
+import { Toast, Indicator, MessageBox } from "mint-ui";
 //全局接口错误拦截
 axios.interceptors.response.use(function (response) {
     let res = response.data;
@@ -14,6 +14,7 @@ axios.interceptors.response.use(function (response) {
                 if (action == 'confirm') {
                     let a = location.href.split("/#/")[1];
                     if (a.split("/")[0] == 'worksdetail') {
+                        this.$cookie.set("token", a.split("/")[1]);
                         window.location.replace(`/#/login/${a.split("/")[1]}`);
                     } else {
                         window.location.replace("/#/login/-1");
