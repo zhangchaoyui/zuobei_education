@@ -1,20 +1,6 @@
 <template>
   <div class="register">
-    <div class="type" v-if="page==1">
-      <p>请选择您的身份？</p>
-      <p class="lastp">帮助我们更好地为您提供服务</p>
-      <div class="img">
-        <div class="children" @click="type(1)">
-          <img src="../../public/images/2.png" alt />
-          <p>孩子</p>
-        </div>
-        <div class="teacher" @click="type(2)">
-          <img src="../../public/images/1.png" alt />
-          <p>老师</p>
-        </div>
-      </div>
-    </div>
-    <div class="container" v-if="page==2">
+    <div class="container">
       <div class="page">
         <img src="../../public/images/logo.png" alt class="logo" />
         <div class="input">
@@ -50,7 +36,6 @@ export default {
   name: "register",
   data() {
     return {
-      page: 1,
       phone: "",
       password: "",
       code: "",

@@ -119,8 +119,10 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
+          console.log(res);
           if (res) {
-            if (res.user_type != undefined) {
+            console.log(res);
+            if (res.user_type != undefined && res.user_type != 0) {
               util.toast("登陆成功~");
               setTimeout(() => {
                 this.$cookie.set("token", res.token, { expires: "3D" });
@@ -130,7 +132,6 @@ export default {
                   window.location.replace(
                     `/#/worksdetail/${this.$cookie.get("w_id")}`
                   );
-                  
                 } else {
                   window.location.replace("/");
                 }

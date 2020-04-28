@@ -18,7 +18,6 @@ axios.interceptors.response.use(function (response) {
                     } else {
                         window.location.replace("/#/login/-1");
                     }
-
                 }
             }).catch(err => {
                 if (err == 'cancel') {

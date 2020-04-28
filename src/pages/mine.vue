@@ -51,7 +51,7 @@
         </span>
       </div>
     </div>
-    <!-- <button @click="tui">退出</button> -->
+    <button @click="tui" class="tui">退出</button>
     <div class="bottom"></div>
   </div>
 </template>
@@ -389,7 +389,22 @@ export default {
   }
   .bottom {
     width: 100%;
-    height: 1rem;
+    height: 0.8rem;
+  }
+  .tui {
+    width: 90%;
+    margin: 0 auto;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    text-align: center;
+    font-size: 0.3rem;
+    color: white;
+    background: #fa8100;
+    opacity: 0.8;
+    border: none;
+    margin: 0 auto;
+    border-radius: 5px;
+    display: block;
   }
 }
 </style>
