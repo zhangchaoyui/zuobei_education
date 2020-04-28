@@ -65,7 +65,7 @@
           <img src="../../public/images/icon28.png" alt />
           <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
           <span v-if="play">点击收听老师点评</span>
-          <span v-else>播放语音中</span>
+          <span v-else>播放语音中{{luyinTime}}</span>
         </div>
       </div>
       <div class="icon">
@@ -118,7 +118,7 @@
           <img src="../../public/images/icon28.png" alt />
           <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
           <span v-if="play">点击收听老师点评</span>
-          <span v-else>播放语音中</span>
+          <span v-else>播放语音中 {{luyinTime}}</span>
         </div>
       </div>
     </div>
@@ -178,10 +178,12 @@ export default {
       isListen: 0, // 0-未试听/试听结束 1-试听中 2-暂停试听
       isPlay: false, // 是否播放
       isSubmit: false, // 是否已提交
-      play: true
+      play: true,
+      luyinTime: ""
     };
   },
   mounted() {
+    this.$cookie.delete("w_id");
     this.getWorksDetail();
     this.Usertype = this.$cookie.get("user_type") || 1;
   },
@@ -388,6 +390,27 @@ export default {
         document.getElementById("audio").addEventListener("ended", () => {
           this.play = true;
         });
+        document.getElementsByTagName("audio")[0]; // 获取AudioDom节点
+        musicDom.load(); //因为source标签不能直接更改路径，所以整个audio标签必须重新加载一次
+        musicDom.oncanplay = function() {
+          this.luyinTime = musicDom.duration;
+          console.log("音乐时长", musicDom.duration); //音乐总时长
+          //处理时长
+          var time = musicDom.duration;
+          //分钟
+          var minute = time / 60;
+          var minutes = parseInt(minute);
+          if (minutes < 10) {
+            minutes = "0" + minutes;
+          }
+          //秒
+          var second = time % 60;
+          var seconds = Math.round(second);
+          if (seconds < 10) {
+            seconds = "0" + seconds;
+          }
+          console.log("处理音乐时长", minutes + "：" + seconds);
+        };
       } else {
         audio.pause();
         this.play = true;
