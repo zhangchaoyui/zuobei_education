@@ -104,7 +104,7 @@
         <img :src="review.avatar" v-image-preview />
         {{review.nickname}}
         <div @click="initShareInfo">
-          <img src="../../public/images/fabulous.png" />分享
+          <img src="../../public/images/icon5.png" />分享
         </div>
       </div>
       <div class="content" v-if="review.type==1">
@@ -384,11 +384,16 @@ export default {
 
     //播放录音
     myplay() {
-      this.play = false;
-      document.getElementById("audio").play();
-      document.getElementById("audio").addEventListener("ended", () => {
+      this.play = !this.play;
+      if (!this.play) {
+        document.getElementById("audio").play();
+        document.getElementById("audio").addEventListener("ended", () => {
+          this.play = true;
+        });
+      } else {
+        audio.pause();
         this.play = true;
-      });
+      }
     }
   },
   created() {

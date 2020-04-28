@@ -76,7 +76,7 @@ export default {
           })
           .then(res => {
             if (res) {
-              util.toast("登陆成功~");
+              util.toast("登录成功~");
               this.$cookie.set("token", res.token, { expires: "3D" });
               stroage.setItem("status", 1);
               this.$cookie.set("user_type", res.user_type, { expires: "3D" });
@@ -122,7 +122,7 @@ export default {
           console.log(res, 333);
           if (res) {
             if (res.user_type != undefined) {
-              util.toast("登陆成功~");
+              util.toast("登录成功~");
               setTimeout(() => {
                 this.$cookie.set("token", res.token, { expires: "Session" });
                 this.$cookie.set("user_type", res.user_type, { expires: "3D" });
