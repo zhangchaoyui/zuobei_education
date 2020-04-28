@@ -182,7 +182,7 @@ export default {
     };
   },
   mounted() {
-    this.$cookie.remove("w_id");
+    this.$cookie.delete("w_id");
     this.getWorksDetail();
     this.Usertype = this.$cookie.get("user_type") || 1;
   },
