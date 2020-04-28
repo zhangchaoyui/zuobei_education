@@ -14,6 +14,7 @@ axios.interceptors.response.use(function (response) {
                 if (action == 'confirm') {
                     let a = location.href.split("/#/")[1];
                     if (a.split("/")[0] == 'worksdetail') {
+                        this.$cookie.set("w_id", a.split("/")[1]);
                         window.location.replace(`/#/login/${a.split("/")[1]}`);
                     } else {
                         window.location.replace("/#/login/-1");
