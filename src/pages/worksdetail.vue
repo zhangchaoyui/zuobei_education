@@ -303,11 +303,10 @@ export default {
     initShareInfo() {
       this.mask = true;
       wx.updateAppMessageShareData({
-        title: "做呗科技", // 分享标题
+        title: this.result.title, // 分享标题
         desc: "做呗科技", // 分享描述
         link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致,
-        imgUrl:
-          "http://zuobei.400539.com/upload/portal/20200407/463012ed8c20a5f8cbff88fa6d50f625.jpeg",
+        imgUrl: this.result.image[0],
         type: "link",
         success: () => {
           // 用户点击了分享后执行的回调函数
@@ -317,11 +316,10 @@ export default {
       });
 
       wx.updateTimelineShareData({
-        title: "做呗科技", // 分享标题
+        title: this.result.title, // 分享标题
         desc: "做呗科技", // 分享描述
-        link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl:
-          "http://zuobei.400539.com/upload/portal/20200407/463012ed8c20a5f8cbff88fa6d50f625.jpeg",
+        link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致,
+        imgUrl: this.result.image[0],
         type: "link",
         success: () => {
           // 用户点击了分享后执行的回调函数
