@@ -141,6 +141,9 @@ export default {
           this.value = "";
           this.showImg = [];
           this.imgList = [];
+          setTimeout(()=>{
+            this.$router.push('/')
+          },1600)
         });
     },
 
