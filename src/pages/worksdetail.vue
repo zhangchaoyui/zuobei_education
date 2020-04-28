@@ -390,7 +390,7 @@ export default {
         document.getElementById("audio").addEventListener("ended", () => {
           this.play = true;
         });
-        document.getElementsByTagName("audio")[0]; // 获取AudioDom节点
+        let musicDom = document.getElementsByTagName("audio")[0]; // 获取AudioDom节点
         musicDom.load(); //因为source标签不能直接更改路径，所以整个audio标签必须重新加载一次
         musicDom.oncanplay = function() {
           this.luyinTime = musicDom.duration;
@@ -531,7 +531,7 @@ export default {
       height: 100%;
       display: flex;
       flex-direction: row;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
       font-size: 0.34rem;
       color: #f05556;
@@ -785,7 +785,7 @@ export default {
         width: 80%;
         height: 0.95rem;
         line-height: 1rem;
-        margin: 0 auto;
+        margin: 0.1rem auto 0;
         background: white;
         border-radius: 0.6rem;
         display: flex;

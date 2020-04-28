@@ -1,4 +1,5 @@
 import storage from "../stroage/index";
+import vueCookie from 'vue-cookie'
 import { MessageBox, Indicator, Toast } from 'mint-ui';
 export default {
     //判断公共登录方法
@@ -7,8 +8,9 @@ export default {
         if (type == 0) {
             MessageBox.confirm('请先登录~', '友情提示').then(action => {
                 if (action == 'confirm') {
-                    let a = location.href.split("/#/")[1];
-                    if (a.split("/")[0]=='worksdetail') {
+                    let a = window.location.href.split("/#/")[1];
+                    if (a.split("/")[0] == 'worksdetail') {
+                        vueCookie.set("w_id", a.split("/")[1], { expires: "3D" });
                         window.location.replace(`/#/login/${a.split("/")[1]}`);
                     } else {
                         window.location.replace("/#/login/-1");
