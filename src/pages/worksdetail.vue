@@ -124,7 +124,7 @@
     </div>
 
     <!-- 录音 -->
-    <div class="Mask" v-show="showMask" @click="showMask=!showMask"></div>
+    <div class="Mask" v-show="showMask" @click="show()"></div>
     <div class="Eject" v-show="showMask">
       <img src="../../public/images/icon47.png" v-if="isVoice ==0" />
       <div class="vm-voice-box" v-if="isVoice ==0">
@@ -134,14 +134,19 @@
 
       <div class="vm-voice-player" v-if="isVoice ==1">
         <img src="../../public/images/icon48.png" />
+        <img src="../../public/images/1.gif" class="gif" />
         <div class="suspend" @click="voiceEnd">| |</div>
-        <div class="suspend2" @click="voiceEnd">最多可录60秒</div>
+        <div class="suspend2">最多可录{{luyinTime}}秒</div>
       </div>
 
       <!-- // isListen  // 0-未试听/试听结束 1-试听中 2-暂停试听
       // 录完音 按钮展示-->
       <div class="vm-voice-player" v-if="isVoice == 2">
         <img src="../../public/images/icon48.png" />
+        <div class="second">
+          <span>54″</span>
+          <img src="../../public/images/1.gif" alt />
+        </div>
         <div class="vm-vp-button">
           <p class="vm-vp-revoice" @click="Reset">重录</p>
           <p class="vm-vp-submit" :class="{'vm-vp-no-submit' : isSubmit}" @click="voiceHandle()">提交</p>
@@ -176,12 +181,12 @@ export default {
       serverId: "", // 录音微信服务id
       showMask: true, //蒙层以及录音显示
       tip: 1, //提交 0- 重录
-      isVoice: 1, // 0-未录音 1-录音中 2-录完音
+      isVoice: 2, // 0-未录音 1-录音中 2-录完音
       isListen: 0, // 0-未试听/试听结束 1-试听中 2-暂停试听
       isPlay: false, // 是否播放
       isSubmit: false, // 是否已提交
       play: true,
-      luyinTime: ""
+      luyinTime: 60
     };
   },
   mounted() {
@@ -207,6 +212,14 @@ export default {
           }
         });
       }, 300);
+      let a = setInterval(() => {
+        if (this.luyinTime == 1) {
+          this.luyinTime--;
+          clearInterval(a);
+        } else {
+          this.luyinTime--;
+        }
+      }, 1000);
     },
 
     // 停止录音
@@ -392,31 +405,47 @@ export default {
         document.getElementById("audio").addEventListener("ended", () => {
           this.play = true;
         });
-        let musicDom = document.getElementsByTagName("audio")[0]; // 获取AudioDom节点
-        musicDom.load(); //因为source标签不能直接更改路径，所以整个audio标签必须重新加载一次
-        musicDom.oncanplay = function() {
-          this.luyinTime = musicDom.duration;
-          console.log("音乐时长", musicDom.duration); //音乐总时长
-          //处理时长
-          var time = musicDom.duration;
-          //分钟
-          var minute = time / 60;
-          var minutes = parseInt(minute);
-          if (minutes < 10) {
-            minutes = "0" + minutes;
-          }
-          //秒
-          var second = time % 60;
-          var seconds = Math.round(second);
-          if (seconds < 10) {
-            seconds = "0" + seconds;
-          }
-          console.log("处理音乐时长", minutes + "：" + seconds);
-        };
+        // let musicDom = document.getElementsByTagName("audio")[0]; // 获取AudioDom节点
+        // musicDom.load(); //因为source标签不能直接更改路径，所以整个audio标签必须重新加载一次
+        // musicDom.oncanplay = function() {
+        //   this.luyinTime = musicDom.duration;
+        //   console.log("音乐时长", musicDom.duration); //音乐总时长
+        //   //处理时长
+        //   var time = musicDom.duration;
+        //   //分钟
+        //   var minute = time / 60;
+        //   var minutes = parseInt(minute);
+        //   if (minutes < 10) {
+        //     minutes = "0" + minutes;
+        //   }
+        //   //秒
+        //   var second = time % 60;
+        //   var seconds = Math.round(second);
+        //   if (seconds < 10) {
+        //     seconds = "0" + seconds;
+        //   }
+        //   console.log("处理音乐时长", minutes + "：" + seconds);
+        // };
       } else {
         audio.pause();
         this.play = true;
       }
+    },
+    //显示
+    show() {
+      this.showMask = !this.showMask;
+      audio.pause();
+      this.play = true;
+      _this.isVoice = 0;
+      wx.stopRecord({
+        success: function(res) {
+          // 微信生成的localId，此时语音还未上传至微信服务器
+          _this.isVoice = 0;
+        },
+        fail: function(res) {
+          console.log(JSON.stringify(res));
+        }
+      });
     }
   },
   created() {
@@ -1002,7 +1031,7 @@ export default {
           display: inline-block;
           width: 80%;
           line-height: 0.4rem;
-          margin: 0.2rem auto 0;
+          margin: 0.3rem auto 0;
           text-align: center;
           color: white;
           font-size: 0.24rem;
@@ -1016,12 +1045,46 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
+      position: relative;
       img {
         display: block;
         width: auto;
         margin: 0rem auto 0.4rem;
         height: 3.3rem;
         border-radius: 0.2rem;
+      }
+      .gif {
+        width: 80%;
+        position: absolute;
+        height: 1.3rem;
+        top: 1.5rem;
+        left: 10%;
+      }
+      .second {
+        width: 90%;
+        position: absolute;
+        height: 1.3rem;
+        top: 1.5rem;
+        left: 8%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        span {
+          display: block;
+          padding: 0 0.1rem;
+          text-align: center;
+          line-height: 1.3rem;
+          font-size: 0.3rem;
+          color: #f4b909;
+          font-weight: 500;
+          position: absolute;
+          left: 0;
+        }
+        img {
+          width: 95%;
+          height: 1.3rem;
+          margin: 0 0 0 0.2rem;
+        }
       }
       .suspend {
         width: 60%;
@@ -1036,7 +1099,7 @@ export default {
       .suspend2 {
         width: 60%;
         margin: 0.2rem auto 0;
-        color: #FDF2E3;
+        color: #fdf2e3;
         font-size: 0.25rem;
         line-height: 0.4rem;
         text-align: center;
@@ -1059,16 +1122,19 @@ export default {
         }
         .vm-vp-revoice {
           width: 0.8rem;
-          box-shadow: 0px 1px 3px 0px #ebb51f;
+          color: white;
+          background: #f5a60d;
         }
         .vm-vp-submit {
           width: 2rem;
-          background: #f5bb0e;
-          color: white;
+          background: white;
+          color: #f6bf27;
+          font-size: 0.26rem;
         }
         .vm-vp-pause {
           width: 0.8rem;
-          box-shadow: 0px 1px 3px 0px #ebb51f;
+          color: white;
+          background: #f5a60d;
         }
       }
     }
