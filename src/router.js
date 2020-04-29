@@ -45,15 +45,9 @@ export default new Router({
             component: resolve => require(['./pages/personal'], resolve),
         },
         {
-            path: '/login/:type',//登录
-            name: 'login',
-            meta: { title: '登录' },
-            component: resolve => require(['./pages/login'], resolve),
-        },
-        {
             path: '/register',//注册
             name: 'register',
-            meta: { title: '注册' },
+            meta: { title: '绑定手机号' },
             component: resolve => require(['./pages/register'], resolve),
         },
 
@@ -152,7 +146,7 @@ export default new Router({
         {
             path: '/forget',//忘记密码
             name: 'forget',
-            meta: { title: '忘记密码' },
+            meta: { title: '替换手机' },
             component: resolve => require(['./pages/forget'], resolve),
         },
         {

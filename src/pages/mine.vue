@@ -51,7 +51,7 @@
         </span>
       </div>
     </div>
-    <button @click="tui" class="tui">退出</button>
+    <!-- <button @click="tui" class="tui">退出</button> -->
     <div class="bottom"></div>
   </div>
 </template>

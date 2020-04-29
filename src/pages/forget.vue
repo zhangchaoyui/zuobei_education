@@ -13,11 +13,11 @@
             <button @click="codeTime" v-if="timeStatus==1">获取验证码</button>
             <button v-if="timeStatus==0" style="color:#EFEFEF">获取验证码{{time}}</button>
           </div>
-          <div class="phone">
+          <!-- <div class="phone">
             <input type="text" placeholder="请输入新密码" v-model="password" @blur="blurIn" />
-          </div>
+          </div>-->
         </div>
-        <Btn btnType="2" sureText="重置密码" v-on:submit="forget"></Btn>
+        <Btn btnType="2" sureText="替换绑定" v-on:submit="forget"></Btn>
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       phone: "",
-      password: "",
+      // password: "",
       code: "",
       time: 60,
       timeStatus: 1
@@ -52,16 +52,17 @@ export default {
       } else if (code == "") {
         util.toast("请验证码！");
         return;
-      } else if (password == "") {
-        util.toast("请输入新密码！");
-        return;
       }
+      //  else if (password == "") {
+      //   util.toast("请输入新密码！");
+      //   return;
+      // }
       util.Indicator("加载中");
       this.http
         .post("/login/reset", {
           phone,
-          code,
-          password
+          code
+          // password
         })
         .then(res => {
           if (res) {

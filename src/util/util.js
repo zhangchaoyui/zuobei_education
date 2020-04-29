@@ -11,11 +11,10 @@ export default {
                     let a = window.location.href.split("/#/")[1];
                     if (a.split("/")[0] == 'worksdetail') {
                         vueCookie.set("w_id", a.split("/")[1], { expires: "3D" });
-                        window.location.replace(`/#/login/${a.split("/")[1]}`);
+                        this.bind();
                     } else {
-                        window.location.replace("/#/login/-1");
+                        this.bind();
                     }
-
                 }
             }).catch(err => {
                 if (err == 'cancel') {
@@ -58,5 +57,23 @@ export default {
             .replace(/&gt;/g, ">")
             .replace(/&quot;/g, '"')
             .replace(/&#39;/g, "'");
-    }
+    },
+
+    //微信授权
+    bind() {
+        console.log(111);
+        const appid = "wx4522fb49b27981d6";
+        const code = this.GetQueryString("code"); // 截取路径
+        if (code == null || code === "") {
+            const local = `http://zuobei.400539.com/#/register`;
+            window.location.href =
+                "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+                appid +
+                "&redirect_uri=" +
+                encodeURIComponent(local) +
+                "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+        } else {
+            this.code = code;
+        }
+    },
 }

@@ -124,7 +124,10 @@ export default {
 
     //跳转外链
     external() {
-      wx.miniProgram.navigateTo({ url: "/page/index/index" });
+      wx.miniProgram.navigateTo({
+        url:
+          "pages/common/blank-page/index?weappSharePath=pages%2Fhome%2Fdashboard%2Findex%3Fkdt_id%3D46011280"
+      });
     },
 
     //banner跳转
@@ -184,7 +187,26 @@ export default {
       this.$router.push("/search");
     }
   },
-  components: {}
+  components: {},
+  created() {
+    let _this = this;
+    this.axios
+      .post("/token/sdksign", { url: location.href.split("#")[0] })
+      .then(res => {
+        wx.config({
+          debug: false,
+          appId: res.appid,
+          timestamp: parseInt(res.timestamp),
+          nonceStr: res.nonceStr,
+          signature: res.signature,
+          jsApiList: ["miniProgram"]
+        });
+        wx.ready(function() {});
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
 };
 </script>
 

@@ -19,11 +19,11 @@
             <button @click="codeTime()" v-if="timeStatus==1">获取验证码</button>
             <button v-if="timeStatus==0" style="color:#EFEFEF">获取验证码{{time}}</button>
           </div>
-          <div class="phone">
+          <!-- <div class="phone">
             <input type="password" placeholder="请输入密码" v-model="password" @blur="blurIn" />
-          </div>
+          </div>-->
         </div>
-        <Btn btnType="2" sureText="注册" v-on:submit="register"></Btn>
+        <Btn btnType="2" sureText="绑定手机号" v-on:submit="register"></Btn>
       </div>
     </div>
   </div>
@@ -32,23 +32,27 @@
  <script>
 import Btn from "../components/Button";
 import util from "../util/util";
+import stroage from "../stroage/index";
 export default {
   name: "register",
   data() {
     return {
       phone: "",
-      password: "",
+      // password: "",
       code: "",
       time: 60,
       timeStatus: 1
     };
   },
-  mounted() {},
+  mounted() {
+    this.getOpenId();
+  },
   methods: {
     blurIn() {
       window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
     },
-    //注册
+
+    //绑定手机
     register() {
       let { phone, password, code } = this;
       var myreg = /^[1]([3-9])[0-9]{9}$/;
@@ -58,23 +62,32 @@ export default {
       } else if (code == "") {
         util.toast("请验证码！");
         return;
-      } else if (password == "") {
-        util.toast("请输入密码！");
-        return;
       }
+      // else if (password == "") {
+      //   util.toast("请输入密码！");
+      //   return;
+      // }
       util.Indicator("加载中");
       this.http
         .post("/login/reg", {
           token: this.$cookie.get("token"),
           phone,
-          code,
-          password
+          code
         })
         .then(res => {
           if (res) {
-            util.toast("注册成功~");
+            util.toast("绑定成功~");
             setTimeout(() => {
-              window.location.replace(`/#/login/-1`);
+              this.$cookie.set("token", res.token, { expires: "3D" });
+              this.$cookie.set("user_type", res.user_type, { expires: "3D" });
+              stroage.setItem("status", 1);
+              if (this.$cookie.get("w_id")) {
+                window.location.replace(
+                  `/#/workLists/${this.$cookie.get("w_id")}`
+                );
+              } else {
+                window.location.replace(`/#/`);
+              }
             }, 2000);
           }
         });
@@ -105,16 +118,27 @@ export default {
         });
     },
 
-    //身份选择
-    type(e) {
-      console.log(e);
-      this.page = 2;
+    //获取用户信息
+    getOpenId() {
       this.http
-        .post("/login/iden", {
-          tid: e,
+        .post("/login/getToken", {
+          code: util.GetQueryString("code"),
           token: this.$cookie.get("token")
         })
-        .then(() => {});
+        .then(res => {
+          this.$cookie.set("token", res.token, { expires: "3D" });
+          if (res.user_type != 0) {
+            if (this.$cookie.get("w_id")) {
+              window.location.replace(
+                `/#/workLists/${this.$cookie.get("w_id")}`
+              );
+            } else {
+              window.location.replace(`/#/`);
+            }
+          } else {
+            return;
+          }
+        });
     }
   },
   components: {
