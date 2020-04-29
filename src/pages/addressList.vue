@@ -121,6 +121,7 @@ export default {
     .mint-cell {
       width: 100%;
       height: 100%;
+      border: 1px solid white;
       .mint-cell-wrapper {
         width: 100%;
         height: 100%;
@@ -130,6 +131,7 @@ export default {
         .mint-cell-value {
           width: 100%;
           height: 100%;
+          border: 1px solid white;
         }
       }
 

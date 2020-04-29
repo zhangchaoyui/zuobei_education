@@ -179,9 +179,9 @@ export default {
       recordTimer: null,
       localId: "", // 录音本地id
       serverId: "", // 录音微信服务id
-      showMask: true, //蒙层以及录音显示
+      showMask: false, //蒙层以及录音显示
       tip: 1, //提交 0- 重录
-      isVoice: 2, // 0-未录音 1-录音中 2-录完音
+      isVoice: 0, // 0-未录音 1-录音中 2-录完音
       isListen: 0, // 0-未试听/试听结束 1-试听中 2-暂停试听
       isPlay: false, // 是否播放
       isSubmit: false, // 是否已提交
@@ -434,18 +434,22 @@ export default {
     //显示
     show() {
       this.showMask = !this.showMask;
-      audio.pause();
-      this.play = true;
-      _this.isVoice = 0;
-      wx.stopRecord({
-        success: function(res) {
-          // 微信生成的localId，此时语音还未上传至微信服务器
-          _this.isVoice = 0;
-        },
-        fail: function(res) {
-          console.log(JSON.stringify(res));
-        }
-      });
+      if (this.showMask) {
+        return;
+      } else {
+        audio.pause();
+        this.play = true;
+        this.isVoice = 0;
+        this.luyinTime = 60;
+        wx.stopRecord({
+          success: function(res) {
+            // 微信生成的localId，此时语音还未上传至微信服务器
+          },
+          fail: function(res) {
+            console.log(JSON.stringify(res));
+          }
+        });
+      }
     }
   },
   created() {

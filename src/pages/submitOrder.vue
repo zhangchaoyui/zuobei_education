@@ -154,8 +154,8 @@ export default {
     justify-content: space-around;
     border-radius: 5px;
     img {
-      width: 1.63rem;
-      height: 1.63rem;
+      width: 1.8rem;
+      height: 1.8rem;
       border-radius: 5px;
     }
     .ordercontent {

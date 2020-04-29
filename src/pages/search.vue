@@ -1,13 +1,10 @@
 <template>
   <div class="search">
-    <form action v-on:submit.prevent>
-      <mt-search
-        v-model="value"
-        placeholder="请输入查询作品名称"
-        @keyup.enter.native="search"
-        class="font-size-8"
-      ></mt-search>
-    </form>
+    <div class="search2">
+      <img src="../../public/images/search.png" alt />
+      <input type="text" placeholder="请输入搜索作品名称"  v-model="value"/>
+      <div @click="search">搜索</div>
+    </div>
     <!-- 作品列表 -->
     <div class="articleList" v-if="data.length>0">
       <div class="title">
@@ -81,30 +78,35 @@ export default {
   margin: 0.1rem auto 0;
   background: #fff;
   padding-bottom: 1.1rem;
-  .mint-search {
-    height: auto;
-    margin-top: 0.2rem;
-    .mint-searchbar {
-      padding: 0px 10px;
-      border-radius: 0.4rem;
-      background: #f9f9f9 !important;
-      .mint-searchbar-inner {
-        background: none !important;
-        .mintui-search {
-          font-size: 0.34rem;
-        }
-        .mint-searchbar-core {
-          padding-left: 5%;
-          background: none !important;
-        }
-      }
-      .mint-searchbar-cancel {
-        font-size: 0.34rem;
-        color: $colorA;
-      }
+  .search2 {
+    width: 100%;
+    height: 0.62rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.24rem;
+    color: #858585;
+    margin-top: 4%;
+    margin-bottom: 2%;
+    background: #f9f9f9;
+    border-radius: 0.3rem;
+    padding: 0;
+    font-size: 0.26rem;
+    img {
+      width: 0.26rem;
+      height: 0.26rem;
+      margin-left: 5%;
+      margin-right: 3%;
     }
-    .mint-search-list {
-      height: 0;
+    input {
+      width: 70%;
+      border: none;
+      padding-left: 3%;
+      background: none;
+      height: 100%;
+    }
+    div {
+      margin-left: 2%;
+      color: #f5bb0e;
     }
   }
 
