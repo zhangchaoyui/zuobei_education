@@ -64,6 +64,7 @@ export default {
         console.log(111);
         const appid = "wx4522fb49b27981d6";
         const code = this.GetQueryString("code"); // 截取路径
+        console.log(code)
         if (code == null || code === "") {
             const local = `http://zuobei.400539.com/#/register`;
             window.location.href =

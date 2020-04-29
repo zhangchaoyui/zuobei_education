@@ -126,7 +126,13 @@ export default {
     external() {
       wx.miniProgram.navigateTo({
         url:
-          "pages/common/blank-page/index?weappSharePath=pages%2Fhome%2Fdashboard%2Findex%3Fkdt_id%3D46011280"
+          "pages/common/blank-page/index?weappSharePath=pages%2Fhome%2Fdashboard%2Findex%3Fkdt_id%3D46011280",
+          success:function(res){
+            alert(res,111)
+          },
+          fail(res){
+            alert(res)
+          }
       });
     },
 
@@ -199,7 +205,7 @@ export default {
           timestamp: parseInt(res.timestamp),
           nonceStr: res.nonceStr,
           signature: res.signature,
-          jsApiList: ["miniProgram"]
+          jsApiList: ["invokeMiniProgramAPI"]
         });
         wx.ready(function() {});
       })

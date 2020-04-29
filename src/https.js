@@ -3,7 +3,7 @@
 import axios from 'axios';
 import vueCookie from 'vue-cookie'
 import { Toast, Indicator, MessageBox } from "mint-ui";
-import util from 'util/util'
+import util from './util/util'
 //全局接口错误拦截
 axios.interceptors.response.use(function (response) {
     let res = response.data;
@@ -15,6 +15,7 @@ axios.interceptors.response.use(function (response) {
             MessageBox.confirm('请先登录~', '友情提示').then(action => {
                 if (action == 'confirm') {
                     let a = window.location.href.split("/#/")[1];
+                    console.log(a, 222);
                     if (a.split("/")[0] == 'worksdetail') {
                         vueCookie.set("w_id", a.split("/")[1], { expires: "3D" });
                         util.bind();
