@@ -65,7 +65,7 @@
           <img src="../../public/images/icon28.png" alt />
           <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
           <span v-if="play">点击收听老师点评</span>
-          <span v-else>播放语音中{{luyinTime}}</span>
+          <span v-else>播放语音中</span>
         </div>
       </div>
       <div class="icon">
@@ -118,7 +118,7 @@
           <img src="../../public/images/icon28.png" alt />
           <audio :src="review.content" controls="controls" class="audio" id="audio"></audio>
           <span v-if="play">点击收听老师点评</span>
-          <span v-else>播放语音中 {{luyinTime}}</span>
+          <span v-else>播放语音中</span>
         </div>
       </div>
     </div>
@@ -242,7 +242,7 @@ export default {
             // 微信生成的localId，此时语音还未上传至微信服务器
             _this.localId = res.localId;
             _this.isVoice = 2;
-            _this.zongTime = _this.zongTime - luyinTime;
+            _this.zongTime = _this.zongTime - _this.luyinTime;
           },
           fail: function(res) {
             console.log(JSON.stringify(res));
@@ -299,7 +299,7 @@ export default {
       };
       this.http.post("/works/amr", data).then(res => {
         util.toast(res);
-        this.showMask = !this.showMask;
+        this.show();
         this.getWorksDetail();
       });
     },
@@ -434,12 +434,14 @@ export default {
         this.play = true;
       }
     },
+    
     //显示
     show() {
       this.showMask = !this.showMask;
       if (this.showMask) {
         return;
       } else {
+        let audio = document.getElementById("audio");
         audio.pause();
         this.play = true;
         this.isVoice = 0;

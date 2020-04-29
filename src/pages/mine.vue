@@ -390,5 +390,20 @@ export default {
     width: 100%;
     height: 1rem;
   }
+  .tui {
+    width: 90%;
+    margin: 0.2rem auto 0 !important;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    text-align: center;
+    font-size: 0.3rem;
+    color: white;
+    background: #f6bb0e;
+    opacity: 0.8;
+    border: none;
+    margin: 0 auto;
+    border-radius: 5px;
+    display: block;
+  }
 }
 </style>
