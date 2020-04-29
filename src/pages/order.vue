@@ -148,7 +148,7 @@ export default {
       margin: 0.14rem auto 0.08rem;
       background: #fff;
       border-radius: 5px;
-      padding-bottom: 0.1rem;
+      padding-bottom: 0.2rem;
       .a {
         display: flex;
         flex-direction: row;
@@ -212,11 +212,11 @@ export default {
       }
 
       .button2 {
-        width: 55%;
+        width: 50%;
         display: flex;
-        margin-left: 45%;
+        margin-left: 50%;
         div {
-          margin: 0 0.2rem;
+          margin: 0 0.2rem 0 .1rem;
           padding: 0 0.29rem;
           height: 100%;
           line-height: 0.5rem;

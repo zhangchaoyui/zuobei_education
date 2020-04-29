@@ -124,22 +124,29 @@
     </div>
 
     <!-- 录音 -->
-    <div class="Mask" v-show="showMask" @click="showMask=!showMask"></div>
+    <div class="Mask" v-show="showMask" @click="show()"></div>
     <div class="Eject" v-show="showMask">
       <img src="../../public/images/icon47.png" v-if="isVoice ==0" />
       <div class="vm-voice-box" v-if="isVoice ==0">
         <p v-show="!isVoice" @click="voiceStart">点击录音</p>
+        <p>点击任意处取消</p>
       </div>
 
       <div class="vm-voice-player" v-if="isVoice ==1">
         <img src="../../public/images/icon48.png" />
+        <img src="../../public/images/1.gif" class="gif" />
         <div class="suspend" @click="voiceEnd">| |</div>
+        <div class="suspend2">最多可录{{luyinTime}}秒</div>
       </div>
 
       <!-- // isListen  // 0-未试听/试听结束 1-试听中 2-暂停试听
       // 录完音 按钮展示-->
       <div class="vm-voice-player" v-if="isVoice == 2">
         <img src="../../public/images/icon48.png" />
+        <div class="second">
+          <span>{{zongTime}}″</span>
+          <img src="../../public/images/1.gif" alt />
+        </div>
         <div class="vm-vp-button">
           <p class="vm-vp-revoice" @click="Reset">重录</p>
           <p class="vm-vp-submit" :class="{'vm-vp-no-submit' : isSubmit}" @click="voiceHandle()">提交</p>
@@ -172,13 +179,15 @@ export default {
       recordTimer: null,
       localId: "", // 录音本地id
       serverId: "", // 录音微信服务id
-      showMask: false,
+      showMask: false, //蒙层以及录音显示
       tip: 1, //提交 0- 重录
       isVoice: 0, // 0-未录音 1-录音中 2-录完音
       isListen: 0, // 0-未试听/试听结束 1-试听中 2-暂停试听
       isPlay: false, // 是否播放
       isSubmit: false, // 是否已提交
-      play: true
+      play: true,
+      luyinTime: 60, //录音时间
+      zongTime: 60
     };
   },
   mounted() {
@@ -204,6 +213,15 @@ export default {
           }
         });
       }, 300);
+      let a = setInterval(() => {
+        if (this.luyinTime == 1) {
+          this.luyinTime--;
+          clearInterval(a);
+          this.voiceEnd();
+        } else {
+          this.luyinTime--;
+        }
+      }, 1000);
     },
 
     // 停止录音
@@ -224,6 +242,7 @@ export default {
             // 微信生成的localId，此时语音还未上传至微信服务器
             _this.localId = res.localId;
             _this.isVoice = 2;
+            _this.zongTime = _this.zongTime - _this.luyinTime;
           },
           fail: function(res) {
             console.log(JSON.stringify(res));
@@ -280,7 +299,7 @@ export default {
       };
       this.http.post("/works/amr", data).then(res => {
         util.toast(res);
-        this.showMask = !this.showMask;
+        this.show();
         this.getWorksDetail();
       });
     },
@@ -304,11 +323,10 @@ export default {
     initShareInfo() {
       this.mask = true;
       wx.updateAppMessageShareData({
-        title: "做呗科技", // 分享标题
+        title: this.result.title, // 分享标题
         desc: "做呗科技", // 分享描述
         link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致,
-        imgUrl:
-          "http://zuobei.400539.com/upload/portal/20200407/463012ed8c20a5f8cbff88fa6d50f625.jpeg",
+        imgUrl: this.result.image[0],
         type: "link",
         success: () => {
           // 用户点击了分享后执行的回调函数
@@ -318,11 +336,10 @@ export default {
       });
 
       wx.updateTimelineShareData({
-        title: "做呗科技", // 分享标题
+        title: this.result.title, // 分享标题
         desc: "做呗科技", // 分享描述
-        link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl:
-          "http://zuobei.400539.com/upload/portal/20200407/463012ed8c20a5f8cbff88fa6d50f625.jpeg",
+        link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致,
+        imgUrl: this.result.image[0],
         type: "link",
         success: () => {
           // 用户点击了分享后执行的回调函数
@@ -391,9 +408,53 @@ export default {
         document.getElementById("audio").addEventListener("ended", () => {
           this.play = true;
         });
+        // let musicDom = document.getElementsByTagName("audio")[0]; // 获取AudioDom节点
+        // musicDom.load(); //因为source标签不能直接更改路径，所以整个audio标签必须重新加载一次
+        // musicDom.oncanplay = function() {
+        //   this.luyinTime = musicDom.duration;
+        //   console.log("音乐时长", musicDom.duration); //音乐总时长
+        //   //处理时长
+        //   var time = musicDom.duration;
+        //   //分钟
+        //   var minute = time / 60;
+        //   var minutes = parseInt(minute);
+        //   if (minutes < 10) {
+        //     minutes = "0" + minutes;
+        //   }
+        //   //秒
+        //   var second = time % 60;
+        //   var seconds = Math.round(second);
+        //   if (seconds < 10) {
+        //     seconds = "0" + seconds;
+        //   }
+        //   console.log("处理音乐时长", minutes + "：" + seconds);
+        // };
       } else {
         audio.pause();
         this.play = true;
+      }
+    },
+    
+    //显示
+    show() {
+      this.showMask = !this.showMask;
+      if (this.showMask) {
+        return;
+      } else {
+        let audio = document.getElementById("audio");
+        audio.pause();
+        this.play = true;
+        this.isVoice = 0;
+        this.luyinTime = 60;
+        this.zongTime = 60;
+        wx.stopRecord({
+          success: function(res) {
+            // 微信生成的localId，此时语音还未上传至微信服务器
+          },
+          fail: function(res) {
+            console.log(JSON.stringify(res));
+          }
+        });
       }
     }
   },
@@ -511,7 +572,7 @@ export default {
       height: 100%;
       display: flex;
       flex-direction: row;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
       font-size: 0.34rem;
       color: #f05556;
@@ -528,7 +589,7 @@ export default {
       height: 100%;
       display: flex;
       flex-direction: row;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
       font-size: 0.34rem;
       color: #ccc;
@@ -730,7 +791,7 @@ export default {
       // height: 0.77rem;
       font-size: 0.25rem;
       color: white;
-      margin: 0 auto;
+      margin: 0.2rem auto 0;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
@@ -765,7 +826,7 @@ export default {
         width: 80%;
         height: 0.95rem;
         line-height: 1rem;
-        margin: 0 auto;
+        margin: 0.1rem auto 0;
         background: white;
         border-radius: 0.6rem;
         display: flex;
@@ -935,20 +996,20 @@ export default {
     z-index: 10;
   }
   .Eject {
-    width: 75%;
-    padding: 0.2rem 0 0.7rem;
+    width: 80%;
+    padding: 0.2rem 0 0.4rem;
     position: absolute;
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: #f5bb0e;
     border-radius: 0.2rem;
     z-index: 11;
     img {
       display: block;
       width: auto;
-      margin: 0.5rem auto;
-      height: 1.8rem;
+      margin: 0.7rem auto;
+      height: 1.6rem;
       border-radius: 0.4rem;
     }
     .img2 {
@@ -960,19 +1021,31 @@ export default {
     .vm-voice-box {
       width: 100%;
       display: flex;
+      flex-direction: column;
       margin-top: 0.6rem;
       overflow: hidden;
       p {
-        display: inline-block;
-        width: 80%;
-        height: 0.8rem;
-        line-height: 0.8rem;
-        margin: 0 auto;
-        border-radius: 0.4rem;
-        text-align: center;
-        color: white;
-        background: #f5bb0e;
-        font-size: 0.22rem;
+        &:first-child {
+          display: inline-block;
+          width: 80%;
+          height: 0.8rem;
+          line-height: 0.8rem;
+          margin: 0 auto;
+          border-radius: 0.4rem;
+          text-align: center;
+          color: #f5bb0e;
+          background: white;
+          font-size: 0.26rem;
+        }
+        &:last-child {
+          display: inline-block;
+          width: 80%;
+          line-height: 0.4rem;
+          margin: 0.3rem auto 0;
+          text-align: center;
+          color: white;
+          font-size: 0.24rem;
+        }
       }
     }
     .vm-voice-player {
@@ -982,22 +1055,65 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
+      position: relative;
       img {
         display: block;
         width: auto;
         margin: 0rem auto 0.4rem;
-        height: 3rem;
-        border-radius: 0.4rem;
+        height: 3.3rem;
+        border-radius: 0.2rem;
+      }
+      .gif {
+        width: 80%;
+        position: absolute;
+        height: 1.3rem;
+        top: 1.5rem;
+        left: 10%;
+      }
+      .second {
+        width: 90%;
+        position: absolute;
+        height: 1.3rem;
+        top: 1.5rem;
+        left: 8%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        span {
+          display: block;
+          padding: 0 0.1rem;
+          text-align: center;
+          line-height: 1.3rem;
+          font-size: 0.3rem;
+          color: #f4b909;
+          font-weight: 500;
+          position: absolute;
+          left: 0;
+        }
+        img {
+          width: 95%;
+          height: 1.3rem;
+          margin: 0 0 0 0.2rem;
+        }
       }
       .suspend {
         width: 60%;
         margin: 0 auto;
-        background: #e8b92b;
+        background: #f5a60d;
         color: #fff;
         font-size: 0.4rem;
         line-height: 0.8rem;
         text-align: center;
         border-radius: 1rem;
+      }
+      .suspend2 {
+        width: 60%;
+        margin: 0.2rem auto 0;
+        color: #fdf2e3;
+        font-size: 0.25rem;
+        line-height: 0.4rem;
+        text-align: center;
+        letter-spacing: 3px;
       }
       .vm-vp-button {
         width: 80%;
@@ -1016,16 +1132,19 @@ export default {
         }
         .vm-vp-revoice {
           width: 0.8rem;
-          box-shadow: 0px 1px 3px 0px #ebb51f;
+          color: white;
+          background: #f5a60d;
         }
         .vm-vp-submit {
           width: 2rem;
-          background: #f5bb0e;
-          color: white;
+          background: white;
+          color: #f6bf27;
+          font-size: 0.26rem;
         }
         .vm-vp-pause {
           width: 0.8rem;
-          box-shadow: 0px 1px 3px 0px #ebb51f;
+          color: white;
+          background: #f5a60d;
         }
       }
     }

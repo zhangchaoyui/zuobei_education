@@ -391,15 +391,16 @@ export default {
     width: 100%;
     height: 0.8rem;
   }
+
   .tui {
     width: 90%;
-    margin: 0 auto;
+    margin: 0.2rem auto 0 !important;
     height: 0.8rem;
     line-height: 0.8rem;
     text-align: center;
     font-size: 0.3rem;
     color: white;
-    background: #fa8100;
+    background: #f6bb0e;
     opacity: 0.8;
     border: none;
     margin: 0 auto;

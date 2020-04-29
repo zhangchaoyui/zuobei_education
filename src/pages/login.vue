@@ -119,7 +119,6 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res);
           if (res) {
             console.log(res);
             if (res.user_type != undefined && res.user_type != 0) {

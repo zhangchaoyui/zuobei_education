@@ -284,7 +284,7 @@ export default {
         background: #f5bb0e;
         position: absolute;
         bottom: 0;
-        left: 15%;
+        left: 18%;
       }
       img {
         margin-left: 0.2rem;
