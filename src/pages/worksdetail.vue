@@ -144,7 +144,7 @@
       <div class="vm-voice-player" v-if="isVoice == 2">
         <img src="../../public/images/icon48.png" />
         <div class="second">
-          <span>54″</span>
+          <span>{{zongTime}}″</span>
           <img src="../../public/images/1.gif" alt />
         </div>
         <div class="vm-vp-button">
@@ -186,7 +186,8 @@ export default {
       isPlay: false, // 是否播放
       isSubmit: false, // 是否已提交
       play: true,
-      luyinTime: 60
+      luyinTime: 60, //录音时间
+      zongTime: 60
     };
   },
   mounted() {
@@ -216,6 +217,7 @@ export default {
         if (this.luyinTime == 1) {
           this.luyinTime--;
           clearInterval(a);
+          this.voiceEnd();
         } else {
           this.luyinTime--;
         }
@@ -240,6 +242,7 @@ export default {
             // 微信生成的localId，此时语音还未上传至微信服务器
             _this.localId = res.localId;
             _this.isVoice = 2;
+            _this.zongTime = _this.zongTime - luyinTime;
           },
           fail: function(res) {
             console.log(JSON.stringify(res));
@@ -441,6 +444,7 @@ export default {
         this.play = true;
         this.isVoice = 0;
         this.luyinTime = 60;
+        this.zongTime = 60;
         wx.stopRecord({
           success: function(res) {
             // 微信生成的localId，此时语音还未上传至微信服务器

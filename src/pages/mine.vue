@@ -51,6 +51,7 @@
         </span>
       </div>
     </div>
+    <button @click="tui" class="tui">退出</button>
     <div class="bottom"></div>
   </div>
 </template>
@@ -181,6 +182,12 @@ export default {
 
     UserInfo() {
       this.$router.push("/personal");
+    },
+    tui() {
+      this.$cookie.set("token", "", { expires: "3D" });
+      this.$cookie.set("user_type", "", { expires: "3D" });
+      stroage.setItem("status", 0);
+      this.getMineInfo();
     }
   },
   components: {}
