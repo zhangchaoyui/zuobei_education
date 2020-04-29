@@ -119,7 +119,6 @@ export default {
           token: this.$cookie.get("token")
         })
         .then(res => {
-          console.log(res, 333);
           if (res) {
             if (res.user_type != undefined) {
               util.toast("登录成功~");
