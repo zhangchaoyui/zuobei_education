@@ -12,15 +12,14 @@ axios.interceptors.response.use(function (response) {
         return res.data;
     } else if (res.code == 3) {
         if (path != "/#/index") {
-            MessageBox.confirm('请先登录~', '友情提示').then(action => {
+            MessageBox.confirm('请先绑定手机号~', '友情提示').then(action => {
                 if (action == 'confirm') {
                     let a = window.location.href.split("/#/")[1];
-                    console.log(a, 222);
                     if (a.split("/")[0] == 'worksdetail') {
                         vueCookie.set("w_id", a.split("/")[1], { expires: "3D" });
-                        util.bind();
+                        window.location.replace("/#/register");
                     } else {
-                        util.bind();
+                        window.location.replace("/#/register");
                     }
                 }
             }).catch(err => {
@@ -29,16 +28,20 @@ axios.interceptors.response.use(function (response) {
                 }
             })
         } else {
-            Toast(res.msg);
+            // Toast(res.msg);
         }
         // return Promise.reject(res);
     } else if (res.code == 0) {
-        Toast(res.msg);
-        return;
+        if (res.msg == 'code已过期') {
+            return;
+        } else {
+            Toast(res.msg);
+            return;
+        }
     }
 }, (error) => { //这部分拦截服务器错误码
     let res = error.response;
-    alert(res.data.message);
+    Toast(error);
     return Promise.reject(error);
 });
 

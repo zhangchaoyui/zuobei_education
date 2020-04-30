@@ -48,7 +48,7 @@
       </div>
     </div>
     <!-- 外链 -->
-    <div class="nav_img" @click="external">
+    <div class="nav_img" @click="aa">
       <img src="../../public/images/background4.png" />
     </div>
     <!-- 作品列表 -->
@@ -86,13 +86,22 @@
           </div>
         </div>
       </div>
+      <van-overlay :show="show" @click="show=false">
+        <div class="wrapper" @click="show=false">
+          <div class="frame">
+            <img src="../../public/images/111.jpg" alt />
+            <span>长按识别二维码跳转小程序</span>
+          </div>
+        </div>
+      </van-overlay>
     </div>
   </div>
 </template>
 
 <script>
-import wx from "weixin-js-sdk";
+import { Overlay } from "vant";
 import stroage from "../stroage/index";
+import util from "../util/util";
 export default {
   name: "index",
   data() {
@@ -102,13 +111,20 @@ export default {
       swiper: [],
       Article: [],
       Works: [],
-      Usertype: ""
+      Usertype: "",
+      show: false
     };
   },
   mounted() {
     this.getSwiper();
     this.getArticle();
     this.getWorks();
+
+    if (util.GetQueryString("code")) {
+      this.getOpenId();
+    } else {
+      this.bind();
+    }
     this.Usertype = this.$cookie.get("user_type") || 1;
   },
   methods: {
@@ -120,20 +136,6 @@ export default {
     //跳转作品列表
     worksList() {
       this.$router.push("/workslist");
-    },
-
-    //跳转外链
-    external() {
-      wx.miniProgram.navigateTo({
-        url:
-          "pages/common/blank-page/index?weappSharePath=pages%2Fhome%2Fdashboard%2Findex%3Fkdt_id%3D46011280",
-          success:function(res){
-            alert(res,111)
-          },
-          fail(res){
-            alert(res)
-          }
-      });
     },
 
     //banner跳转
@@ -155,6 +157,9 @@ export default {
       this.$router.push("/newList");
     },
 
+    aa() {
+      this.show = !this.show;
+    },
     //跳转导航
     nav(e) {
       if (e == 1) {
@@ -191,27 +196,50 @@ export default {
 
     search() {
       this.$router.push("/search");
+    },
+
+    //微信授权
+    bind() {
+      if (!this.$cookie.get("token") != "") {
+        const appid = "wx4522fb49b27981d6";
+        const code = util.GetQueryString("code"); // 截取路径
+        if (code == null || code === "") {
+          const local = `http://zuobei.400539.com/#/`;
+          window.location.href =
+            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+            appid +
+            "&redirect_uri=" +
+            encodeURIComponent(local) +
+            "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+        } else {
+          this.code = code;
+        }
+      }
+    },
+
+    //获取用户信息
+    getOpenId() {
+      this.http
+        .post("/login/getToken", {
+          code: util.GetQueryString("code"),
+          token: this.$cookie.get("token")
+        })
+        .then(res => {
+          let user_type;
+          if (res.user_type == 0) {
+            user_type = 1;
+          } else {
+            user_type = res.user_type;
+          }
+          this.$cookie.set("token", res.token, { expires: "7D" });
+          this.$cookie.set("phone", res.phone, { expires: "7D" });
+          this.$cookie.set("user_type", user_type, { expires: "7D" });
+          stroage.setItem("status", 1);
+        });
     }
   },
-  components: {},
-  created() {
-    let _this = this;
-    this.axios
-      .post("/token/sdksign", { url: location.href.split("#")[0] })
-      .then(res => {
-        wx.config({
-          debug: false,
-          appId: res.appid,
-          timestamp: parseInt(res.timestamp),
-          nonceStr: res.nonceStr,
-          signature: res.signature,
-          jsApiList: ["invokeMiniProgramAPI"]
-        });
-        wx.ready(function() {});
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+  components: {
+    Overlay
   }
 };
 </script>
@@ -252,29 +280,29 @@ export default {
       margin-right: 5%;
     }
   }
-  .mint-search {
-    width: 100%;
-    height: auto;
-    margin-top: 0.2rem;
+  .wrapper {
     display: flex;
-    overflow: hidden;
-    .mint-searchbar {
-      padding: 0px 10px;
-      border-radius: 0.4rem;
-      background: #f9f9f9 !important;
-      .mint-searchbar-inner {
-        background: none !important;
-        .mintui-search {
-          font-size: 0.34rem;
-        }
-        .mint-searchbar-core {
-          padding-left: 5%;
-          background: none !important;
-        }
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    .frame {
+      height: auto;
+      border-radius: 10px;
+      padding: 0.2rem 0.3rem 0.4rem;
+      background: white;
+      margin-top: -30%;
+      img {
+        display: block;
+        width: 3rem;
+        height: 3rem;
+        margin: 0 auto;
       }
-      .mint-searchbar-cancel {
-        font-size: 0.34rem;
-        color: $colorA;
+      span {
+        display: block;
+        margin: 0 auto;
+        font-size: 0.26rem;
+        color: #858585;
       }
     }
   }

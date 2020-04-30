@@ -28,6 +28,7 @@ export default {
         id: this.id
       })
       .then(res => {
+        console.log(res)
         this.data = res.data[0];
       });
   },

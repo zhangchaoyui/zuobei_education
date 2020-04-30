@@ -300,7 +300,9 @@ export default {
       this.http.post("/works/amr", data).then(res => {
         util.toast(res);
         this.show();
-        this.getWorksDetail();
+        setTimeout(() => {
+          this.getWorksDetail();
+        }, 1500);
       });
     },
 
@@ -322,6 +324,7 @@ export default {
     //分享功能
     initShareInfo() {
       this.mask = true;
+      this.fenxiang();
       wx.updateAppMessageShareData({
         title: this.result.title, // 分享标题
         desc: "做呗科技", // 分享描述
@@ -330,8 +333,7 @@ export default {
         type: "link",
         success: () => {
           // 用户点击了分享后执行的回调函数
-          this.mask = true;
-          this.fenxiang();
+          this.mask = false;
         }
       });
 
@@ -343,8 +345,7 @@ export default {
         type: "link",
         success: () => {
           // 用户点击了分享后执行的回调函数
-          this.fenxiang();
-          this.mask = true;
+          this.mask = false;
         },
         complete: function(err) {
           console.log(err);
@@ -434,7 +435,7 @@ export default {
         this.play = true;
       }
     },
-    
+
     //显示
     show() {
       this.showMask = !this.showMask;
@@ -734,7 +735,7 @@ export default {
   }
   .br2 {
     width: 100%;
-    height: 3.33rem;
+    height: 3.5rem;
   }
   .bottom {
     width: 100%;
@@ -788,13 +789,13 @@ export default {
     }
     .content {
       width: 86%;
-      // height: 0.77rem;
+      height: 1rem;
       font-size: 0.25rem;
       color: white;
       margin: 0.2rem auto 0;
       display: -webkit-box;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 4;
       overflow: hidden;
       text-overflow: ellipsis;
       display: flex;

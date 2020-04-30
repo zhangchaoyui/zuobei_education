@@ -38,15 +38,12 @@ export default {
   data() {
     return {
       phone: "",
-      // password: "",
       code: "",
       time: 60,
       timeStatus: 1
     };
   },
-  mounted() {
-    this.getOpenId();
-  },
+  mounted() {},
   methods: {
     blurIn() {
       window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
@@ -63,10 +60,6 @@ export default {
         util.toast("请验证码！");
         return;
       }
-      // else if (password == "") {
-      //   util.toast("请输入密码！");
-      //   return;
-      // }
       util.Indicator("加载中");
       this.http
         .post("/login/reg", {
@@ -78,8 +71,9 @@ export default {
           if (res) {
             util.toast("绑定成功~");
             setTimeout(() => {
-              this.$cookie.set("token", res.token, { expires: "3D" });
-              this.$cookie.set("user_type", res.user_type, { expires: "3D" });
+              this.$cookie.set("token", res.token, { expires: "7D" });
+              this.$cookie.set("user_type", res.user_type, { expires: "7D" });
+              this.$cookie.set("phone", phone, { expires: "7D" });
               stroage.setItem("status", 1);
               if (this.$cookie.get("w_id")) {
                 window.location.replace(
@@ -115,29 +109,6 @@ export default {
               this.time = time;
             }
           }, 1000);
-        });
-    },
-
-    //获取用户信息
-    getOpenId() {
-      this.http
-        .post("/login/getToken", {
-          code: util.GetQueryString("code"),
-          token: this.$cookie.get("token")
-        })
-        .then(res => {
-          this.$cookie.set("token", res.token, { expires: "3D" });
-          if (res.user_type != 0) {
-            if (this.$cookie.get("w_id")) {
-              window.location.replace(
-                `/#/workLists/${this.$cookie.get("w_id")}`
-              );
-            } else {
-              window.location.replace(`/#/`);
-            }
-          } else {
-            return;
-          }
         });
     }
   },

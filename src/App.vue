@@ -38,32 +38,35 @@ export default {
     };
   },
   mounted() {
+    console.log(2222);
     //截取域名后缀
-     switch (location.href.split("/#/")[1]) {
-        case "":
-           this.selected = 0;
-          break;
-        case "upload":
-           this.selected = 1;
-          break;
-        case "workslist":
-           this.selected = 2;
-          break;
-        case "mine":
-           this.selected = 3;
-          break;
-      }
-      //判断token
+    switch (location.href.split("/#/")[1]) {
+      case "":
+        this.selected = 0;
+        break;
+      case "upload":
+        this.selected = 1;
+        break;
+      case "workslist":
+        this.selected = 2;
+        break;
+      case "mine":
+        this.selected = 3;
+        break;
+    }
+    //判断token
     if (this.$cookie.get("token")) {
       stroage.setItem("status", 1);
     } else {
       stroage.setItem("status", 0);
     }
   },
-  
+
   watch: {
     //路由改变
     $route(res) {
+      console.log(11);
+      this.UserType = this.$cookie.get("user_type");
       if (res.meta.title == "首页") {
         this.selected = 0;
       } else if (res.meta.title == "上传作品") {

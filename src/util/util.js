@@ -1,19 +1,19 @@
-import storage from "../stroage/index";
+// import storage from "../stroage/index";
 import vueCookie from 'vue-cookie'
 import { MessageBox, Indicator, Toast } from 'mint-ui';
 export default {
     //判断公共登录方法
     login() {
-        let type = storage.getItem("status")
-        if (type == 0) {
-            MessageBox.confirm('请先登录~', '友情提示').then(action => {
+        let phone = vueCookie.get("phone")
+        if (phone == '') {
+            MessageBox.confirm('请先绑定手机号~', '友情提示').then(action => {
                 if (action == 'confirm') {
                     let a = window.location.href.split("/#/")[1];
                     if (a.split("/")[0] == 'worksdetail') {
                         vueCookie.set("w_id", a.split("/")[1], { expires: "3D" });
-                        this.bind();
+                        window.location.replace('/#/register')
                     } else {
-                        this.bind();
+                        window.location.replace('/#/register')
                     }
                 }
             }).catch(err => {
@@ -61,7 +61,6 @@ export default {
 
     //微信授权
     bind() {
-        console.log(111);
         const appid = "wx4522fb49b27981d6";
         const code = this.GetQueryString("code"); // 截取路径
         console.log(code)

@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="mask" v-if="value!=''&&data.length<=0">暂无搜索作品</div>
+    <div class="mask" v-if="data.length<=0">暂无搜索作品</div>
   </div>
 </template>
 

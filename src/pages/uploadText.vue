@@ -1,7 +1,7 @@
 <template>
   <div class="upload">
     <div class="text">
-      <textarea class="textarea" placeholder="输入内容~" v-model="value"></textarea>
+      <textarea class="textarea" placeholder="输入内容~" v-model="value" maxlength="100" @click="a"></textarea>
     </div>
     <div class="img" v-if="Usertype==2">
       <div class="img_cloumn" v-for="(item,index) in imgList" :key="index">
@@ -66,7 +66,9 @@ export default {
         }
       });
     },
-
+    a() {
+      util.toast("文字最大可输入100~");
+    },
     wxuploadImage(localIds) {
       let _this = this;
       var i = 0;
