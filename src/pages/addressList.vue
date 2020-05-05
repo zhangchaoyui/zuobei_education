@@ -1,5 +1,33 @@
 <template>
   <div class="addressList" v-if="type==1">
+    <div class="address2" v-if="zhidingData">
+      <mt-cell-swipe
+        :right="[
+                {
+                    content: '删除',
+                    style: {
+                      width: '0.8rem',
+                      background:' red',
+                      color: '#fff',
+                    },
+                    handler: () => deleteAddress(zhidingData[0].id)
+                }   
+            ]"
+      >
+        <img src="../../public/images/icon36.png" alt />
+        <div class="content">
+          <div class="title">
+            {{zhidingData[0].name}}
+            <span>{{zhidingData[0].tel}}</span>
+          </div>
+          <div
+            class="address_content"
+          >{{zhidingData[0].sheng}} {{zhidingData[0].shi}} {{zhidingData[0].qu}} {{zhidingData[0].adress}}</div>
+        </div>
+        <div class="right" @click="replace(zhidingData[0].id)">编辑</div>
+      </mt-cell-swipe>
+    </div>
+
     <div v-show="data" class="address" v-for="(item,index) in data" :key="index">
       <mt-cell-swipe
         :right="[
@@ -51,12 +79,12 @@ export default {
   data() {
     return {
       type: this.$route.params.type,
-      data: "",
+      data: [],
       startX: 0, //触摸位置
       endX: 0, //结束位置
       moveX: 0, //滑动时的位置
-      disX: 0 //移动距离
-      // deleteSlider: "" //滑动时的效果,使用v-bind:style="deleteSlider"
+      disX: 0, //移动距离
+      zhidingData: ""
     };
   },
   mounted() {
@@ -67,12 +95,17 @@ export default {
       this.axios
         .post("/good/adreslist", { token: this.$cookie.get("token") })
         .then(res => {
+          for (let i in res) {
+            if (res[i].click == 1) {
+              this.zhidingData = res.splice(i, 1);
+            }
+          }
           this.data = res;
         });
     },
     //添加地址
     addAddress() {
-      this.$router.push("/addAddress/0");
+      this.$router.push("/addAddress/0/type/2");
     },
     //删除地址
     deleteAddress(i) {
@@ -88,8 +121,9 @@ export default {
       stroage.setItem("data", data);
       this.$router.go(-1);
     },
+
     replace(id) {
-      this.$router.push(`/addAddress/${id}`);
+      this.$router.push(`/addAddress/${id}/type/${1}`);
     }
   },
   components: {
@@ -107,17 +141,19 @@ export default {
   background: #f5f5f5;
   display: flex;
   flex-direction: column;
-  .address {
+  .address,
+  .address2 {
     width: 96%;
     height: 1.8rem;
     display: flex;
     align-items: center;
-    margin: 0.2rem auto 0.2rem;
+    margin: 0.1rem auto 0.12rem;
     background: #fff;
     border-radius: 5px;
     position: relative;
     user-select: none;
     transition: 0.3s;
+    border-radius: 5px;
     .mint-cell {
       width: 100%;
       height: 100%;
@@ -208,6 +244,9 @@ export default {
       line-height: 1.8rem;
       border-radius: 5px;
     }
+  }
+  .address2 {
+    border: 1px solid #f5bb0e;
   }
   .empty {
     width: 100%;

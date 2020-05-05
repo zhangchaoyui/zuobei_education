@@ -148,8 +148,8 @@ export default {
     flex-direction: column;
     overflow: hidden;
     p {
-      display: inline-block;
-      width: 96%;
+      display: block;
+      width: 100%;
       margin: 0 auto;
       font-size: 0.28rem;
       line-height: 0.8rem;

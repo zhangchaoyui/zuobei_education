@@ -4,12 +4,16 @@
       <img src="../../public/images/icon14.png" alt />
       {{data.brand}}：{{data.no}}
     </div>
-    <van-steps direction="vertical" :active="0">
+    <van-steps direction="vertical" :active="0" v-if="data.data">
       <van-step v-for="(item,index) in data.data" :key="index">
         <h3 class="status-content-latest">{{item.context}}</h3>
         <p class="status-time-latest">{{item.time}}</p>
       </van-step>
     </van-steps>
+    <div
+      v-else
+      style="width:100%;height:30vh;line-height:30vh;font-size:.26rem;color:#ccc;text-align:center"
+    >暂无物流信息</div>
   </div>
 </template>
 
@@ -28,7 +32,7 @@ export default {
         id: this.id
       })
       .then(res => {
-        console.log(res)
+        console.log(res);
         this.data = res.data[0];
       });
   },

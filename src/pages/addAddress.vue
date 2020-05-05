@@ -2,7 +2,7 @@
   <div class="addAddress">
     <div class="content">
       <mt-field placeholder="收货人" v-model="username"></mt-field>
-      <mt-field placeholder="手机号码" maxlength='11' v-model="tel"></mt-field>
+      <mt-field placeholder="手机号码" maxlength="11" v-model="tel"></mt-field>
       <div class="fu">
         <mt-field placeholder="请选择地址" v-model="city"></mt-field>
         <div class="address" @click="choose">{{city}}</div>
@@ -11,8 +11,8 @@
       <mt-switch v-model="click" class="switch">默认收货地址</mt-switch>
     </div>
 
-    <Btn btnType="3" sureText="确认提交" v-on:submit="submitAddress"></Btn>
-
+    <Btn btnType="3" sureText="确认提交" v-if="bianji==2" v-on:submit="submitAddress"></Btn>
+    <Btn btnType="3" sureText="保存" v-else-if="bianji==1" v-on:submit="submitEditpost"></Btn>
     <!--省市区三级联动-->
     <div class="divwrap" v-if="show">
       <v-distpicker
@@ -43,8 +43,9 @@ export default {
       qu: "",
       show: false,
       city: "",
-      click: "",
-      id: this.$route.params.id
+      click: false,
+      id: this.$route.params.id,
+      bianji: this.$route.params.zhi
     };
   },
   mounted() {
@@ -69,7 +70,7 @@ export default {
     submitAddress() {
       let { sheng, shi, qu, address, tel, username, click } = this;
       var myreg = /^[1]([3-9])[0-9]{9}$/;
-      if (tel == "" || !myreg.test(tel)) {
+      if (tel == "" && !myreg.test(tel)) {
         util.toast("请输入正确的手机号码！");
         return;
       } else if (address == "") {
@@ -78,7 +79,7 @@ export default {
       }
 
       util.Indicator("加载中");
-      if (click) {
+      if (!click) {
         click = 2;
       } else {
         click = 1;
@@ -122,6 +123,41 @@ export default {
       this.qu = a.value;
       this.show = false;
       this.city = this.sheng + this.shi + this.qu;
+    },
+    submitEditpost() {
+      let { sheng, shi, qu, address, tel, username, click, id } = this;
+      var myreg = /^[1]([3-9])[0-9]{9}$/;
+      if (tel == "" && !myreg.test(tel)) {
+        util.toast("请输入正确的手机号码！");
+        return;
+      } else if (address == "") {
+        util.toast("请输入详细地址！");
+        return;
+      }
+      util.Indicator("加载中");
+      if (!click) {
+        click = 2;
+      } else {
+        click = 1;
+      }
+      this.http
+        .post("/good/editpost", {
+          sheng,
+          shi,
+          qu,
+          adress: address,
+          tel,
+          name: username,
+          click,
+          id,
+          token: this.$cookie.get("token")
+        })
+        .then(() => {
+          util.toast("地址编辑成功！");
+          setTimeout(() => {
+            this.$router.go(-1);
+          }, 1500);
+        });
     }
   },
   components: {

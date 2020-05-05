@@ -53,7 +53,7 @@ export default {
     register() {
       let { phone, password, code } = this;
       var myreg = /^[1]([3-9])[0-9]{9}$/;
-      if (phone == "" || !myreg.test(phone)) {
+      if (phone == "" && !myreg.test(phone)) {
         util.toast("请输入正确的手机号码！");
         return;
       } else if (code == "") {

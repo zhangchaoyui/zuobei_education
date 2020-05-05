@@ -2,7 +2,7 @@
   <div class="search">
     <div class="search2">
       <img src="../../public/images/search.png" alt />
-      <input type="text" placeholder="请输入搜索作品名称"  v-model="value"/>
+      <input type="text" placeholder="请输入搜索作品名称" v-model="value" />
       <div @click="search">搜索</div>
     </div>
     <!-- 作品列表 -->
@@ -47,7 +47,9 @@ export default {
       mask: true
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.value);
+  },
   methods: {
     blurIn() {
       window.scrollTo(0, Math.max(this.scrollHeight - 1, 0));
@@ -59,6 +61,7 @@ export default {
         })
         .then(res => {
           this.data = res;
+          this.value = this.value;
         });
     },
 

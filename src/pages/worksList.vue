@@ -5,9 +5,9 @@
     </div>
     <div class="frame">
       <div class="nav">
-        <div v-bind:class="{'btn':btn==1}" @click="getWorksList(1)">月度</div>
-        <div v-bind:class="{'btn':btn==2}" @click="getWorksList(2)">季度</div>
-        <div v-bind:class="{'btn':btn==3}" @click="getWorksList(3)">年度</div>
+        <div v-bind:class="{'btn':btn==1}" @click="aa(1)">月度</div>
+        <div v-bind:class="{'btn':btn==2}" @click="aa(2)">季度</div>
+        <div v-bind:class="{'btn':btn==3}" @click="aa(3)">年度</div>
       </div>
       <div
         class="list"
@@ -16,43 +16,7 @@
         infinite-scroll-distance="30"
       >
         <div class="ranking">
-          <div class="one">
-            <div class="works_left">
-              <div class="detail_let">
-                <img alt src="../../public/images/banner3.jpg" />
-              </div>
-              <div class="works_right">
-                <div class="works_r_top">
-                  <div class="userImage">
-                    <img alt />
-                  </div>
-                  <div class="userDetail">
-                    <div></div>
-                    <div></div>
-                  </div>
-                </div>
-                <div class="row">
-                  累计上传
-                  <span></span>&nbsp;次
-                </div>
-                <div class="row">
-                  累计上传
-                  <span>3</span>&nbsp;天
-                </div>
-                <div class="top">
-                  <img src="../../public/images/fabulous_red.png" alt />
-                </div>
-              </div>
-            </div>
-            <div class="float_img">
-              <div class="top_row">
-                3
-                <span>次</span>
-              </div>
-              <div class="bottom_row2">累计上墙</div>
-            </div>
-          </div>
-          <!-- <div class="one" v-if="oneList[0]" @click="WorksDetail(oneList[0].id)">
+          <div class="one" v-if="oneList[0]" @click="WorksDetail(oneList[0].id)">
             <div class="works_left">
               <div class="detail_let">
                 <img v-bind:src="oneList[0].image||''" alt />
@@ -88,7 +52,7 @@
               </div>
               <div class="bottom_row2">累计上墙</div>
             </div>
-          </div>-->
+          </div>
           <div class="two" v-for="(item,index) in worksList" :key="index">
             <div class="works_left2" @click="WorksDetail(item.id)">
               <div class="detail_let">
@@ -157,8 +121,13 @@ export default {
           } else {
             this.loading = false;
           }
-          this.btn = e;
         });
+    },
+    aa(e) {
+      this.page = 1;
+      this.worksList = [];
+      this.getWorksList(e);
+      this.btn = e;
     },
     //获取排行榜第一名信息
     getoOneList() {

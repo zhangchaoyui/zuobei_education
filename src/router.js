@@ -107,7 +107,7 @@ export default new Router({
             component: resolve => require(['./pages/addressList'], resolve),
         },
         {
-            path: '/addAddress/:id',//添加地址信息
+            path: '/addAddress/:id/type/:zhi',//添加地址信息
             name: 'addAddress',
             meta: { title: '添加地址信息' },
             component: resolve => require(['./pages/addAddress'], resolve),
@@ -191,6 +191,12 @@ export default new Router({
             name: 'do_review',
             meta: { title: '回复老师点评' },
             component: resolve => require(['./pages/do_review'], resolve),
+        },
+        {
+            path: '/cache',//缓存
+            name: 'cache',
+            meta: { title: 'cache' },
+            component: resolve => require(['./pages/cache'], resolve),
         }
 
     ]

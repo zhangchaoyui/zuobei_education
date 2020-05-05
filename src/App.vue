@@ -38,8 +38,8 @@ export default {
     };
   },
   mounted() {
-    console.log(2222);
     //截取域名后缀
+    console.log(location.href.split("/#/")[1])
     switch (location.href.split("/#/")[1]) {
       case "":
         this.selected = 0;
@@ -47,7 +47,7 @@ export default {
       case "upload":
         this.selected = 1;
         break;
-      case "workslist":
+      case "worksList":
         this.selected = 2;
         break;
       case "mine":
@@ -65,8 +65,7 @@ export default {
   watch: {
     //路由改变
     $route(res) {
-      console.log(11);
-      this.UserType = this.$cookie.get("user_type");
+      console.log(res);
       if (res.meta.title == "首页") {
         this.selected = 0;
       } else if (res.meta.title == "上传作品") {
@@ -76,6 +75,7 @@ export default {
       } else if (res.meta.title == "我的") {
         this.selected = 3;
       }
+      this.UserType = this.$cookie.get("user_type");
     },
     //tabbar改变
     selected: function(val) {

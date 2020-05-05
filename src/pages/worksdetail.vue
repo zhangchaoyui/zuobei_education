@@ -371,6 +371,9 @@ export default {
 
     //重置录音
     Reset() {
+      this.luyinTime = 60;
+      //录音时间
+      this.zongTime = 60;
       this.isVoice = 0;
       this.voiceStart();
     },
@@ -491,9 +494,6 @@ export default {
               _this.isVoice = 2;
               _this.localId = res.localId;
             }
-          });
-          wx.error(function(res) {
-            alert(res.errMsg);
           });
         });
       })
@@ -804,7 +804,7 @@ export default {
       align-items: center;
       .postion {
         width: 2rem;
-        height: 1.2rem;
+        height: 2rem;
         margin-right: 2%;
         border-radius: 5px;
         position: relative;
