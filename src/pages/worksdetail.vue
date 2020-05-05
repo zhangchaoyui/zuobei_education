@@ -622,6 +622,7 @@ export default {
       height: 100%;
       position: relative;
       overflow: hidden;
+      border-radius: 5px;
       img {
         width: 100%;
         position: absolute;
@@ -649,15 +650,16 @@ export default {
       padding: 0 0 0.01rem 5%;
       box-sizing: border-box;
       color: #333333;
-      border-bottom: 1px solid #e5e5e5;
+      border-bottom: 1px solid #ebebeb;
       display: flex;
       justify-content: left;
       span {
         text-align: center;
         display: inline-block;
         width: 10%;
-        padding: 0.15rem 0.1rem 0.1rem;
+        padding: 0.15rem 0rem 0.1rem;
         border-bottom: 2px solid #e8b92b;
+        margin-left: 2%;
       }
     }
     .evaluate_list {
@@ -735,7 +737,7 @@ export default {
   }
   .br2 {
     width: 100%;
-    height: 3.5rem;
+    height: 3rem;
   }
   .bottom {
     width: 100%;
@@ -789,10 +791,10 @@ export default {
     }
     .content {
       width: 86%;
-      height: 1rem;
+      max-height: 1rem;
       font-size: 0.25rem;
       color: white;
-      margin: 0.2rem auto 0;
+      margin: 0.25rem auto 0;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 4;
@@ -827,7 +829,7 @@ export default {
         width: 80%;
         height: 0.95rem;
         line-height: 1rem;
-        margin: 0.1rem auto 0;
+        margin: 0rem auto 0;
         background: white;
         border-radius: 0.6rem;
         display: flex;
