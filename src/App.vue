@@ -39,7 +39,6 @@ export default {
   },
   mounted() {
     //截取域名后缀
-    console.log(location.href.split("/#/")[1])
     switch (location.href.split("/#/")[1]) {
       case "":
         this.selected = 0;
@@ -65,7 +64,6 @@ export default {
   watch: {
     //路由改变
     $route(res) {
-      console.log(res);
       if (res.meta.title == "首页") {
         this.selected = 0;
       } else if (res.meta.title == "上传作品") {

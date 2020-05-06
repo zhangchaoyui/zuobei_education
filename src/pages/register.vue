@@ -53,7 +53,10 @@ export default {
     register() {
       let { phone, password, code } = this;
       var myreg = /^[1]([3-9])[0-9]{9}$/;
-      if (phone == "" && !myreg.test(phone)) {
+      if (phone == "") {
+        util.toast("请输入手机号码！");
+        return;
+      } else if (!myreg.test(phone)) {
         util.toast("请输入正确的手机号码！");
         return;
       } else if (code == "") {
@@ -89,27 +92,37 @@ export default {
 
     //验证码倒计时
     codeTime() {
-      this.http
-        .post("/Sms/index", {
-          phone: this.phone,
-          token: this.$cookie.get("token")
-        })
-        .then(() => {
-          util.toast("验证码发送成功~");
-          this.timeStatus = 0;
-          let { time } = this,
-            a;
-          a = setInterval(() => {
-            if (time == 0) {
-              this.timeStatus = 1;
-              this.time = 60;
-              clearInterval(a);
-            } else {
-              --time;
-              this.time = time;
-            }
-          }, 1000);
-        });
+      let { phone } = this;
+      var myreg = /^1[1-9][0-9]{9}$/;
+      if (phone == "") {
+        util.toast("请输入手机号码！");
+        return;
+      } else if (!myreg.test(phone)) {
+        util.toast("请输入正确的手机号码！");
+        return;
+      } else {
+        this.http
+          .post("/Sms/index", {
+            phone,
+            token: this.$cookie.get("token")
+          })
+          .then(() => {
+            util.toast("验证码发送成功~");
+            this.timeStatus = 0;
+            let { time } = this,
+              a;
+            a = setInterval(() => {
+              if (time == 0) {
+                this.timeStatus = 1;
+                this.time = 60;
+                clearInterval(a);
+              } else {
+                --time;
+                this.time = time;
+              }
+            }, 1000);
+          });
+      }
     }
   },
   components: {

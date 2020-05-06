@@ -197,6 +197,12 @@ export default new Router({
             name: 'cache',
             meta: { title: 'cache' },
             component: resolve => require(['./pages/cache'], resolve),
+        },
+        {
+            path: '/comment/:id',//评论详情
+            name: 'comment',
+            meta: { title: '评论详情' },
+            component: resolve => require(['./pages/comment'], resolve),
         }
 
     ]

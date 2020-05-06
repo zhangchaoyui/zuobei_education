@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <mt-swipe :auto="4000">
       <mt-swipe-item v-for="(item,index) in data.banner" :key="index">
-        <img v-lazy='item'>
+        <img v-lazy="item" />
       </mt-swipe-item>
     </mt-swipe>
     <div class="content">
@@ -149,7 +149,7 @@ export default {
     overflow: hidden;
     p {
       display: block;
-      width: 100%;
+      width: 96%;
       margin: 0 auto;
       font-size: 0.28rem;
       line-height: 0.8rem;

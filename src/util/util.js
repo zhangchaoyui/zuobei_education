@@ -5,7 +5,8 @@ export default {
     //判断公共登录方法
     login() {
         let phone = vueCookie.get("phone")
-        if (phone == '') {
+        console.log(phone)
+        if (phone == '' || phone == null || phone == undefined) {
             MessageBox.confirm('请先绑定手机号~', '友情提示').then(action => {
                 if (action == 'confirm') {
                     let a = window.location.href.split("/#/")[1];

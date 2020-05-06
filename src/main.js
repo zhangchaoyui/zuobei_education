@@ -11,12 +11,14 @@ import http from './https'
 //挂载到VUE实例，以便全局使用;
 Vue.prototype.http = http;
 
-import { Step, Steps, Overlay } from 'vant';
+import { Step, Steps, Overlay, ImagePreview, Swipe, SwipeItem } from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Step);
 Vue.use(Steps);
 Vue.use(Overlay);
-
+Vue.use(ImagePreview);
+Vue.use(Swipe);
+Vue.use(SwipeItem);
 import VueDirectiveImagePreviewer from 'vue-directive-image-previewer'
 import 'vue-directive-image-previewer/dist/assets/style.css'
 Vue.use(VueDirectiveImagePreviewer)

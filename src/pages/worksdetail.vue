@@ -20,11 +20,11 @@
     </div>
     <div class="works_title">{{result.title}}</div>
     <!-- 轮播图 -->
-    <mt-swipe :auto="4000">
-      <mt-swipe-item v-for="(item,index) in result.image" :key="index">
-        <img v-image-preview :src="item" />
-      </mt-swipe-item>
-    </mt-swipe>
+    <van-swipe :autoplay="3000" indicator-color="#f6bc0e">
+      <van-swipe-item v-for="(item, index) in result.image" :key="index">
+        <img :src="item" alt="图片未显示" v-image-preview />
+      </van-swipe-item>
+    </van-swipe>
     <div class="br"></div>
     <div class="evaluate">
       <div class="title">
@@ -54,11 +54,12 @@
         {{review.nickname}}
         <span v-if="review.reply==1" @click="do_review(review.id)">回复</span>
       </div>
-      <div class="content" v-if="review.type==1&&review!=null">
+      <div class="content" ref="detailDom" v-if="review.type==1&&review!=null">
         <div class="postion" v-if="review.image">
           <img :src="review.image" v-image-preview alt />
         </div>
         {{review.content}}
+        <!-- <a v-if="showDetailBtn" class>详情</a> -->
       </div>
       <div class="content" v-else-if="review.type==2&&review!=null">
         <div class="voice" @click="myplay">
@@ -161,6 +162,7 @@
 </template>
 
 <script>
+let a;
 import stroage from "../stroage/index";
 import wx from "weixin-js-sdk";
 import util from "../util/util";
@@ -168,6 +170,10 @@ export default {
   name: "worksdetail",
   data() {
     return {
+      prjDetail: "", // 详情
+      showDetailBtn: false, // 是否显示“详情”按钮
+      detailDom: "", // 详情dom
+
       id: this.$route.params.id,
       mask: false,
       avatar: "", //头像
@@ -194,6 +200,10 @@ export default {
     this.$cookie.delete("w_id");
     this.getWorksDetail();
     this.Usertype = this.$cookie.get("user_type") || 1;
+
+    this.detailDom = this.$refs.detailDom;
+    this.showDetailBtnFun();
+    window.addEventListener("resize", this.showDetailBtnFun);
   },
   methods: {
     // 开始录音
@@ -213,7 +223,7 @@ export default {
           }
         });
       }, 300);
-      let a = setInterval(() => {
+      a = setInterval(() => {
         if (this.luyinTime == 1) {
           this.luyinTime--;
           clearInterval(a);
@@ -232,6 +242,7 @@ export default {
       // 间隔太短
       if (new Date().getTime() - this.startTime < 300) {
         this.startTime = 0;
+        clearInterval(a);
         util.toast("录音时间太短~");
         // 不录音
         clearTimeout(this.recordTimer);
@@ -240,6 +251,7 @@ export default {
           success: function(res) {
             // util.toast("停止录音了");
             // 微信生成的localId，此时语音还未上传至微信服务器
+            clearInterval(a);
             _this.localId = res.localId;
             _this.isVoice = 2;
             _this.zongTime = _this.zongTime - _this.luyinTime;
@@ -318,9 +330,17 @@ export default {
           this.message = res.message || {};
           this.result = res.result || {};
           this.review = res.review || {};
+          this.showDetailBtnFun();
         });
     },
 
+    showDetailBtnFun() {
+      this.$nextTick(() => {
+        this.detailDom = this.$refs.detailDom;
+        this.showDetailBtn =
+          this.detailDom.clientHeight < this.detailDom.scrollHeight;
+      });
+    },
     //分享功能
     initShareInfo() {
       this.mask = true;
@@ -371,11 +391,13 @@ export default {
 
     //重置录音
     Reset() {
-      this.luyinTime = 60;
-      //录音时间
+      clearInterval(a);
+      this.luyinTime = 60; //录音时间
       this.zongTime = 60;
       this.isVoice = 0;
-      this.voiceStart();
+      wx.pauseVoice({
+        localId: this.localId // 需要停止的音频的本地ID，由stopRecord接口获得
+      });
     },
 
     //点赞
@@ -444,22 +466,22 @@ export default {
       this.showMask = !this.showMask;
       if (this.showMask) {
         return;
-      } else {
-        let audio = document.getElementById("audio");
-        audio.pause();
-        this.play = true;
-        this.isVoice = 0;
-        this.luyinTime = 60;
-        this.zongTime = 60;
-        wx.stopRecord({
-          success: function(res) {
-            // 微信生成的localId，此时语音还未上传至微信服务器
-          },
-          fail: function(res) {
-            console.log(JSON.stringify(res));
-          }
-        });
       }
+      clearInterval(a);
+      a = "";
+      this.play = true;
+      this.isVoice = 0;
+      this.luyinTime = 60;
+      this.zongTime = 60;
+      wx.pauseVoice({
+        localId: this.localId // 需要停止的音频的本地ID，由stopRecord接口获得
+      });
+      this.localId = "";
+      wx.stopRecord({
+        success: function(res) {
+          // 微信生成的localId，此时语音还未上传至微信服务器
+        }
+      });
     }
   },
   created() {
@@ -611,13 +633,13 @@ export default {
     color: #333333;
     line-height: 0.5rem;
   }
-  .mint-swipe {
+  .van-swipe {
     width: 90%;
     margin: 0 auto;
     height: 4.15rem;
     overflow: hidden;
     margin: 0.37rem auto;
-    .mint-swipe-item {
+    .van-swipe-item {
       width: 100%;
       height: 100%;
       position: relative;
@@ -625,6 +647,7 @@ export default {
       border-radius: 5px;
       img {
         width: 100%;
+
         position: absolute;
         top: 50%;
         left: 50%;
@@ -803,15 +826,15 @@ export default {
       display: flex;
       align-items: center;
       .postion {
-        width: 2rem;
-        height: 2rem;
+        width: 1.8rem;
+        height: 1.8rem;
         margin-right: 2%;
         border-radius: 5px;
         position: relative;
         overflow: hidden;
         img {
           width: 100%;
-          border-radius: 5px;
+          border-radius: 10px;
           overflow: hidden;
           position: absolute;
           top: 50%;
@@ -927,6 +950,7 @@ export default {
         overflow: hidden;
         img {
           width: 100%;
+          height: 100%;
           border-radius: 5px;
           overflow: hidden;
           position: absolute;
