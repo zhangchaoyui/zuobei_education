@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="cloumn" v-for="(item,index) in data" :key="index">
-          <div class="let">1</div>
+          <div class="let">{{index+1}}</div>
           <div class="let_img">
             <img :src="item.avatar" alt />
           </div>

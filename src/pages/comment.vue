@@ -1,7 +1,8 @@
 <template>
   <div class="comment">
     <div class="img">
-      <img :src="review.image" alt />
+      <img :src="review.image" alt v-if="review.image" />
+      <div class="a" v-else>暂无图片</div>
     </div>
     <div class="content">
       <span></span>
@@ -57,6 +58,11 @@ export default {
       width: 100%;
       height: auto;
     }
+  }
+  .a {
+    width: 100%;
+    text-align: center;
+    font-size: 0.24rem;
   }
   .content {
     width: 90%;

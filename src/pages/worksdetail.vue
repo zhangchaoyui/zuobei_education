@@ -54,12 +54,15 @@
         {{review.nickname}}
         <span v-if="review.reply==1" @click="do_review(review.id)">回复</span>
       </div>
-      <div class="content" ref="detailDom" v-if="review.type==1&&review!=null">
+      <div class="content" v-if="review.type==1&&review!=null">
+        <div></div>
         <div class="postion" v-if="review.image">
           <img :src="review.image" v-image-preview alt />
         </div>
-        {{review.content}}
-        <!-- <a v-if="showDetailBtn" class>详情</a> -->
+        <span>
+          {{review.content |ellipsis}}
+          <a v-if="showDetailBtn" class="fu" @click="details">更多 ></a>
+        </span>
       </div>
       <div class="content" v-else-if="review.type==2&&review!=null">
         <div class="voice" @click="myplay">
@@ -112,7 +115,8 @@
         <div class="postion" v-if="review.image">
           <img :src="review.image" v-image-preview alt />
         </div>
-        {{review.content}}
+        {{review.content |ellipsis}}}}
+        <a v-if="showDetailBtn" class="fu" @click="details">更多 ></a>
       </div>
       <div class="content" v-else-if="review.type==2">
         <div class="voice" @click="myplay">
@@ -170,10 +174,6 @@ export default {
   name: "worksdetail",
   data() {
     return {
-      prjDetail: "", // 详情
-      showDetailBtn: false, // 是否显示“详情”按钮
-      detailDom: "", // 详情dom
-
       id: this.$route.params.id,
       mask: false,
       avatar: "", //头像
@@ -193,17 +193,23 @@ export default {
       isSubmit: false, // 是否已提交
       play: true,
       luyinTime: 60, //录音时间
-      zongTime: 60
+      zongTime: 60, //总时间
+      showDetailBtn: false // 是否显示“详情”按钮
     };
   },
   mounted() {
     this.$cookie.delete("w_id");
     this.getWorksDetail();
     this.Usertype = this.$cookie.get("user_type") || 1;
-
-    this.detailDom = this.$refs.detailDom;
-    this.showDetailBtnFun();
-    window.addEventListener("resize", this.showDetailBtnFun);
+  },
+  filters: {
+    ellipsis(value) {
+      if (value.length > 30) {
+        return value.slice(0, 30) + "...";
+      } else {
+        return value;
+      }
+    }
   },
   methods: {
     // 开始录音
@@ -329,34 +335,24 @@ export default {
         .then(res => {
           this.message = res.message || {};
           this.result = res.result || {};
+          if (res.review.image) {
+            if (res.review.content.length > 20) {
+              res.review.content.slice(0, 20) + "...";
+              this.showDetailBtn = true;
+            }
+          } else {
+            if (res.review.content.length > 30) {
+              res.review.content.slice(0, 30) + "...";
+              this.showDetailBtn = true;
+            }
+          }
           this.review = res.review || {};
-          this.showDetailBtnFun();
         });
-    },
-
-    showDetailBtnFun() {
-      this.$nextTick(() => {
-        this.detailDom = this.$refs.detailDom;
-        this.showDetailBtn =
-          this.detailDom.clientHeight < this.detailDom.scrollHeight;
-      });
     },
     //分享功能
     initShareInfo() {
       this.mask = true;
       this.fenxiang();
-      wx.updateAppMessageShareData({
-        title: this.result.title, // 分享标题
-        desc: "做呗科技", // 分享描述
-        link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致,
-        imgUrl: this.result.image[0],
-        type: "link",
-        success: () => {
-          // 用户点击了分享后执行的回调函数
-          this.mask = false;
-        }
-      });
-
       wx.updateTimelineShareData({
         title: this.result.title, // 分享标题
         desc: "做呗科技", // 分享描述
@@ -365,7 +361,7 @@ export default {
         type: "link",
         success: () => {
           // 用户点击了分享后执行的回调函数
-          this.mask = false;
+          // this.mask = false;
         },
         complete: function(err) {
           console.log(err);
@@ -482,6 +478,10 @@ export default {
           // 微信生成的localId，此时语音还未上传至微信服务器
         }
       });
+    },
+
+    details() {
+      this.$router.push(`/comment/${this.$route.params.id}`);
     }
   },
   created() {
@@ -506,10 +506,26 @@ export default {
             "onVoicePlayEnd",
             "updateAppMessageShareData",
             "updateTimelineShareData",
-            "onMenuShareAppMessage"
+            "onMenuShareAppMessage",
+            'onMenuShareTimeline'
           ]
         });
         wx.ready(function() {
+          wx.updateAppMessageShareData({
+            title: this.result.title, // 分享标题
+            desc: "做呗科技", // 分享描述
+            link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致,
+            imgUrl: this.result.image[0],
+            type: "link",
+            trigger: function(res) {
+              console.log("发送给朋友圈之前的回调")
+              // alert('发送给朋友圈之前的回调');
+            },
+            success: function() {
+               console.log('用户确认分享')
+              // 用户确认分享后执行的回调函数
+            }
+          });
           wx.onVoiceRecordEnd({
             // 录音时间超过一分钟没有停止的时候会执行 complete 回调
             complete: function(res) {
@@ -814,7 +830,7 @@ export default {
     }
     .content {
       width: 86%;
-      max-height: 1rem;
+      max-height: 1.2rem;
       font-size: 0.25rem;
       color: white;
       margin: 0.25rem auto 0;
@@ -825,6 +841,7 @@ export default {
       text-overflow: ellipsis;
       display: flex;
       align-items: center;
+      line-height: 0.4rem;
       .postion {
         width: 1.8rem;
         height: 1.8rem;
@@ -842,6 +859,19 @@ export default {
           transform: translate(-50%, -50%);
         }
       }
+      span {
+        display: block;
+        max-width: 100%;
+        height: 100%;
+        position: relative;
+        .fu {
+          position: absolute;
+          bottom: 0;
+          right: 0.1rem;
+          font-size: 0.24rem;
+        }
+      }
+
       img {
         width: 1.2rem;
         height: 1.2rem;

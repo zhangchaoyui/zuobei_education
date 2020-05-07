@@ -9,7 +9,9 @@
       </div>
       <div class="content2" v-if="data.length>0">
         <div class="works" v-for="(item,index) in data " :key="index" @click="worksDetail(item.id)">
-          <img :src="item.image" />
+          <div class="img">
+            <img v-lazy="item.image" />
+          </div>
           <div class="worksDetail">
             <div class="works_name">{{item.title}}</div>
             <img src="../../public/images/fabulous_red.png" alt />
@@ -163,9 +165,20 @@ export default {
         box-sizing: border-box;
         float: left;
         margin-left: 1%;
-        img {
-          width: auto;
+        .img {
+          width: 100%;
           height: 2.22rem;
+          position: relative;
+          overflow: hidden;
+          img {
+            width: 100%;
+            border-radius: 5px;
+            overflow: hidden;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
         }
         .worksDetail {
           width: 100%;
