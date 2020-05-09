@@ -5,9 +5,8 @@ export default {
     //判断公共登录方法
     login() {
         let phone = vueCookie.get("phone")
-        console.log(phone)
         if (phone == '' || phone == null || phone == undefined) {
-            MessageBox.confirm('请先绑定手机号~', '友情提示').then(action => {
+            MessageBox.confirm('请先登录~', '友情提示').then(action => {
                 if (action == 'confirm') {
                     let a = window.location.href.split("/#/")[1];
                     if (a.split("/")[0] == 'worksdetail') {
@@ -66,7 +65,7 @@ export default {
         const code = this.GetQueryString("code"); // 截取路径
         console.log(code)
         if (code == null || code === "") {
-            const local = `http://zuobei.400539.com/#/register`;
+            const local = `http://zuobeikeji.com/#/register`;
             window.location.href =
                 "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
                 appid +

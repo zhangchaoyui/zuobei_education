@@ -59,8 +59,8 @@
         <div class="postion" v-if="review.image">
           <img :src="review.image" v-image-preview alt />
         </div>
-        <span>
-          {{review.content |ellipsis}}
+        <span :style="{'width': (review.image? '70%':'100%')}">
+          {{review.content}}
           <a v-if="showDetailBtn" class="fu" @click="details">更多 ></a>
         </span>
       </div>
@@ -115,8 +115,10 @@
         <div class="postion" v-if="review.image">
           <img :src="review.image" v-image-preview alt />
         </div>
-        {{review.content |ellipsis}}}}
-        <a v-if="showDetailBtn" class="fu" @click="details">更多 ></a>
+        <span :style="{'width': (review.image? '70%':'100%')}">
+          {{review.content}}
+          <a v-if="showDetailBtn" class="fu" @click="details">更多 ></a>
+        </span>
       </div>
       <div class="content" v-else-if="review.type==2">
         <div class="voice" @click="myplay">
@@ -201,15 +203,25 @@ export default {
     this.$cookie.delete("w_id");
     this.getWorksDetail();
     this.Usertype = this.$cookie.get("user_type") || 1;
-  },
-  filters: {
-    ellipsis(value) {
-      if (value.length > 30) {
-        return value.slice(0, 30) + "...";
+    console.log(this.$cookie.get("token"));
+    if (!this.$cookie.get("token")) {
+      if (util.GetQueryString("code")) {
+        console.log(111);
+        this.getOpenId();
       } else {
-        return value;
+        console.log(222);
+        this.bind();
       }
     }
+  },
+  filters: {
+    // ellipsis(value) {
+    //   if (value.length > 60) {
+    //     return value.slice(0, 60) + "...";
+    //   } else {
+    //     return value;
+    //   }
+    // }
   },
   methods: {
     // 开始录音
@@ -336,13 +348,13 @@ export default {
           this.message = res.message || {};
           this.result = res.result || {};
           if (res.review.image) {
-            if (res.review.content.length > 20) {
-              res.review.content.slice(0, 20) + "...";
+            if (parseInt(res.review.content.length) > 35) {
+              res.review.content = res.review.content.slice(0, 35) + "...";
               this.showDetailBtn = true;
             }
           } else {
-            if (res.review.content.length > 30) {
-              res.review.content.slice(0, 30) + "...";
+            if (res.review.content.length > 70) {
+              res.review.content = res.review.content.slice(0, 70) + "...";
               this.showDetailBtn = true;
             }
           }
@@ -365,6 +377,21 @@ export default {
         },
         complete: function(err) {
           console.log(err);
+        }
+      });
+      wx.updateAppMessageShareData({
+        title: this.result.title, // 分享标题
+        desc: "做呗科技", // 分享描述
+        link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致,
+        imgUrl: this.result.image[0],
+        type: "link",
+        trigger: function(res) {
+          console.log("发送给朋友圈之前的回调");
+          // alert('发送给朋友圈之前的回调');
+        },
+        success: function() {
+          console.log("用户确认分享");
+          // 用户确认分享后执行的回调函数
         }
       });
     },
@@ -398,7 +425,7 @@ export default {
 
     //点赞
     Fabulous() {
-      if (this.$cookie.get("token")) {
+      if (this.$cookie.get("phone")) {
         this.dianzan();
       } else {
         util.login();
@@ -482,6 +509,46 @@ export default {
 
     details() {
       this.$router.push(`/comment/${this.$route.params.id}`);
+    },
+
+    //微信授权
+    bind() {
+      if (!this.$cookie.get("token") != "") {
+        const appid = "wx4522fb49b27981d6";
+        const code = util.GetQueryString("code"); // 截取路径
+        if (code == null || code === "") {
+          const local = `http://zuobeikeji.com/#/worksdetail/${this.$route.params.id}`;
+          window.location.href =
+            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+            appid +
+            "&redirect_uri=" +
+            encodeURIComponent(local) +
+            "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+        } else {
+          this.code = code;
+        }
+      }
+    },
+
+    //获取用户信息
+    getOpenId() {
+      this.http
+        .post("/login/getToken", {
+          code: util.GetQueryString("code"),
+          token: this.$cookie.get("token")
+        })
+        .then(res => {
+          let user_type;
+          if (res.user_type == 0) {
+            user_type = 1;
+          } else {
+            user_type = res.user_type;
+          }
+          this.$cookie.set("token", res.token, { expires: "7D" });
+          this.$cookie.set("phone", res.phone, { expires: "7D" });
+          this.$cookie.set("user_type", user_type, { expires: "7D" });
+          stroage.setItem("status", 1);
+        });
     }
   },
   created() {
@@ -507,25 +574,10 @@ export default {
             "updateAppMessageShareData",
             "updateTimelineShareData",
             "onMenuShareAppMessage",
-            'onMenuShareTimeline'
+            "onMenuShareTimeline"
           ]
         });
         wx.ready(function() {
-          wx.updateAppMessageShareData({
-            title: this.result.title, // 分享标题
-            desc: "做呗科技", // 分享描述
-            link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致,
-            imgUrl: this.result.image[0],
-            type: "link",
-            trigger: function(res) {
-              console.log("发送给朋友圈之前的回调")
-              // alert('发送给朋友圈之前的回调');
-            },
-            success: function() {
-               console.log('用户确认分享')
-              // 用户确认分享后执行的回调函数
-            }
-          });
           wx.onVoiceRecordEnd({
             // 录音时间超过一分钟没有停止的时候会执行 complete 回调
             complete: function(res) {
@@ -834,17 +886,13 @@ export default {
       font-size: 0.25rem;
       color: white;
       margin: 0.25rem auto 0;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 4;
-      overflow: hidden;
       text-overflow: ellipsis;
       display: flex;
       align-items: center;
       line-height: 0.4rem;
       .postion {
-        width: 1.8rem;
-        height: 1.8rem;
+        width: 1.6rem;
+        height: 1.6rem;
         margin-right: 2%;
         border-radius: 5px;
         position: relative;
@@ -859,11 +907,14 @@ export default {
           transform: translate(-50%, -50%);
         }
       }
-      span {
-        display: block;
-        max-width: 100%;
-        height: 100%;
+      .span {
+        width: 100%;
+        display: inline-block;
         position: relative;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
         .fu {
           position: absolute;
           bottom: 0;

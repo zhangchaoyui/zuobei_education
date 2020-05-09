@@ -66,6 +66,7 @@ export default {
     },
 
     worksDetail(id) {
+      
       this.$router.push(`/worksdetail/${id}`);
     }
   },
